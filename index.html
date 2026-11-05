@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brawl Stars: BCKLAS English Challenge</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Arial Black', Impact, sans-serif; }
+    body {
+      background: radial-gradient(circle at center, #2c1654 0%, #120924 100%);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 15px;
+      user-select: none;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 96%;
+      max-width: 1200px;
+      margin-bottom: 15px;
+    }
+    .title-box { text-align: left; }
+    h1 {
+      font-size: 2.2rem;
+      color: #ffde00;
+      text-shadow: 3px 3px 0 #d9381e, 6px 6px 0 #000;
+      letter-spacing: 1px;
+    }
+    .sub-title {
+      font-size: 1.1rem;
+      color: #00f0ff;
+      text-shadow: 2px 2px 0 #000;
+      margin-top: 3px;
+    }
+    .action-btn {
+      background: #ffaa00;
+      color: #000;
+      border: 3px solid #000;
+      border-radius: 12px;
+      padding: 8px 16px;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 5px 0 #000;
+      transition: all 0.1s;
+    }
+    .action-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 1px 0 #000;
+    }
+    /* 中央礦坑 */
+    .mine-container {
+      background: rgba(0, 0, 0, 0.45);
+      border: 4px solid #ffcc00;
+      border-radius: 20px;
+      padding: 15px 30px;
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 0 25px rgba(255, 204, 0, 0.4);
+    }
+    .gem-display {
+      font-size: 1.8rem;
+      color: #a855f7;
+      text-shadow: 2px 2px 0 #000;
+    }
+    .next-question-btn {
+      margin-top: 10px;
+      background: #22c55e;
+      color: #fff;
+      font-size: 1.25rem;
+      padding: 10px 26px;
+      border: 3px solid #000;
+      border-radius: 15px;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #15803d;
+      transition: all 0.1s;
+    }
+    .next-question-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #15803d;
+    }
+    /* 5 組英雄競技場 */
+    .teams-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 15px;
+      width: 96%;
+      max-width: 1200px;
+    }
+    .team-card {
+      border: 4px solid #000;
+      border-radius: 20px;
+      padding: 15px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      box-shadow: 0 8px 0 #0f172a;
+    }
+    .avatar-wrapper {
+      width: 85px;
+      height: 85px;
+      border-radius: 50%;
+      border: 4px solid #ffde00;
+      overflow: hidden;
+      background: #000;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+    .avatar-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .team-name {
+      font-size: 1.3rem;
+      color: #ffde00;
+      text-shadow: 2px 2px 0 #000;
+      margin-bottom: 8px;
+    }
+    .gem-count {
+      font-size: 2.2rem;
+      color: #fff;
+      text-shadow: 2px 2px 0 #000;
+      margin-bottom: 12px;
+    }
+    .btn-group {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      justify-content: center;
+    }
+    .gem-btn {
+      flex: 1;
+      padding: 10px 0;
+      font-size: 1.2rem;
+      border: 2px solid #000;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #000;
+    }
+    .btn-add { background: #10b981; color: white; }
+    .btn-sub { background: #ef4444; color: white; }
+    .gem-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #000; }
+
+    /* 題目彈出視窗 */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85);
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+    .modal-content {
+      background: #1e1b4b;
+      border: 5px solid #ffde00;
+      border-radius: 25px;
+      padding: 30px;
+      width: 90%;
+      max-width: 700px;
+      text-align: center;
+      box-shadow: 0 0 40px #ffde00;
+    }
+    .q-type { color: #38bdf8; font-size: 1.2rem; margin-bottom: 12px; letter-spacing: 1px; }
+    .q-text { font-size: 1.8rem; color: #fff; margin-bottom: 25px; line-height: 1.3; }
+    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+    .opt-btn {
+      background: #4338ca;
+      color: #fff;
+      border: 3px solid #000;
+      border-radius: 14px;
+      padding: 16px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      box-shadow: 0 5px 0 #000;
+      transition: all 0.1s;
+    }
+    .opt-btn.correct { background: #10b981 !important; border-color: #fff; box-shadow: 0 0 15px #10b981; }
+    .opt-btn.wrong { background: #ef4444 !important; opacity: 0.5; }
+    .close-modal { background: #64748b; color: #fff; border: 2px solid #000; padding: 8px 20px; border-radius: 10px; font-size: 1rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="title-box">
+      <h1>BRAWL STARS: GEM GRAB</h1>
+      <div class="sub-title">BCKLAS English Challenge • Collect 10 Gems to Win!</div>
+    </div>
+    <div style="display:flex; gap:10px;">
+      <button class="action-btn" onclick="resetGame()">🔄 重設分數</button>
+      <button class="action-btn" onclick="toggleFullScreen()">⛶ 全螢幕投影</button>
+    </div>
+  </header>
+
+  <div class="mine-container">
+    <div class="gem-display">💎 CENTRAL GEM MINE 💎</div>
+    <button class="next-question-btn" onclick="openQuestion()">⚡ 抽英語題目 (Battle Quiz)</button>
+  </div>
+
+  <div class="teams-grid">
+    <!-- Team 1: Crow -->
+    <div class="team-card" style="background: linear-gradient(180deg, #374151, #111827);">
+      <div class="avatar-wrapper">
+        <img class="avatar-img" src="https://cdn.brawlify.com/brawlers/borders/16000016.png" alt="Crow" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Crow';">
+      </div>
+      <div class="team-name">Crow</div>
+      <div class="gem-count" id="gem-1">💎 0</div>
+      <div class="btn-group">
+        <button class="gem-btn btn-add" onclick="changeGem(1, 1)">+1</button>
+        <button class="gem-btn btn-sub" onclick="changeGem(1, -1)">-1</button>
+      </div>
+    </div>
+
+    <!-- Team 2: Mortis -->
+    <div class="team-card" style="background: linear-gradient(180deg, #7c3aed, #4c1d95);">
+      <div class="avatar-wrapper">
+        <img class="avatar-img" src="https://cdn.brawlify.com/brawlers/borders/16000015.png" alt="Mortis" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Mortis';">
+      </div>
+      <div class="team-name">Mortis</div>
+      <div class="gem-count" id="gem-2">💎 0</div>
+      <div class="btn-group">
+        <button class="gem-btn btn-add" onclick="changeGem(2, 1)">+1</button>
+        <button class="gem-btn btn-sub" onclick="changeGem(2, -1)">-1</button>
+      </div>
+    </div>
+
+    <!-- Team 3: El Primo -->
+    <div class="team-card" style="background: linear-gradient(180deg, #dc2626, #991b1b);">
+      <div class="avatar-wrapper">
+        <img class="avatar-img" src="https://cdn.brawlify.com/brawlers/borders/16000004.png" alt="El Primo" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/bottts/svg?seed=ElPrimo';">
+      </div>
+      <div class="team-name">El Primo</div>
+      <div class="gem-count" id="gem-3">💎 0</div>
+      <div class="btn-group">
+        <button class="gem-btn btn-add" onclick="changeGem(3, 1)">+1</button>
+        <button class="gem-btn btn-sub" onclick="changeGem(3, -1)">-1</button>
+      </div>
+    </div>
+
+    <!-- Team 4: Bo -->
+    <div class="team-card" style="background: linear-gradient(180deg, #059669, #064e3b);">
+      <div class="avatar-wrapper">
+        <img class="avatar-img" src="https://cdn.brawlify.com/brawlers/borders/16000008.png" alt="Bo" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Bo';">
+      </div>
+      <div class="team-name">Bo</div>
+      <div class="gem-count" id="gem-4">💎 0</div>
+      <div class="btn-group">
+        <button class="gem-btn btn-add" onclick="changeGem(4, 1)">+1</button>
+        <button class="gem-btn btn-sub" onclick="changeGem(4, -1)">-1</button>
+      </div>
+    </div>
+
+    <!-- Team 5: Barley -->
+    <div class="team-card" style="background: linear-gradient(180deg, #d97706, #78350f);">
+      <div class="avatar-wrapper">
+        <img class="avatar-img" src="https://cdn.brawlify.com/brawlers/borders/16000003.png" alt="Barley" onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/bottts/svg?seed=Barley';">
+      </div>
+      <div class="team-name">Barley</div>
+      <div class="gem-count" id="gem-5">💎 0</div>
+      <div class="btn-group">
+        <button class="gem-btn btn-add" onclick="changeGem(5, 1)">+1</button>
+        <button class="gem-btn btn-sub" onclick="changeGem(5, -1)">-1</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 題目彈出視窗 -->
+  <div class="modal" id="qModal">
+    <div class="modal-content">
+      <div class="q-type" id="qCategory">Category: Vocabulary</div>
+      <div class="q-text" id="qQuestion">Question goes here?</div>
+      <div class="options-grid" id="qOptions"></div>
+      <button class="close-modal" onclick="closeQuestion()">返回競技場</button>
+    </div>
+  </div>
+
+  <script>
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playBeep(freq, type, duration) {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.type = type;
+      osc.frequency.value = freq;
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+      osc.stop(audioCtx.currentTime + duration);
+    }
+
+    const questions = [
+      { cat: "Phonics", q: "Which word has the 'short a' sound?", opts: ["Cake", "Cat", "Rain", "Train"], ans: 1 },
+      { cat: "Grammar (Tenses)", q: "Yesterday, Kelly ________ to the library.", opts: ["go", "goes", "went", "going"], ans: 2 },
+      { cat: "Vocabulary", q: "What is the opposite of 'Strong'?", opts: ["Weak", "Heavy", "Brave", "Fast"], ans: 0 },
+      { cat: "Prepositions", q: "The pencil is ________ the pencil case.", opts: ["in", "on", "under", "behind"], ans: 0 },
+      { cat: "Spelling", q: "Which spelling is correct?", opts: ["Beatiful", "Beautiful", "Beautifull", "Beutiful"], ans: 1 },
+      { cat: "Grammar (Pronouns)", q: "This is Tom. ________ is my best friend.", opts: ["She", "He", "They", "It"], ans: 1 },
+      { cat: "Phonics", q: "Which word rhymes with 'night'?", opts: ["Right", "Tree", "Boat", "Fish"], ans: 0 },
+      { cat: "Vocabulary", q: "Where do you borrow English storybooks?", opts: ["Canteen", "Library", "Art Room", "Playground"], ans: 1 },
+      { cat: "Grammar (Tenses)", q: "Look! The children ________ football now.", opts: ["play", "plays", "are playing", "played"], ans: 2 },
+      { cat: "Vocabulary", q: "An elephant is big, but a mouse is ________.", opts: ["huge", "tall", "small", "long"], ans: 2 },
+      { cat: "Prepositions", q: "The birds are flying ________ the sky.", opts: ["in", "on", "at", "under"], ans: 0 },
+      { cat: "Spelling", q: "Rearrange: 't-e-a-c-h-r-e' to spell a person:", opts: ["Doctor", "Teacher", "Nurse", "Farmer"], ans: 1 }
+    ];
+
+    const scores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
+
+    function changeGem(teamId, val) {
+      scores[teamId] = Math.max(0, scores[teamId] + val);
+      document.getElementById(`gem-${teamId}`).innerText = `💎 ${scores[teamId]}`;
+      if (val > 0) {
+        playBeep(600, 'sine', 0.15);
+        if (scores[teamId] >= 10) {
+          playBeep(880, 'triangle', 0.5);
+          alert(`🏆 恭喜！該隊成功奪得 10 顆寶石，取得 BCKLAS 爭霸賽總冠軍！`);
+        }
+      }
+    }
+
+    function openQuestion() {
+      const randIdx = Math.floor(Math.random() * questions.length);
+      const q = questions[randIdx];
+      
+      document.getElementById('qCategory').innerText = `【分類：${q.cat}】`;
+      document.getElementById('qQuestion').innerText = q.q;
+      const optsBox = document.getElementById('qOptions');
+      optsBox.innerHTML = '';
+
+      q.opts.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt-btn';
+        btn.innerText = opt;
+        btn.onclick = () => {
+          if (idx === q.ans) {
+            btn.classList.add('correct');
+            playBeep(523, 'sine', 0.2);
+            setTimeout(() => playBeep(659, 'sine', 0.3), 150);
+          } else {
+            btn.classList.add('wrong');
+            playBeep(180, 'sawtooth', 0.3);
+          }
+        };
+        optsBox.appendChild(btn);
+      });
+      document.getElementById('qModal').style.display = 'flex';
+    }
+
+    function closeQuestion() {
+      document.getElementById('qModal').style.display = 'none';
+    }
+
+    function resetGame() {
+      if(confirm("確定要將所有小組寶石重設為 0 嗎？")) {
+        for(let i=1; i<=5; i++) {
+          scores[i] = 0;
+          document.getElementById(`gem-${i}`).innerText = `💎 0`;
+        }
+      }
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  </script>
+</body>
+</html>
