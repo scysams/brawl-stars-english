@@ -179,18 +179,19 @@
       padding: 20px;
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
+      align-items: flex-end; /* 讓全身角色踩在泥土線上 */
       position: relative;
-      height: 420px;
+      height: 440px;
       overflow: hidden;
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
     }
+    /* 地面泥土線 */
     .arena-box::after {
       content: '';
       position: absolute;
       bottom: 0; left: 0; width: 100%;
       height: 25px;
-      background: #7f5539; /* 泥土底層 */
+      background: #7f5539; /* 泥土層 */
       z-index: 1;
     }
     .fighter-side {
@@ -200,8 +201,10 @@
       width: 250px;
       z-index: 5;
     }
+    
+    /* 全身角色容器樣式 */
     .fighter-sprite-wrap {
-      height: 240px;
+      height: 270px; /* 拉高容器，完美容納全身 */
       display: flex;
       align-items: flex-end;
       justify-content: center;
@@ -209,8 +212,8 @@
       transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
     .fighter-sprite {
-      width: 150px;
-      height: 200px;
+      width: 180px; /* 加寬尺寸，看全身更清晰 */
+      height: 240px; /* 加高尺寸，真正的大比例全身 */
       object-fit: contain;
       filter: drop-shadow(0 10px 10px rgba(0,0,0,0.4));
     }
@@ -280,6 +283,7 @@
       100% { transform: scale(1) rotate(90deg); opacity: 0; }
     }
 
+    /* 全身被打擊退與震動 */
     @keyframes hitReceiveRed {
       0%, 100% { transform: translateX(0); filter: brightness(1); }
       20% { transform: translateX(35px); filter: brightness(2.5) sepia(1) saturate(5) hue-rotate(-50deg); }
@@ -295,12 +299,14 @@
       80% { transform: translateX(5px); }
     }
 
+    /* 勝利原地全身跳躍 */
     @keyframes victoryJump {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-50px) scaleY(1.1); }
     }
+    /* 輸家倒下變透明消散 */
     @keyframes defeatFall {
-      100% { transform: rotate(90deg) translateY(50px); opacity: 0; }
+      100% { transform: rotate(90deg) translateY(60px); opacity: 0; }
     }
 
     .arena-center {
@@ -409,11 +415,11 @@
       <div class="rules-list">
         <div class="rules-item">
           <span class="rules-icon">🎯</span>
-          <span><strong>20% Critical Chance (20% 暴擊機率)</strong>：每次答對英文題目，有 20% 的幸運機率發動驚天動地的「暴擊」！</span>
+          <span><strong>30% Critical Chance (30% 暴擊機率)</strong>：每次答對英文題目，有 30% 的幸運機率發動驚天動地的「暴擊」！</span>
         </div>
         <div class="rules-item">
           <span class="rules-icon">💥</span>
-          <span><strong>Double Damage (雙倍傷害 -2 HP)</strong>：觸發暴擊時，音效會更震撼，全身角色會爆發出巨大的黃金色 <strong>CRITICAL! -2 HP</strong> 效果！</span>
+          <span><strong>Double Damage (雙倍傷害 -2 HP)</strong>：觸發暴擊時，音效會更震撼，全身角色會爆發出巨大的黃臨色 <strong>CRITICAL! -2 HP</strong> 效果！</span>
         </div>
         <div class="rules-item">
           <span class="rules-icon">🛡️</span>
@@ -473,14 +479,14 @@
   </div>
 
   <script>
-    // 英雄全身立繪圖片
+    // 英雄全身官方 PNG 圖片庫 (Wikia 數據庫高畫質全身立繪，不再是頭像大頭貼！)
     const brawlersRoster = [
-      { name: "Crow", img: "https://cdn.brawlify.com/brawlers/borders/16000016.png", sprite: "https://cdn.brawlify.com/brawlers/borderless/16000016.png", icon: "🪶" },
-      { name: "Mortis", img: "https://cdn.brawlify.com/brawlers/borders/16000015.png", sprite: "https://cdn.brawlify.com/brawlers/borderless/16000015.png", icon: "🦇" },
-      { name: "El Primo", img: "https://cdn.brawlify.com/brawlers/borders/16000004.png", sprite: "https://cdn.brawlify.com/brawlers/borderless/16000004.png", icon: "🥊" },
-      { name: "Bo", img: "https://cdn.brawlify.com/brawlers/borders/16000008.png", sprite: "https://cdn.brawlify.com/brawlers/borderless/16000008.png", icon: "🏹" },
-      { name: "Barley", img: "https://cdn.brawlify.com/brawlers/borders/16000003.png", sprite: "https://cdn.brawlify.com/brawlers/borderless/16000003.png", icon: "🍾" },
-      { name: "Shelly", img: "https://cdn.brawlify.com/brawlers/borders/16000000.png", sprite: "https://cdn.brawlify.com/brawlers/borderless/16000000.png", icon: "💥" }
+      { name: "Crow", img: "https://cdn.brawlify.com/brawlers/borders/16000016.png", sprite: "https://static.wikia.nocookie.net/brawlstars/images/a/a2/Crow_Skin-Default.png", icon: "🪶" },
+      { name: "Mortis", img: "https://cdn.brawlify.com/brawlers/borders/16000015.png", sprite: "https://static.wikia.nocookie.net/brawlstars/images/b/b2/Mortis_Skin-Default.png", icon: "🦇" },
+      { name: "El Primo", img: "https://cdn.brawlify.com/brawlers/borders/16000004.png", sprite: "https://static.wikia.nocookie.net/brawlstars/images/0/04/El_Primo_Skin-Default.png", icon: "🥊" },
+      { name: "Bo", img: "https://cdn.brawlify.com/brawlers/borders/16000008.png", sprite: "https://static.wikia.nocookie.net/brawlstars/images/e/ee/Bo_Skin-Default.png", icon: "🏹" },
+      { name: "Barley", img: "https://cdn.brawlify.com/brawlers/borders/16000003.png", sprite: "https://static.wikia.nocookie.net/brawlstars/images/3/3c/Barley_Skin-Default.png", icon: "🍾" },
+      { name: "Shelly", img: "https://cdn.brawlify.com/brawlers/borders/16000000.png", sprite: "https://static.wikia.nocookie.net/brawlstars/images/5/5e/Shelly_Skin-Default.png", icon: "💥" }
     ];
 
     const questions = [
@@ -572,7 +578,7 @@
       document.getElementById('battleScreen').style.display = 'none';
       document.getElementById('selectScreen').style.display = 'flex';
       
-      // 重置動畫狀態
+      // 重設戰鬥立繪
       document.getElementById('fighterCard1').style.animation = 'none';
       document.getElementById('fighterCard2').style.animation = 'none';
       document.getElementById('fighterCard1').style.transform = 'none';
@@ -654,10 +660,10 @@
       const attacker = currentAttacker === 1 ? p1Brawler : p2Brawler;
 
       if (isSuccess) {
-        // 1. 衝鋒動畫
+        // 1. 全身角色衝鋒突進 (DASH)
         attackerWrap.style.transform = currentAttacker === 1 ? 'translateX(550px) scale(1.15)' : 'translateX(-550px) scale(1.15)';
         
-        // 2. 命中爆炸與受創
+        // 2. 蓄力突進後之命中判定
         setTimeout(() => {
           burst.innerText = isCrit ? '💥⚡' : '💥';
           burst.style.display = 'block';
@@ -670,10 +676,10 @@
             playBeep(180, 'square', 0.3);
           }
 
-          // 對手受創與擊退
+          // 對手全身受創震動與擊退 (Knockback)
           defenderWrap.style.animation = currentAttacker === 1 ? 'hitReceiveBlue 0.45s ease' : 'hitReceiveRed 0.45s ease';
           
-          // 4. 跳出傷害文字
+          // 4. 跳出浮動傷害文字
           if (isCrit) {
             dmg.classList.add('crit-damage');
             dmg.innerText = 'CRITICAL! -2 HP';
@@ -685,7 +691,7 @@
           dmg.style.bottom = '220px';
           dmg.style.animation = 'floatDamage 0.85s forwards';
 
-          // 計算血量扣除
+          // 扣除生命值
           const dmgAmount = isCrit ? 2 : 1;
           if (currentAttacker === 1) {
             p2Hp = Math.max(0, p2Hp - dmgAmount);
@@ -695,7 +701,7 @@
           updateBattleUI();
         }, 320);
 
-        // 5. 撤退
+        // 5. 特效消失，全身角色後撤 (Retreat)
         setTimeout(() => {
           burst.style.display = 'none';
           dmg.style.animation = 'none';
@@ -703,14 +709,14 @@
           attackerWrap.style.transform = 'none';
         }, 800);
 
-        // 6. 判定終局 K.O.
+        // 6. 判定 K.O. 勝利與舞蹈特效
         setTimeout(() => {
           if (p1Hp <= 0 || p2Hp <= 0) {
             const winnerName = p1Hp > 0 ? p1Brawler.name : p2Brawler.name;
             const winnerWrap = p1Hp > 0 ? document.getElementById('fighterCard1') : document.getElementById('fighterCard2');
             const loserWrap = p1Hp > 0 ? document.getElementById('fighterCard2') : document.getElementById('fighterCard1');
 
-            // 贏家跳躍，輸家倒下
+            // 修正Bug：贏家上下跳躍，輸家向後倒地消散
             winnerWrap.style.animation = 'victoryJump 0.4s ease infinite';
             loserWrap.style.animation = 'defeatFall 1s forwards';
 
