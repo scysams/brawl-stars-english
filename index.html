@@ -54,7 +54,7 @@
       background: rgba(0, 0, 0, 0.6);
       border: 4px solid #ffde00;
       border-radius: 24px;
-      padding: 25px;
+      padding: 20px 25px;
       text-align: center;
       box-shadow: 0 0 30px rgba(255, 222, 0, 0.3);
       display: flex;
@@ -62,16 +62,16 @@
       align-items: center;
     }
     .select-status {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       color: #ffde00;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       text-shadow: 2px 2px 0 #000;
     }
     .preview-box {
       display: flex;
       gap: 50px;
       align-items: center;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
     .player-preview {
       display: flex;
@@ -84,29 +84,29 @@
       height: 110px;
       border-radius: 20px;
       border: 4px solid #fff;
-      background: rgba(255,255,255,0.08);
+      background: rgba(255, 255, 255, 0.08);
       overflow: hidden;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
     .preview-avatar img { width: 90%; height: 90%; object-fit: contain; }
     
-    /* 12 英雄選擇網格 (雙排 4x3 佈局) */
+    /* 12 英雄選擇網格 (4欄 x 3列) */
     .roster-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      margin-bottom: 25px;
+      gap: 12px;
+      margin-bottom: 20px;
       width: 100%;
       max-width: 850px;
     }
     .roster-card {
       background: #2d164d;
       border: 3px solid #552586;
-      border-radius: 18px;
-      padding: 12px 6px;
+      border-radius: 16px;
+      padding: 10px 4px;
       cursor: pointer;
       display: flex;
       flex-direction: column;
@@ -114,24 +114,24 @@
       transition: all 0.2s;
     }
     .roster-card:hover {
-      transform: translateY(-5px) scale(1.05);
+      transform: translateY(-4px) scale(1.04);
       border-color: #ffde00;
       box-shadow: 0 0 15px #ffde00;
     }
     .roster-card img {
-      width: 80px;
-      height: 95px;
+      width: 75px;
+      height: 90px;
       object-fit: contain;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
       filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
     }
     .roster-super-tag {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: #ffde00;
       background: rgba(0,0,0,0.5);
       padding: 2px 6px;
       border-radius: 6px;
-      margin-top: 4px;
+      margin-top: 3px;
     }
     .btn-brawl {
       background: #22c55e;
@@ -143,7 +143,7 @@
       cursor: pointer;
       box-shadow: 0 7px 0 #15803d;
       display: none;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
     }
     .btn-brawl:active { transform: translateY(4px); box-shadow: 0 3px 0 #15803d; }
 
@@ -154,7 +154,7 @@
       background: rgba(20, 10, 35, 0.85);
       border: 3px dashed #ffaa00;
       border-radius: 16px;
-      padding: 15px;
+      padding: 14px;
       text-align: left;
       box-shadow: inset 0 0 15px rgba(255, 170, 0, 0.2);
     }
@@ -166,7 +166,7 @@
       text-shadow: 1px 1px 0 #000;
     }
     .rules-list {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       line-height: 1.5;
       color: #ddd;
     }
@@ -180,7 +180,7 @@
       font-size: 1.1rem;
     }
 
-    /* 戰鬥競技場 (2D 橫向戰場) */
+    /* 戰鬥競技場 */
     #battleScreen {
       display: none;
       width: 96%;
@@ -188,13 +188,13 @@
       position: relative;
     }
     .arena-box {
-      background: linear-gradient(to bottom, #4f772d, #31572c); /* 綠色草地 */
+      background: linear-gradient(to bottom, #4f772d, #31572c);
       border: 6px solid #ffde00;
       border-radius: 30px;
       padding: 20px;
       display: flex;
       justify-content: space-between;
-      align-items: flex-end; /* 讓全身角色踩在泥土線上 */
+      align-items: flex-end;
       position: relative;
       height: 440px;
       overflow: hidden;
@@ -205,7 +205,7 @@
       position: absolute;
       bottom: 0; left: 0; width: 100%;
       height: 25px;
-      background: #7f5539; /* 泥土層 */
+      background: #7f5539;
       z-index: 1;
     }
     .fighter-side {
@@ -215,7 +215,6 @@
       width: 250px;
       z-index: 5;
     }
-    
     .fighter-sprite-wrap {
       height: 270px;
       display: flex;
@@ -231,7 +230,7 @@
       filter: drop-shadow(0 10px 10px rgba(0,0,0,0.4));
     }
     #fighterCard2 .fighter-sprite {
-      transform: scaleX(-1); /* 讓右側藍方角色面向左側 */
+      transform: scaleX(-1);
     }
 
     .status-panel {
@@ -324,7 +323,6 @@
       100% { transform: rotate(90deg) translateY(60px); opacity: 0; }
     }
 
-    /* 競技場中央控制台 */
     .arena-center {
       display: flex;
       flex-direction: column;
@@ -371,7 +369,6 @@
     }
     .btn-attack-normal:active, .btn-attack-super:active { transform: translateY(3px); box-shadow: 0 2px 0 #000; }
 
-    /* 答題視窗 */
     .modal {
       display: none;
       position: fixed;
@@ -438,19 +435,24 @@
     <div class="preview-box">
       <div class="player-preview">
         <div style="color:#ef4444; font-size:1.1rem; margin-bottom:5px;">RED SIDE (P1)</div>
-        <div class="preview-avatar" style="border-color:#ef4444;"><img id="p1PreviewImg" src="" style="display:none;" referrerpolicy="no-referrer"></div>
+        <div class="preview-avatar" style="border-color:#ef4444;">
+          <img id="p1PreviewImg" src="" style="display:none;" referrerpolicy="no-referrer">
+        </div>
         <div id="p1Name" style="color:#ffde00; font-size:1.2rem;">?</div>
         <div id="p1SuperTag" class="roster-super-tag" style="display:none;"></div>
       </div>
       <div style="font-size:2rem; color:#ffde00;">VS</div>
       <div class="player-preview">
         <div style="color:#3b82f6; font-size:1.1rem; margin-bottom:5px;">BLUE SIDE (P2)</div>
-        <div class="preview-avatar" style="border-color:#3b82f6;"><img id="p2PreviewImg" src="" style="display:none;" referrerpolicy="no-referrer"></div>
+        <div class="preview-avatar" style="border-color:#3b82f6;">
+          <img id="p2PreviewImg" src="" style="display:none;" referrerpolicy="no-referrer">
+        </div>
         <div id="p2Name" style="color:#ffde00; font-size:1.2rem;">?</div>
         <div id="p2SuperTag" class="roster-super-tag" style="display:none;"></div>
       </div>
     </div>
 
+    <!-- 12 英雄選擇網格 -->
     <div class="roster-grid" id="rosterContainer"></div>
     <button class="btn-brawl" id="startBrawlBtn" onclick="enterBattle()">🔥 BRAWL! (進入對決) 🔥</button>
 
@@ -464,7 +466,7 @@
         </div>
         <div class="rules-item">
           <span class="rules-icon">⚡</span>
-          <span><strong>SUPER Attack (角色專屬絕招)</strong>：題目為<strong>【高難度挑戰題】</strong>！答對觸發該英雄毀滅絕招，造成 <strong>3 HP 傷害</strong>（Mortis/Poco 為 2 HP 傷害並為自己回血 +1 HP）！</span>
+          <span><strong>SUPER Attack (角色專屬絕招)</strong>：題目為<strong>【高難度挑戰題】</strong>！答對觸發該英雄毀滅絕招，造成 <strong>3 HP 傷害</strong>（Mortis 為 2 HP 傷害並為自己回血 +1 HP）！</span>
         </div>
         <div class="rules-item">
           <span class="rules-icon">🛡️</span>
@@ -530,11 +532,12 @@
   </div>
 
   <script>
-    // 💡 12 位官方全身英雄，頭像與全身立繪全線完美配合！不破圖！
+    // 💡 12 位完整的熱門官方英雄列表（直連透明全身立繪 + 自動切換備用頭像保險）
     const brawlersRoster = [
       { 
         name: "Crow", 
-        sprite: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/a/a2/Crow_Skin-Default.png", 
+        sprite: "https://static.wikia.nocookie.net/brawlstars/images/a/a2/Crow_Skin-Default.png", 
+        backupId: "16000016",
         superName: "天降黑羽 (Dagger Storm)", 
         superIcon: "🪶", 
         superDmg: 3, 
@@ -542,7 +545,8 @@
       },
       { 
         name: "Mortis", 
-        sprite: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/b/b2/Mortis_Skin-Default.png", 
+        sprite: "https://static.wikia.nocookie.net/brawlstars/images/b/b2/Mortis_Skin-Default.png", 
+        backupId: "16000015",
         superName: "蝠血狂飆 (Life Lead)", 
         superIcon: "🦇", 
         superDmg: 2, 
@@ -550,7 +554,8 @@
       },
       { 
         name: "El Primo", 
-        sprite: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/0/04/El_Primo_Skin-Default.png", 
+        sprite: "https://static.wikia.nocookie.net/brawlstars/images/0/04/El_Primo_Skin-Default.png", 
+        backupId: "16000004",
         superName: "飛天手肘落 (Flying Elbow)", 
         superIcon: "🥊", 
         superDmg: 3, 
@@ -558,7 +563,8 @@
       },
       { 
         name: "Bo", 
-        sprite: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/e/ee/Bo_Skin-Default.png", 
+        sprite: "https://static.wikia.nocookie.net/brawlstars/images/e/ee/Bo_Skin-Default.png", 
+        backupId: "16000008",
         superName: "地雷爆破 (Mines Blast)", 
         superIcon: "🏹", 
         superDmg: 3, 
@@ -566,7 +572,8 @@
       },
       { 
         name: "Barley", 
-        sprite: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/3/3c/Barley_Skin-Default.png", 
+        sprite: "https://static.wikia.nocookie.net/brawlstars/images/3/3c/Barley_Skin-Default.png", 
+        backupId: "16000003",
         superName: "狂暴烈酒 (Super Bottle)", 
         superIcon: "🍾", 
         superDmg: 3, 
@@ -574,7 +581,8 @@
       },
       { 
         name: "Shelly", 
-        sprite: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/5/5e/Shelly_Skin-Default.png", 
+        sprite: "https://static.wikia.nocookie.net/brawlstars/images/5/5e/Shelly_Skin-Default.png", 
+        backupId: "16000000",
         superName: "超級大霰彈 (Super Shell)", 
         superIcon: "💥", 
         superDmg: 3, 
@@ -582,7 +590,8 @@
       },
       { 
         name: "Colt", 
-        sprite: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/8/8a/Colt_Skin-Default.png", 
+        sprite: "https://static.wikia.nocookie.net/brawlstars/images/8/8a/Colt_Skin-Default.png", 
+        backupId: "16000001",
         superName: "子彈風暴 (Bullet Storm)", 
         superIcon: "🔫", 
         superDmg: 3, 
@@ -590,7 +599,8 @@
       },
       { 
         name: "Spike", 
-        sprite: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/8/8e/Spike_Skin-Default.png", 
+        sprite: "https://static.wikia.nocookie.net/brawlstars/images/8/8e/Spike_Skin-Default.png", 
+        backupId: "16000005",
         superName: "針刺結界 (Stick Around)", 
         superIcon: "🌵", 
         superDmg: 3, 
@@ -598,7 +608,8 @@
       },
       { 
         name: "Leon", 
-        sprite: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/3/33/Leon_Skin-Default.png", 
+        sprite: "https://static.wikia.nocookie.net/brawlstars/images/3/33/Leon_Skin-Default.png", 
+        backupId: "16000023",
         superName: "隱形潛獵 (Smoke Bomb)", 
         superIcon: "🦎", 
         superDmg: 3, 
@@ -606,7 +617,8 @@
       },
       { 
         name: "Piper", 
-        sprite: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/5/5d/Piper_Skin-Default.png", 
+        sprite: "https://static.wikia.nocookie.net/brawlstars/images/5/5d/Piper_Skin-Default.png", 
+        backupId: "16000022",
         superName: "驚喜謝幕 (Poppin')", 
         superIcon: "☂️", 
         superDmg: 3, 
@@ -614,7 +626,8 @@
       },
       { 
         name: "Frank", 
-        sprite: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/5/55/Frank_Skin-Default.png", 
+        sprite: "https://static.wikia.nocookie.net/brawlstars/images/5/55/Frank_Skin-Default.png", 
+        backupId: "16000020",
         superName: "震地重擊 (Stunning Blow)", 
         superIcon: "🔨", 
         superDmg: 3, 
@@ -622,7 +635,8 @@
       },
       { 
         name: "Bull", 
-        sprite: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/b/b7/Bull_Skin-Default.png", 
+        sprite: "https://static.wikia.nocookie.net/brawlstars/images/b/b7/Bull_Skin-Default.png", 
+        backupId: "16000002",
         superName: "蠻牛衝撞 (Bulldozer)", 
         superIcon: "🐂", 
         superDmg: 3, 
@@ -686,9 +700,8 @@
       brawlersRoster.forEach((b) => {
         const card = document.createElement('div');
         card.className = 'roster-card';
-        // 💡 徹底解決破圖：選角卡片使用與戰鬥完全相同的全身立繪，並設定自動 referrer 保護
         card.innerHTML = `
-          <img src="${b.sprite}" alt="${b.name}" referrerpolicy="no-referrer">
+          <img src="${b.sprite}" alt="${b.name}" referrerpolicy="no-referrer" onerror="this.onerror=null; this.src='https://cdn.brawlify.com/brawlers/borders/${b.backupId}.png'">
           <div style="font-size:1.05rem;">${b.name}</div>
           <div class="roster-super-tag">⚡ ${b.superName.split(' ')[0]}</div>
         `;
@@ -705,6 +718,7 @@
         document.getElementById('p1SuperTag').style.display = 'block';
         const img = document.getElementById('p1PreviewImg');
         img.src = b.sprite;
+        img.onerror = () => { img.src = `https://cdn.brawlify.com/brawlers/borders/${b.backupId}.png`; };
         img.style.display = 'block';
         selectingPlayer = 2;
         document.getElementById('selectInstruction').innerText = "Player 2 (Blue Side): Choose Your Brawler!";
@@ -716,6 +730,7 @@
         document.getElementById('p2SuperTag').style.display = 'block';
         const img = document.getElementById('p2PreviewImg');
         img.src = b.sprite;
+        img.onerror = () => { img.src = `https://cdn.brawlify.com/brawlers/borders/${b.backupId}.png`; };
         img.style.display = 'block';
         document.getElementById('selectInstruction').innerText = "Ready to Fight! Click Below!";
         document.getElementById('startBrawlBtn').style.display = 'block';
@@ -751,12 +766,18 @@
     function enterBattle() {
       document.getElementById('selectScreen').style.display = 'none';
       document.getElementById('battleScreen').style.display = 'block';
-      document.getElementById('f1Img').src = p1Brawler.sprite;
+      const f1 = document.getElementById('f1Img');
+      f1.src = p1Brawler.sprite;
+      f1.onerror = () => { f1.src = `https://cdn.brawlify.com/brawlers/borders/${p1Brawler.backupId}.png`; };
       document.getElementById('f1Name').innerText = p1Brawler.name;
       document.getElementById('f1SuperDesc').innerText = `⚡ ${p1Brawler.superName}`;
-      document.getElementById('f2Img').src = p2Brawler.sprite;
+      
+      const f2 = document.getElementById('f2Img');
+      f2.src = p2Brawler.sprite;
+      f2.onerror = () => { f2.src = `https://cdn.brawlify.com/brawlers/borders/${p2Brawler.backupId}.png`; };
       document.getElementById('f2Name').innerText = p2Brawler.name;
       document.getElementById('f2SuperDesc').innerText = `⚡ ${p2Brawler.superName}`;
+      
       currentAttacker = 1;
       p1Hp = 10;
       p2Hp = 10;
