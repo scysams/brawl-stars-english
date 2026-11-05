@@ -90,7 +90,7 @@
     }
     .preview-avatar img { width: 100%; height: 100%; object-fit: cover; }
     
-    /* 8 英雄選擇網格 */
+    /* 8 英雄選擇網格 (雙排 4x2 佈局) */
     .roster-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -191,7 +191,7 @@
       padding: 20px;
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
+      align-items: flex-end; /* 讓全身角色踩在泥土線上 */
       position: relative;
       height: 440px;
       overflow: hidden;
@@ -214,6 +214,7 @@
       z-index: 5;
     }
     
+    /* 全身角色容器樣式 */
     .fighter-sprite-wrap {
       height: 270px;
       display: flex;
@@ -299,6 +300,7 @@
       100% { transform: scale(1) rotate(90deg); opacity: 0; }
     }
 
+    /* 被打擊退與震動 */
     @keyframes hitReceiveRed {
       0%, 100% { transform: translateX(0); filter: brightness(1); }
       20% { transform: translateX(35px); filter: brightness(2.5) sepia(1) saturate(5) hue-rotate(-50deg); }
@@ -314,6 +316,7 @@
       80% { transform: translateX(5px); }
     }
 
+    /* 勝利跳躍與落敗倒地 */
     @keyframes victoryJump {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-50px) scaleY(1.1); }
@@ -322,6 +325,7 @@
       100% { transform: rotate(90deg) translateY(60px); opacity: 0; }
     }
 
+    /* 競技場中央控制台 */
     .arena-center {
       display: flex;
       flex-direction: column;
@@ -434,14 +438,16 @@
     <div class="preview-box">
       <div class="player-preview">
         <div style="color:#ef4444; font-size:1.1rem; margin-bottom:5px;">RED SIDE (P1)</div>
-        <div class="preview-avatar" style="border-color:#ef4444;"><img id="p1PreviewImg" src="" style="display:none;"></div>
+        <!-- 💡 這裡加上了 referrerpolicy="no-referrer" -->
+        <div class="preview-avatar" style="border-color:#ef4444;"><img id="p1PreviewImg" src="" style="display:none;" referrerpolicy="no-referrer"></div>
         <div id="p1Name" style="color:#ffde00; font-size:1.2rem;">?</div>
         <div id="p1SuperTag" class="roster-super-tag" style="display:none;"></div>
       </div>
       <div style="font-size:2rem; color:#ffde00;">VS</div>
       <div class="player-preview">
         <div style="color:#3b82f6; font-size:1.1rem; margin-bottom:5px;">BLUE SIDE (P2)</div>
-        <div class="preview-avatar" style="border-color:#3b82f6;"><img id="p2PreviewImg" src="" style="display:none;"></div>
+        <!-- 💡 這裡加上了 referrerpolicy="no-referrer" -->
+        <div class="preview-avatar" style="border-color:#3b82f6;"><img id="p2PreviewImg" src="" style="display:none;" referrerpolicy="no-referrer"></div>
         <div id="p2Name" style="color:#ffde00; font-size:1.2rem;">?</div>
         <div id="p2SuperTag" class="roster-super-tag" style="display:none;"></div>
       </div>
@@ -482,7 +488,7 @@
           <div class="hp-text" id="f1HpText">HP: 10 / 10</div>
         </div>
         <div class="fighter-sprite-wrap" id="fighterCard1">
-          <img class="fighter-sprite" id="f1Img" src="">
+          <img class="fighter-sprite" id="f1Img" src="" referrerpolicy="no-referrer">
         </div>
       </div>
 
@@ -504,7 +510,7 @@
           <div class="hp-text" id="f2HpText">HP: 10 / 10</div>
         </div>
         <div class="fighter-sprite-wrap" id="fighterCard2">
-          <img class="fighter-sprite" id="f2Img" src="">
+          <img class="fighter-sprite" id="f2Img" src="" referrerpolicy="no-referrer">
         </div>
       </div>
 
@@ -526,7 +532,7 @@
   </div>
 
   <script>
-    // 💡 所有人頭像與全身圖全部接入 Weserv CDN，保證100%流暢載入且絕不破圖！
+    // 💡 所有人頭像與全身圖全部接入 Weserv 高速免外連 CDN
     const brawlersRoster = [
       { 
         name: "Crow", 
@@ -602,8 +608,8 @@
       },
       { 
         name: "Poco", 
-        img: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/2/23/Poco_Port.png", 
-        sprite: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/2/24/Poco_Skin-Default.png", 
+        img: "https://images.weserv.nl/?url=https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/2/23/Poco_Port.png", 
+        sprite: "https://images.weserv.nl/?url=https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/2/24/Poco_Skin-Default.png", 
         superName: "安可治癒音波 (Encore Harmony)", 
         superIcon: "🎸", 
         superDmg: 2, 
@@ -667,8 +673,9 @@
       brawlersRoster.forEach((b) => {
         const card = document.createElement('div');
         card.className = 'roster-card';
+        // 💡 核心修正：動態生成的 <img> 標籤中也 100% 補上 referrerpolicy="no-referrer"
         card.innerHTML = `
-          <img src="${b.img}" alt="${b.name}">
+          <img src="${b.img}" alt="${b.name}" referrerpolicy="no-referrer">
           <div style="font-size:1.05rem;">${b.name}</div>
           <div class="roster-super-tag">⚡ ${b.superName.split(' ')[0]}</div>
         `;
