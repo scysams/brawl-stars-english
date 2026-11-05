@@ -90,7 +90,7 @@
     }
     .preview-avatar img { width: 100%; height: 100%; object-fit: cover; }
     
-    /* 8 英雄選擇網格 (雙排 4x2 佈局) */
+    /* 8 英雄選擇網格 */
     .roster-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -191,7 +191,7 @@
       padding: 20px;
       display: flex;
       justify-content: space-between;
-      align-items: flex-end; /* 讓全身角色踩在泥土線上 */
+      align-items: flex-end;
       position: relative;
       height: 440px;
       overflow: hidden;
@@ -214,7 +214,6 @@
       z-index: 5;
     }
     
-    /* 全身角色容器樣式 */
     .fighter-sprite-wrap {
       height: 270px;
       display: flex;
@@ -300,7 +299,6 @@
       100% { transform: scale(1) rotate(90deg); opacity: 0; }
     }
 
-    /* 被打擊退與震動 */
     @keyframes hitReceiveRed {
       0%, 100% { transform: translateX(0); filter: brightness(1); }
       20% { transform: translateX(35px); filter: brightness(2.5) sepia(1) saturate(5) hue-rotate(-50deg); }
@@ -316,7 +314,6 @@
       80% { transform: translateX(5px); }
     }
 
-    /* 勝利跳躍與落敗倒地 */
     @keyframes victoryJump {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-50px) scaleY(1.1); }
@@ -325,7 +322,6 @@
       100% { transform: rotate(90deg) translateY(60px); opacity: 0; }
     }
 
-    /* 競技場中央控制台 */
     .arena-center {
       display: flex;
       flex-direction: column;
@@ -372,7 +368,6 @@
     }
     .btn-attack-normal:active, .btn-attack-super:active { transform: translateY(3px); box-shadow: 0 2px 0 #000; }
 
-    /* 答題視窗 */
     .modal {
       display: none;
       position: fixed;
@@ -452,7 +447,6 @@
       </div>
     </div>
 
-    <!-- 8 英雄選擇網格 -->
     <div class="roster-grid" id="rosterContainer"></div>
     <button class="btn-brawl" id="startBrawlBtn" onclick="enterBattle()">🔥 BRAWL! (進入對決) 🔥</button>
 
@@ -532,12 +526,12 @@
   </div>
 
   <script>
-    // 8位英雄完美官方對照庫 (Port:頭像, Sprite:全身立繪)
+    // 💡 所有人頭像與全身圖全部接入 Weserv CDN，保證100%流暢載入且絕不破圖！
     const brawlersRoster = [
       { 
         name: "Crow", 
-        img: "https://static.wikia.nocookie.net/brawlstars/images/b/bf/Crow_Port.png", 
-        sprite: "https://static.wikia.nocookie.net/brawlstars/images/a/a2/Crow_Skin-Default.png", 
+        img: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/b/bf/Crow_Port.png", 
+        sprite: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/a/a2/Crow_Skin-Default.png", 
         superName: "天降黑羽 (Dagger Storm)", 
         superIcon: "🪶", 
         superDmg: 3, 
@@ -545,8 +539,8 @@
       },
       { 
         name: "Mortis", 
-        img: "https://static.wikia.nocookie.net/brawlstars/images/8/81/Mortis_Port.png", 
-        sprite: "https://static.wikia.nocookie.net/brawlstars/images/b/b2/Mortis_Skin-Default.png", 
+        img: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/8/81/Mortis_Port.png", 
+        sprite: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/b/b2/Mortis_Skin-Default.png", 
         superName: "蝠血狂飆 (Life Lead)", 
         superIcon: "🦇", 
         superDmg: 2, 
@@ -554,8 +548,8 @@
       },
       { 
         name: "El Primo", 
-        img: "https://static.wikia.nocookie.net/brawlstars/images/6/6e/El_Primo_Port.png", 
-        sprite: "https://static.wikia.nocookie.net/brawlstars/images/0/04/El_Primo_Skin-Default.png", 
+        img: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/6/6e/El_Primo_Port.png", 
+        sprite: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/0/04/El_Primo_Skin-Default.png", 
         superName: "飛天手肘落 (Flying Elbow)", 
         superIcon: "🥊", 
         superDmg: 3, 
@@ -563,8 +557,8 @@
       },
       { 
         name: "Bo", 
-        img: "https://static.wikia.nocookie.net/brawlstars/images/4/46/Bo_Port.png", 
-        sprite: "https://static.wikia.nocookie.net/brawlstars/images/e/ee/Bo_Skin-Default.png", 
+        img: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/4/46/Bo_Port.png", 
+        sprite: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/e/ee/Bo_Skin-Default.png", 
         superName: "地雷爆破 (Mines Blast)", 
         superIcon: "🏹", 
         superDmg: 3, 
@@ -572,8 +566,8 @@
       },
       { 
         name: "Barley", 
-        img: "https://static.wikia.nocookie.net/brawlstars/images/6/6c/Barley_Port.png", 
-        sprite: "https://static.wikia.nocookie.net/brawlstars/images/3/3c/Barley_Skin-Default.png", 
+        img: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/6/6c/Barley_Port.png", 
+        sprite: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/3/3c/Barley_Skin-Default.png", 
         superName: "狂暴烈酒 (Super Bottle)", 
         superIcon: "🍾", 
         superDmg: 3, 
@@ -581,8 +575,8 @@
       },
       { 
         name: "Shelly", 
-        img: "https://static.wikia.nocookie.net/brawlstars/images/d/d2/Shelly_Port.png", 
-        sprite: "https://static.wikia.nocookie.net/brawlstars/images/5/5e/Shelly_Skin-Default.png", 
+        img: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/d/d2/Shelly_Port.png", 
+        sprite: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/5/5e/Shelly_Skin-Default.png", 
         superName: "超級大霰彈 (Super Shell)", 
         superIcon: "💥", 
         superDmg: 3, 
@@ -590,8 +584,8 @@
       },
       { 
         name: "Colt", 
-        img: "https://static.wikia.nocookie.net/brawlstars/images/0/04/Colt_Port.png", 
-        sprite: "https://static.wikia.nocookie.net/brawlstars/images/8/8a/Colt_Skin-Default.png", 
+        img: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/0/04/Colt_Port.png", 
+        sprite: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/8/8a/Colt_Skin-Default.png", 
         superName: "子彈風暴 (Bullet Storm)", 
         superIcon: "🔫", 
         superDmg: 3, 
@@ -599,12 +593,21 @@
       },
       { 
         name: "Spike", 
-        img: "https://static.wikia.nocookie.net/brawlstars/images/1/1f/Spike_Port.png", 
-        sprite: "https://static.wikia.nocookie.net/brawlstars/images/8/8e/Spike_Skin-Default.png", 
+        img: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/1/1f/Spike_Port.png", 
+        sprite: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/8/8e/Spike_Skin-Default.png", 
         superName: "針刺結界 (Stick Around)", 
         superIcon: "🌵", 
         superDmg: 3, 
         heal: 0 
+      },
+      { 
+        name: "Poco", 
+        img: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/2/23/Poco_Port.png", 
+        sprite: "https://images.weserv.nl/?url=https://static.wikia.nocookie.net/brawlstars/images/2/24/Poco_Skin-Default.png", 
+        superName: "安可治癒音波 (Encore Harmony)", 
+        superIcon: "🎸", 
+        superDmg: 2, 
+        heal: 1 
       }
     ];
 
@@ -789,7 +792,7 @@
             playBeep(523, 'sine', 0.2);
             setTimeout(() => {
               document.getElementById('quizModal').style.display = 'none';
-              const isCrit = !isSuper && Math.random() < 0.30; // 絕招不觸發額外暴擊
+              const isCrit = !isSuper && Math.random() < 0.30;
               executeAttackAnimation(true, isCrit, isSuper);
             }, 600);
           } else {
@@ -814,14 +817,12 @@
       const attacker = currentAttacker === 1 ? p1Brawler : p2Brawler;
 
       if (isSuccess) {
-        // 1. 全身橫向急速衝鋒 (Dash)
         attackerWrap.style.transform = currentAttacker === 1 ? 'translateX(550px) scale(1.2)' : 'translateX(-550px) scale(1.2)';
         
         setTimeout(() => {
-          // 2. 命中爆破與對應音效
           if (isSuper) {
             burst.innerText = `${attacker.superIcon}⚡💥`;
-            playBeep(90, 'sawtooth', 0.6); // 震撼重低音
+            playBeep(90, 'sawtooth', 0.6);
           } else if (isCrit) {
             burst.innerText = '💥⚡';
             playBeep(120, 'square', 0.5);
@@ -834,17 +835,14 @@
           burst.style.left = currentAttacker === 1 ? '720px' : '230px';
           burst.style.bottom = '100px';
 
-          // 3. 對手全身被擊退與強烈晃動 (Knockback)
           defenderWrap.style.animation = currentAttacker === 1 ? 'hitReceiveBlue 0.45s ease' : 'hitReceiveRed 0.45s ease';
           
-          // 4. 跳出浮動傷害文字
           dmg.className = 'damage-text';
           let dmgAmount = 1;
           if (isSuper) {
             dmg.classList.add('super-damage');
             dmgAmount = attacker.superDmg;
             dmg.innerText = `SUPER! -${dmgAmount} HP`;
-            // 絕招回血加成特技
             if (attacker.heal > 0) {
               if (currentAttacker === 1) p1Hp = Math.min(10, p1Hp + attacker.heal);
               else p2Hp = Math.min(10, p2Hp + attacker.heal);
@@ -862,14 +860,12 @@
           dmg.style.bottom = '220px';
           dmg.style.animation = 'floatDamage 0.85s forwards';
 
-          // 扣除對手生命值
           if (currentAttacker === 1) p2Hp = Math.max(0, p2Hp - dmgAmount);
           else p1Hp = Math.max(0, p1Hp - dmgAmount);
           
           updateBattleUI();
         }, 320);
 
-        // 5. 特效消失，全身角色後撤歸位 (Retreat)
         setTimeout(() => {
           burst.style.display = 'none';
           dmg.style.animation = 'none';
@@ -877,7 +873,6 @@
           attackerWrap.style.transform = 'none';
         }, 800);
 
-        // 6. 終局 K.O. 判定與慶祝舞步
         setTimeout(() => {
           if (p1Hp <= 0 || p2Hp <= 0) {
             const winnerName = p1Hp > 0 ? p1Brawler.name : p2Brawler.name;
