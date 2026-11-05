@@ -77,7 +77,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 140px;
+      width: 150px;
     }
     .preview-avatar {
       width: 100px;
@@ -89,11 +89,15 @@
       margin-bottom: 8px;
     }
     .preview-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    
+    /* 8 英雄選擇網格 */
     .roster-grid {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
-      gap: 15px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
       margin-bottom: 25px;
+      width: 100%;
+      max-width: 800px;
     }
     .roster-card {
       background: #2d164d;
@@ -118,6 +122,14 @@
       border: 2px solid #fff;
       margin-bottom: 5px;
     }
+    .roster-super-tag {
+      font-size: 0.75rem;
+      color: #ffde00;
+      background: rgba(0,0,0,0.5);
+      padding: 2px 6px;
+      border-radius: 6px;
+      margin-top: 4px;
+    }
     .btn-brawl {
       background: #22c55e;
       color: #fff;
@@ -135,7 +147,7 @@
     /* 戰鬥秘笈規則面板 */
     .rules-box {
       width: 100%;
-      max-width: 650px;
+      max-width: 750px;
       background: rgba(20, 10, 35, 0.85);
       border: 3px dashed #ffaa00;
       border-radius: 16px;
@@ -173,25 +185,24 @@
       position: relative;
     }
     .arena-box {
-      background: linear-gradient(to bottom, #4f772d, #31572c); /* 綠色草地 */
+      background: linear-gradient(to bottom, #4f772d, #31572c);
       border: 6px solid #ffde00;
       border-radius: 30px;
       padding: 20px;
       display: flex;
       justify-content: space-between;
-      align-items: flex-end; /* 讓全身角色踩在泥土線上 */
+      align-items: flex-end;
       position: relative;
       height: 440px;
       overflow: hidden;
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
     }
-    /* 地面泥土線 */
     .arena-box::after {
       content: '';
       position: absolute;
       bottom: 0; left: 0; width: 100%;
       height: 25px;
-      background: #7f5539; /* 泥土層 */
+      background: #7f5539;
       z-index: 1;
     }
     .fighter-side {
@@ -201,10 +212,8 @@
       width: 250px;
       z-index: 5;
     }
-    
-    /* 全身角色容器樣式 */
     .fighter-sprite-wrap {
-      height: 270px; /* 拉高容器，完美容納全身 */
+      height: 270px;
       display: flex;
       align-items: flex-end;
       justify-content: center;
@@ -212,13 +221,13 @@
       transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
     .fighter-sprite {
-      width: 180px; /* 加寬尺寸，看全身更清晰 */
-      height: 240px; /* 加高尺寸，真正的大比例全身 */
+      width: 180px;
+      height: 240px;
       object-fit: contain;
       filter: drop-shadow(0 10px 10px rgba(0,0,0,0.4));
     }
     #fighterCard2 .fighter-sprite {
-      transform: scaleX(-1); /* 讓右側藍方角色面向左側 */
+      transform: scaleX(-1);
     }
 
     .status-panel {
@@ -264,6 +273,11 @@
       color: #ffde00;
       text-shadow: 3px 3px 0 #ff0055, 5px 5px 0 #000;
     }
+    .damage-text.super-damage {
+      font-size: 4rem;
+      color: #a855f7;
+      text-shadow: 3px 3px 0 #ffde00, 5px 5px 0 #000;
+    }
     @keyframes floatDamage {
       0% { opacity: 1; transform: translateY(0) scale(1.3); }
       100% { opacity: 0; transform: translateY(-90px) scale(0.8); }
@@ -271,19 +285,18 @@
 
     .hit-burst {
       position: absolute;
-      font-size: 4.5rem;
+      font-size: 5rem;
       display: none;
       z-index: 15;
       pointer-events: none;
-      animation: popBurst 0.3s ease-out forwards;
+      animation: popBurst 0.35s ease-out forwards;
     }
     @keyframes popBurst {
       0% { transform: scale(0.3) rotate(0deg); opacity: 0; }
-      50% { transform: scale(1.4) rotate(45deg); opacity: 1; }
+      50% { transform: scale(1.5) rotate(45deg); opacity: 1; }
       100% { transform: scale(1) rotate(90deg); opacity: 0; }
     }
 
-    /* 全身被打擊退與震動 */
     @keyframes hitReceiveRed {
       0%, 100% { transform: translateX(0); filter: brightness(1); }
       20% { transform: translateX(35px); filter: brightness(2.5) sepia(1) saturate(5) hue-rotate(-50deg); }
@@ -299,47 +312,62 @@
       80% { transform: translateX(5px); }
     }
 
-    /* 勝利原地全身跳躍 */
     @keyframes victoryJump {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-50px) scaleY(1.1); }
     }
-    /* 輸家倒下變透明消散 */
     @keyframes defeatFall {
       100% { transform: rotate(90deg) translateY(60px); opacity: 0; }
     }
 
+    /* 競技場中央控制台：普攻與絕招按鈕 */
     .arena-center {
       display: flex;
       flex-direction: column;
       align-items: center;
       align-self: center;
       z-index: 5;
-      margin-bottom: 40px;
+      margin-bottom: 30px;
     }
     .turn-badge {
-      font-size: 1.4rem;
+      font-size: 1.3rem;
       color: #ffde00;
       background: rgba(0,0,0,0.7);
-      padding: 8px 22px;
-      border-radius: 18px;
+      padding: 6px 18px;
+      border-radius: 15px;
       border: 3px solid #ffde00;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       text-shadow: 2px 2px 0 #000;
     }
-    .btn-attack {
+    .action-btn-group {
+      display: flex;
+      gap: 12px;
+    }
+    .btn-attack-normal {
       background: #ff0055;
       color: #fff;
-      font-size: 1.4rem;
-      padding: 12px 30px;
+      font-size: 1.15rem;
+      padding: 10px 18px;
       border: 4px solid #000;
-      border-radius: 18px;
+      border-radius: 16px;
       cursor: pointer;
-      box-shadow: 0 6px 0 #88002e;
+      box-shadow: 0 5px 0 #88002e;
       transition: all 0.1s;
     }
-    .btn-attack:active { transform: translateY(4px); box-shadow: 0 2px 0 #88002e; }
+    .btn-attack-super {
+      background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+      color: #ffde00;
+      font-size: 1.25rem;
+      padding: 10px 22px;
+      border: 4px solid #ffde00;
+      border-radius: 16px;
+      cursor: pointer;
+      box-shadow: 0 5px 0 #581c87, 0 0 15px rgba(236, 72, 153, 0.6);
+      transition: all 0.1s;
+    }
+    .btn-attack-normal:active, .btn-attack-super:active { transform: translateY(3px); box-shadow: 0 2px 0 #000; }
 
+    /* 答題彈出視窗 */
     .modal {
       display: none;
       position: fixed;
@@ -353,23 +381,33 @@
       background: #1e1b4b;
       border: 5px solid #ffde00;
       border-radius: 25px;
-      padding: 30px;
+      padding: 25px;
       width: 90%;
-      max-width: 680px;
+      max-width: 720px;
       text-align: center;
       box-shadow: 0 0 40px #ffde00;
     }
-    .q-turn { font-size: 1.4rem; color: #ffde00; margin-bottom: 8px; }
-    .q-cat { color: #38bdf8; font-size: 1.1rem; margin-bottom: 15px; }
-    .q-text { font-size: 1.7rem; color: #fff; margin-bottom: 25px; line-height: 1.3; }
-    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .q-diff-badge {
+      display: inline-block;
+      font-size: 0.95rem;
+      padding: 4px 14px;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    .diff-normal { background: #3b82f6; color: #fff; }
+    .diff-hard { background: #ec4899; color: #fff; border: 2px solid #ffde00; box-shadow: 0 0 12px #ec4899; }
+    .q-turn { font-size: 1.4rem; color: #ffde00; margin-bottom: 6px; }
+    .q-cat { color: #38bdf8; font-size: 1.05rem; margin-bottom: 12px; }
+    .q-text { font-size: 1.55rem; color: #fff; margin-bottom: 22px; line-height: 1.35; }
+    .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .opt-btn {
       background: #4338ca;
       color: #fff;
       border: 3px solid #000;
       border-radius: 14px;
-      padding: 15px;
-      font-size: 1.25rem;
+      padding: 14px;
+      font-size: 1.15rem;
       cursor: pointer;
       box-shadow: 0 5px 0 #000;
     }
@@ -382,7 +420,7 @@
   <header>
     <div>
       <h1>BCKLAS ENGLISH CHALLENGE</h1>
-      <div class="sub-title">Brawl Stars 1v1 Arena • Answer to Attack!</div>
+      <div class="sub-title">Brawl Stars 1v1 Arena • Normal vs Super Attack!</div>
     </div>
     <div style="display:flex; gap:8px;">
       <button class="btn-top" onclick="restartSelection()">🔄 重新選角</button>
@@ -398,32 +436,36 @@
         <div style="color:#ef4444; font-size:1.1rem; margin-bottom:5px;">RED SIDE (P1)</div>
         <div class="preview-avatar" style="border-color:#ef4444;"><img id="p1PreviewImg" src="" style="display:none;"></div>
         <div id="p1Name" style="color:#ffde00; font-size:1.2rem;">?</div>
+        <div id="p1SuperTag" class="roster-super-tag" style="display:none;"></div>
       </div>
       <div style="font-size:2rem; color:#ffde00;">VS</div>
       <div class="player-preview">
         <div style="color:#3b82f6; font-size:1.1rem; margin-bottom:5px;">BLUE SIDE (P2)</div>
         <div class="preview-avatar" style="border-color:#3b82f6;"><img id="p2PreviewImg" src="" style="display:none;"></div>
         <div id="p2Name" style="color:#ffde00; font-size:1.2rem;">?</div>
+        <div id="p2SuperTag" class="roster-super-tag" style="display:none;"></div>
       </div>
     </div>
+
+    <!-- 8 英雄選擇網格 -->
     <div class="roster-grid" id="rosterContainer"></div>
     <button class="btn-brawl" id="startBrawlBtn" onclick="enterBattle()">🔥 BRAWL! (進入對決) 🔥</button>
 
     <!-- 戰鬥秘笈規則面板 -->
     <div class="rules-box">
-      <div class="rules-title">⚔️ BATTLE TIPS / 戰鬥秘笈 ⚔️</div>
+      <div class="rules-title">⚔️ BATTLE & SUPER TIPS / 戰鬥與絕招秘笈 ⚔️</div>
       <div class="rules-list">
         <div class="rules-item">
-          <span class="rules-icon">🎯</span>
-          <span><strong>30% Critical Chance (30% 暴擊機率)</strong>：每次答對英文題目，有 30% 的幸運機率發動驚天動地的「暴擊」！</span>
+          <span class="rules-icon">🥊</span>
+          <span><strong>Normal Attack (普通攻擊)</strong>：題目難度標準。答對造成 1 HP 傷害（30% 幸運爆擊 2 HP）。</span>
         </div>
         <div class="rules-item">
-          <span class="rules-icon">💥</span>
-          <span><strong>Double Damage (雙倍傷害 -2 HP)</strong>：觸發暴擊時，音效會更震撼，全身角色會爆發出巨大的黃臨色 <strong>CRITICAL! -2 HP</strong> 效果！</span>
+          <span class="rules-icon">⚡</span>
+          <span><strong>SUPER Attack (角色專屬絕招)</strong>：題目為<strong>【高難度挑戰題】</strong>！答對觸發該英雄毀滅絕招，造成 <strong>3 HP 傷害</strong>（Mortis/Poco 為 2 HP 傷害並為自己回血 +1 HP）！</span>
         </div>
         <div class="rules-item">
           <span class="rules-icon">🛡️</span>
-          <span><strong>Safety Guard (血量保護)</strong>：如果對手只剩 1 格血，暴擊會安全將 HP 扣減至 0 並宣告 K.O. 勝利，絕對不會出現負數。</span>
+          <span><strong>Safety Guard (血量保護)</strong>：若對手只剩 1-2 格血，高額傷害安全歸零並判定 K.O. 勝利，無負數。</span>
         </div>
       </div>
     </div>
@@ -435,7 +477,8 @@
       <!-- 玩家 1 (紅方全身立繪) -->
       <div class="fighter-side" id="panelWrap1">
         <div class="status-panel" id="panel1">
-          <div id="f1Name" style="font-size:1.4rem; color:#ffde00; margin-bottom:5px; text-shadow:2px 2px 0 #000;">Crow</div>
+          <div id="f1Name" style="font-size:1.4rem; color:#ffde00; margin-bottom:3px; text-shadow:2px 2px 0 #000;">Crow</div>
+          <div id="f1SuperDesc" style="font-size:0.85rem; color:#00f0ff; margin-bottom:5px;">Super: Dagger Storm</div>
           <div class="hp-bar-wrap"><div class="hp-fill" id="f1HpFill"></div></div>
           <div class="hp-text" id="f1HpText">HP: 10 / 10</div>
         </div>
@@ -444,16 +487,20 @@
         </div>
       </div>
 
-      <!-- 中央控制台 -->
+      <!-- 中央控制台：普攻 & 絕招 -->
       <div class="arena-center">
         <div class="turn-badge" id="currentTurnBadge">Attacker: Crow</div>
-        <button class="btn-attack" onclick="openBattleQuiz()">⚡ 發動攻擊 (Battle Quiz)</button>
+        <div class="action-btn-group">
+          <button class="btn-attack-normal" onclick="openQuiz(false)">🥊 普通攻擊 (Normal)</button>
+          <button class="btn-attack-super" id="btnSuper" onclick="openQuiz(true)">⚡ 發動絕招 (SUPER)</button>
+        </div>
       </div>
 
       <!-- 玩家 2 (藍方全身立繪) -->
       <div class="fighter-side" id="panelWrap2">
         <div class="status-panel" id="panel2">
-          <div id="f2Name" style="font-size:1.4rem; color:#ffde00; margin-bottom:5px; text-shadow:2px 2px 0 #000;">Mortis</div>
+          <div id="f2Name" style="font-size:1.4rem; color:#ffde00; margin-bottom:3px; text-shadow:2px 2px 0 #000;">Mortis</div>
+          <div id="f2SuperDesc" style="font-size:0.85rem; color:#00f0ff; margin-bottom:5px;">Super: Life Lead</div>
           <div class="hp-bar-wrap"><div class="hp-fill" id="f2HpFill"></div></div>
           <div class="hp-text" id="f2HpText">HP: 10 / 10</div>
         </div>
@@ -471,6 +518,7 @@
   <!-- 3. 英文題目彈出框 -->
   <div class="modal" id="quizModal">
     <div class="modal-content">
+      <div id="modalDiffBadge" class="q-diff-badge diff-normal">Normal Question</div>
       <div class="q-turn" id="modalTurnTitle">Crow is Attacking!</div>
       <div class="q-cat" id="modalCat">Category: Grammar</div>
       <div class="q-text" id="modalQ">Question here?</div>
@@ -479,29 +527,104 @@
   </div>
 
   <script>
-    // 英雄全身官方 PNG 圖片庫 (Wikia 數據庫高畫質全身立繪，不再是頭像大頭貼！)
+    // 8 位官方英雄配置（頭像 + 全身立繪 + 專屬絕招）
     const brawlersRoster = [
-      { name: "Crow", img: "https://cdn.brawlify.com/brawlers/borders/16000016.png", sprite: "https://static.wikia.nocookie.net/brawlstars/images/a/a2/Crow_Skin-Default.png", icon: "🪶" },
-      { name: "Mortis", img: "https://cdn.brawlify.com/brawlers/borders/16000015.png", sprite: "https://static.wikia.nocookie.net/brawlstars/images/b/b2/Mortis_Skin-Default.png", icon: "🦇" },
-      { name: "El Primo", img: "https://cdn.brawlify.com/brawlers/borders/16000004.png", sprite: "https://static.wikia.nocookie.net/brawlstars/images/0/04/El_Primo_Skin-Default.png", icon: "🥊" },
-      { name: "Bo", img: "https://cdn.brawlify.com/brawlers/borders/16000008.png", sprite: "https://static.wikia.nocookie.net/brawlstars/images/e/ee/Bo_Skin-Default.png", icon: "🏹" },
-      { name: "Barley", img: "https://cdn.brawlify.com/brawlers/borders/16000003.png", sprite: "https://static.wikia.nocookie.net/brawlstars/images/3/3c/Barley_Skin-Default.png", icon: "🍾" },
-      { name: "Shelly", img: "https://cdn.brawlify.com/brawlers/borders/16000000.png", sprite: "https://static.wikia.nocookie.net/brawlstars/images/5/5e/Shelly_Skin-Default.png", icon: "💥" }
+      { 
+        name: "Crow", 
+        img: "https://cdn.brawlify.com/brawlers/borders/16000016.png", 
+        sprite: "https://static.wikia.nocookie.net/brawlstars/images/a/a2/Crow_Skin-Default.png", 
+        superName: "天降黑羽 (Dagger Storm)", 
+        superIcon: "🪶", 
+        superDmg: 3, 
+        heal: 0 
+      },
+      { 
+        name: "Mortis", 
+        img: "https://cdn.brawlify.com/brawlers/borders/16000015.png", 
+        sprite: "https://static.wikia.nocookie.net/brawlstars/images/b/b2/Mortis_Skin-Default.png", 
+        superName: "蝠血狂飆 (Life Lead)", 
+        superIcon: "🦇", 
+        superDmg: 2, 
+        heal: 1 
+      },
+      { 
+        name: "Shelly", 
+        img: "https://cdn.brawlify.com/brawlers/borders/16000000.png", 
+        sprite: "https://static.wikia.nocookie.net/brawlstars/images/5/5e/Shelly_Skin-Default.png", 
+        superName: "超級霰彈 (Super Shell)", 
+        superIcon: "💥", 
+        superDmg: 3, 
+        heal: 0 
+      },
+      { 
+        name: "Colt", 
+        img: "https://cdn.brawlify.com/brawlers/borders/16000001.png", 
+        sprite: "https://static.wikia.nocookie.net/brawlstars/images/8/8a/Colt_Skin-Default.png", 
+        superName: "子彈風暴 (Bullet Storm)", 
+        superIcon: "🔫", 
+        superDmg: 3, 
+        heal: 0 
+      },
+      { 
+        name: "El Primo", 
+        img: "https://cdn.brawlify.com/brawlers/borders/16000004.png", 
+        sprite: "https://static.wikia.nocookie.net/brawlstars/images/0/04/El_Primo_Skin-Default.png", 
+        superName: "飛天手肘落 (Flying Elbow)", 
+        superIcon: "🥊", 
+        superDmg: 3, 
+        heal: 0 
+      },
+      { 
+        name: "Bo", 
+        img: "https://cdn.brawlify.com/brawlers/borders/16000008.png", 
+        sprite: "https://static.wikia.nocookie.net/brawlstars/images/e/ee/Bo_Skin-Default.png", 
+        superName: "地雷爆破 (Mines Blast)", 
+        superIcon: "🏹", 
+        superDmg: 3, 
+        heal: 0 
+      },
+      { 
+        name: "Spike", 
+        img: "https://cdn.brawlify.com/brawlers/borders/16000005.png", 
+        sprite: "https://static.wikia.nocookie.net/brawlstars/images/8/8e/Spike_Skin-Default.png", 
+        superName: "刺針結界 (Stick Around)", 
+        superIcon: "🌵", 
+        superDmg: 3, 
+        heal: 0 
+      },
+      { 
+        name: "Poco", 
+        img: "https://cdn.brawlify.com/brawlers/borders/16000013.png", 
+        sprite: "https://static.wikia.nocookie.net/brawlstars/images/5/52/Poco_Skin-Default.png", 
+        superName: "安可治癒音波 (Encore Harmony)", 
+        superIcon: "🎸", 
+        superDmg: 2, 
+        heal: 1 
+      }
     ];
 
-    const questions = [
+    // 1. 普通難度題庫 (Normal Quiz)
+    const normalQuestions = [
       { cat: "Phonics", q: "Which word has the 'short a' sound?", opts: ["Cake", "Cat", "Rain", "Train"], ans: 1 },
-      { cat: "Grammar (Tenses)", q: "Yesterday, Kelly ________ to the library.", opts: ["go", "goes", "went", "going"], ans: 2 },
+      { cat: "Grammar", q: "Yesterday, Kelly ________ to the library.", opts: ["go", "goes", "went", "going"], ans: 2 },
       { cat: "Vocabulary", q: "What is the opposite of 'Strong'?", opts: ["Weak", "Heavy", "Brave", "Fast"], ans: 0 },
       { cat: "Prepositions", q: "The pencil is ________ the pencil case.", opts: ["in", "on", "under", "behind"], ans: 0 },
       { cat: "Spelling", q: "Which spelling is correct?", opts: ["Beatiful", "Beautiful", "Beautifull", "Beutiful"], ans: 1 },
-      { cat: "Grammar (Pronouns)", q: "This is Tom. ________ is my best friend.", opts: ["She", "He", "They", "It"], ans: 1 },
+      { cat: "Grammar", q: "This is Tom. ________ is my best friend.", opts: ["She", "He", "They", "It"], ans: 1 },
       { cat: "Phonics", q: "Which word rhymes with 'night'?", opts: ["Right", "Tree", "Boat", "Fish"], ans: 0 },
-      { cat: "Vocabulary", q: "Where do you borrow English storybooks?", opts: ["Canteen", "Library", "Art Room", "Playground"], ans: 1 },
-      { cat: "Grammar (Tenses)", q: "Look! The children ________ football now.", opts: ["play", "plays", "are playing", "played"], ans: 2 },
-      { cat: "Vocabulary", q: "An elephant is big, but a mouse is ________.", opts: ["huge", "tall", "small", "long"], ans: 2 },
-      { cat: "Prepositions", q: "The birds are flying ________ the sky.", opts: ["in", "on", "at", "under"], ans: 0 },
-      { cat: "Spelling", q: "Rearrange: 't-e-a-c-h-r-e' to spell a person:", opts: ["Doctor", "Teacher", "Nurse", "Farmer"], ans: 1 }
+      { cat: "Vocabulary", q: "Where do you borrow English books?", opts: ["Canteen", "Library", "Art Room", "Hall"], ans: 1 }
+    ];
+
+    // 2. 高難度絕招題庫 (Hard Challenge Quiz)
+    const hardQuestions = [
+      { cat: "Past Continuous", q: "While Tom ________ his homework, the telephone rang.", opts: ["was doing", "did", "does", "is doing"], ans: 0 },
+      { cat: "Conditionals", q: "If it rains tomorrow, we ________ the school picnic.", opts: ["cancel", "will cancel", "canceled", "would cancel"], ans: 1 },
+      { cat: "Advanced Vocab", q: "The scientist made a ________ discovery that amazed everyone.", opts: ["remarkable", "bored", "careless", "lazy"], ans: 0 },
+      { cat: "Relative Pronouns", q: "The teacher ________ taught us English last year has moved abroad.", opts: ["which", "who", "whom", "whose"], ans: 1 },
+      { cat: "Irregular Verbs", q: "Choose the correct past participle: 'The vase was ________ by the cat.'", opts: ["broke", "broken", "breaked", "breaking"], ans: 1 },
+      { cat: "Conjunctions", q: "Mary went to school ________ she was not feeling very well.", opts: ["because", "although", "so", "unless"], ans: 1 },
+      { cat: "Sentence Structure", q: "Identify the error: 'Neither Peter nor his brothers (A)is (B)coming to (C)the party.'", opts: ["(A) is -> are", "(B) coming -> come", "(C) the -> a", "No error"], ans: 0 },
+      { cat: "Reading Inference", q: "'Jack was soaking wet and his umbrella was turned inside out.' What happened?", opts: ["It was sunny", "A strong windy storm occurred", "He fell in a pool", "He lost his bag"], ans: 1 }
     ];
 
     let p1Brawler = null;
@@ -511,6 +634,7 @@
     let p1Hp = 10;
     let p2Hp = 10;
     let hasAnswered = false;
+    let isCurrentSuper = false;
 
     let audioCtx = null;
     function playBeep(freq, type, duration) {
@@ -535,7 +659,11 @@
       brawlersRoster.forEach((b) => {
         const card = document.createElement('div');
         card.className = 'roster-card';
-        card.innerHTML = `<img src="${b.img}" alt="${b.name}"><div>${b.name}</div>`;
+        card.innerHTML = `
+          <img src="${b.img}" alt="${b.name}">
+          <div style="font-size:1.05rem;">${b.name}</div>
+          <div class="roster-super-tag">⚡ ${b.superName.split(' ')[0]}</div>
+        `;
         card.onclick = () => selectBrawler(b);
         container.appendChild(card);
       });
@@ -545,6 +673,8 @@
       if (selectingPlayer === 1) {
         p1Brawler = b;
         document.getElementById('p1Name').innerText = b.name;
+        document.getElementById('p1SuperTag').innerText = `⚡ ${b.superName}`;
+        document.getElementById('p1SuperTag').style.display = 'block';
         const img = document.getElementById('p1PreviewImg');
         img.src = b.img;
         img.style.display = 'block';
@@ -554,6 +684,8 @@
       } else if (selectingPlayer === 2) {
         p2Brawler = b;
         document.getElementById('p2Name').innerText = b.name;
+        document.getElementById('p2SuperTag').innerText = `⚡ ${b.superName}`;
+        document.getElementById('p2SuperTag').style.display = 'block';
         const img = document.getElementById('p2PreviewImg');
         img.src = b.img;
         img.style.display = 'block';
@@ -571,6 +703,8 @@
       p2Hp = 10;
       document.getElementById('p1Name').innerText = "?";
       document.getElementById('p2Name').innerText = "?";
+      document.getElementById('p1SuperTag').style.display = 'none';
+      document.getElementById('p2SuperTag').style.display = 'none';
       document.getElementById('p1PreviewImg').style.display = 'none';
       document.getElementById('p2PreviewImg').style.display = 'none';
       document.getElementById('startBrawlBtn').style.display = 'none';
@@ -578,7 +712,6 @@
       document.getElementById('battleScreen').style.display = 'none';
       document.getElementById('selectScreen').style.display = 'flex';
       
-      // 重設戰鬥立繪
       document.getElementById('fighterCard1').style.animation = 'none';
       document.getElementById('fighterCard2').style.animation = 'none';
       document.getElementById('fighterCard1').style.transform = 'none';
@@ -592,8 +725,10 @@
       document.getElementById('battleScreen').style.display = 'block';
       document.getElementById('f1Img').src = p1Brawler.sprite;
       document.getElementById('f1Name').innerText = p1Brawler.name;
+      document.getElementById('f1SuperDesc').innerText = `⚡ ${p1Brawler.superName}`;
       document.getElementById('f2Img').src = p2Brawler.sprite;
       document.getElementById('f2Name').innerText = p2Brawler.name;
+      document.getElementById('f2SuperDesc').innerText = `⚡ ${p2Brawler.superName}`;
       currentAttacker = 1;
       p1Hp = 10;
       p2Hp = 10;
@@ -609,14 +744,28 @@
       const attacker = currentAttacker === 1 ? p1Brawler : p2Brawler;
       const side = currentAttacker === 1 ? "Red" : "Blue";
       document.getElementById('currentTurnBadge').innerText = `Attacker: ${attacker.name} (${side})`;
+      document.getElementById('btnSuper').innerText = `⚡ 發動絕招: ${attacker.name}`;
     }
 
-    function openBattleQuiz() {
+    function openQuiz(isSuper) {
       hasAnswered = false;
+      isCurrentSuper = isSuper;
       const attacker = currentAttacker === 1 ? p1Brawler : p2Brawler;
-      const randQ = questions[Math.floor(Math.random() * questions.length)];
+      const pool = isSuper ? hardQuestions : normalQuestions;
+      const randQ = pool[Math.floor(Math.random() * pool.length)];
 
-      document.getElementById('modalTurnTitle').innerText = `⚔️ ${attacker.name} is Attacking!`;
+      const badge = document.getElementById('modalDiffBadge');
+      if (isSuper) {
+        badge.className = 'q-diff-badge diff-hard';
+        badge.innerText = `🔥 SUPER CHALLENGE (高難度絕招題) • 命中造成 ${attacker.superDmg} 傷害！`;
+      } else {
+        badge.className = 'q-diff-badge diff-normal';
+        badge.innerText = `🥊 NORMAL ATTACK (標準題目) • 命中造成 1-2 傷害`;
+      }
+
+      document.getElementById('modalTurnTitle').innerText = isSuper 
+        ? `⚡ ${attacker.name} 發動絕招：【${attacker.superName}】！` 
+        : `⚔️ ${attacker.name} is Attacking!`;
       document.getElementById('modalCat').innerText = `【Category: ${randQ.cat}】`;
       document.getElementById('modalQ').innerText = randQ.q;
       const optsBox = document.getElementById('modalOpts');
@@ -635,15 +784,15 @@
             playBeep(523, 'sine', 0.2);
             setTimeout(() => {
               document.getElementById('quizModal').style.display = 'none';
-              const isCrit = Math.random() < 0.30; // 30% 暴擊率
-              executeAttackAnimation(true, isCrit);
+              const isCrit = !isSuper && Math.random() < 0.30;
+              executeAttackAnimation(true, isCrit, isSuper);
             }, 600);
           } else {
             btn.classList.add('wrong');
             playBeep(180, 'sawtooth', 0.3);
             setTimeout(() => {
               document.getElementById('quizModal').style.display = 'none';
-              executeAttackAnimation(false, false);
+              executeAttackAnimation(false, false, isSuper);
             }, 700);
           }
         };
@@ -652,7 +801,7 @@
       document.getElementById('quizModal').style.display = 'flex';
     }
 
-    function executeAttackAnimation(isSuccess, isCrit) {
+    function executeAttackAnimation(isSuccess, isCrit, isSuper) {
       const attackerWrap = document.getElementById(currentAttacker === 1 ? 'fighterCard1' : 'fighterCard2');
       const defenderWrap = document.getElementById(currentAttacker === 1 ? 'fighterCard2' : 'fighterCard1');
       const burst = document.getElementById('burstEffect');
@@ -660,48 +809,62 @@
       const attacker = currentAttacker === 1 ? p1Brawler : p2Brawler;
 
       if (isSuccess) {
-        // 1. 全身角色衝鋒突進 (DASH)
-        attackerWrap.style.transform = currentAttacker === 1 ? 'translateX(550px) scale(1.15)' : 'translateX(-550px) scale(1.15)';
+        // 衝刺突襲
+        attackerWrap.style.transform = currentAttacker === 1 ? 'translateX(550px) scale(1.2)' : 'translateX(-550px) scale(1.2)';
         
-        // 2. 蓄力突進後之命中判定
         setTimeout(() => {
-          burst.innerText = isCrit ? '💥⚡' : '💥';
+          // 爆破圖示與音效
+          if (isSuper) {
+            burst.innerText = `${attacker.superIcon}⚡💥`;
+            playBeep(90, 'sawtooth', 0.6); // 超級音效
+          } else if (isCrit) {
+            burst.innerText = '💥⚡';
+            playBeep(120, 'square', 0.5);
+          } else {
+            burst.innerText = '💥';
+            playBeep(180, 'square', 0.3);
+          }
+
           burst.style.display = 'block';
           burst.style.left = currentAttacker === 1 ? '720px' : '230px';
           burst.style.bottom = '100px';
 
-          if (isCrit) {
-            playBeep(120, 'square', 0.5);
-          } else {
-            playBeep(180, 'square', 0.3);
-          }
-
-          // 對手全身受創震動與擊退 (Knockback)
+          // 對手受創反應
           defenderWrap.style.animation = currentAttacker === 1 ? 'hitReceiveBlue 0.45s ease' : 'hitReceiveRed 0.45s ease';
           
-          // 4. 跳出浮動傷害文字
-          if (isCrit) {
+          // 傷害數字與回血結算
+          dmg.className = 'damage-text';
+          let dmgAmount = 1;
+          if (isSuper) {
+            dmg.classList.add('super-damage');
+            dmgAmount = attacker.superDmg;
+            dmg.innerText = `SUPER! -${dmgAmount} HP`;
+            // 吸血/回血特技
+            if (attacker.heal > 0) {
+              if (currentAttacker === 1) p1Hp = Math.min(10, p1Hp + attacker.heal);
+              else p2Hp = Math.min(10, p2Hp + attacker.heal);
+            }
+          } else if (isCrit) {
             dmg.classList.add('crit-damage');
+            dmgAmount = 2;
             dmg.innerText = 'CRITICAL! -2 HP';
           } else {
-            dmg.classList.remove('crit-damage');
+            dmgAmount = 1;
             dmg.innerText = '-1 HP!';
           }
+
           dmg.style.left = currentAttacker === 1 ? '750px' : '180px';
           dmg.style.bottom = '220px';
           dmg.style.animation = 'floatDamage 0.85s forwards';
 
-          // 扣除生命值
-          const dmgAmount = isCrit ? 2 : 1;
-          if (currentAttacker === 1) {
-            p2Hp = Math.max(0, p2Hp - dmgAmount);
-          } else {
-            p1Hp = Math.max(0, p1Hp - dmgAmount);
-          }
+          // 扣除對手生命值
+          if (currentAttacker === 1) p2Hp = Math.max(0, p2Hp - dmgAmount);
+          else p1Hp = Math.max(0, p1Hp - dmgAmount);
+          
           updateBattleUI();
         }, 320);
 
-        // 5. 特效消失，全身角色後撤 (Retreat)
+        // 撤退歸位
         setTimeout(() => {
           burst.style.display = 'none';
           dmg.style.animation = 'none';
@@ -709,14 +872,13 @@
           attackerWrap.style.transform = 'none';
         }, 800);
 
-        // 6. 判定 K.O. 勝利與舞蹈特效
+        // 終局 K.O. 勝利判定（修復了贏家輸家判定）
         setTimeout(() => {
           if (p1Hp <= 0 || p2Hp <= 0) {
             const winnerName = p1Hp > 0 ? p1Brawler.name : p2Brawler.name;
             const winnerWrap = p1Hp > 0 ? document.getElementById('fighterCard1') : document.getElementById('fighterCard2');
             const loserWrap = p1Hp > 0 ? document.getElementById('fighterCard2') : document.getElementById('fighterCard1');
 
-            // 修正Bug：贏家上下跳躍，輸家向後倒地消散
             winnerWrap.style.animation = 'victoryJump 0.4s ease infinite';
             loserWrap.style.animation = 'defeatFall 1s forwards';
 
@@ -735,7 +897,7 @@
         }, 900);
 
       } else {
-        alert(`❌ 答錯了！攻擊落空 (Miss)！輪到對手反擊！`);
+        alert(isSuper ? `❌ 絕招發動失敗！題目太難了，攻擊完全落空！輪到對手！` : `❌ 答錯了！攻擊落空 (Miss)！輪到對手反擊！`);
         currentAttacker = currentAttacker === 1 ? 2 : 1;
         updateBattleUI();
       }
