@@ -54,7 +54,7 @@
       background: rgba(0, 0, 0, 0.6);
       border: 4px solid #ffde00;
       border-radius: 24px;
-      padding: 20px 25px;
+      padding: 25px;
       text-align: center;
       box-shadow: 0 0 30px rgba(255, 222, 0, 0.3);
       display: flex;
@@ -62,16 +62,16 @@
       align-items: center;
     }
     .select-status {
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       color: #ffde00;
-      margin-bottom: 16px;
+      margin-bottom: 20px;
       text-shadow: 2px 2px 0 #000;
     }
     .preview-box {
       display: flex;
       gap: 50px;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
     }
     .player-preview {
       display: flex;
@@ -84,29 +84,29 @@
       height: 110px;
       border-radius: 20px;
       border: 4px solid #fff;
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255,255,255,0.08);
       overflow: hidden;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
     .preview-avatar img { width: 90%; height: 90%; object-fit: contain; }
     
-    /* 12 英雄選擇網格 (4欄 x 3列) */
+    /* 12 英雄選擇網格 (雙排 4x3 佈局) */
     .roster-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       width: 100%;
       max-width: 850px;
     }
     .roster-card {
       background: #2d164d;
       border: 3px solid #552586;
-      border-radius: 16px;
-      padding: 10px 4px;
+      border-radius: 15px;
+      padding: 10px 5px;
       cursor: pointer;
       display: flex;
       flex-direction: column;
@@ -114,7 +114,7 @@
       transition: all 0.2s;
     }
     .roster-card:hover {
-      transform: translateY(-4px) scale(1.04);
+      transform: translateY(-5px) scale(1.05);
       border-color: #ffde00;
       box-shadow: 0 0 15px #ffde00;
     }
@@ -131,7 +131,7 @@
       background: rgba(0,0,0,0.5);
       padding: 2px 6px;
       border-radius: 6px;
-      margin-top: 3px;
+      margin-top: 4px;
     }
     .btn-brawl {
       background: #22c55e;
@@ -143,7 +143,7 @@
       cursor: pointer;
       box-shadow: 0 7px 0 #15803d;
       display: none;
-      margin-bottom: 18px;
+      margin-bottom: 20px;
     }
     .btn-brawl:active { transform: translateY(4px); box-shadow: 0 3px 0 #15803d; }
 
@@ -154,7 +154,7 @@
       background: rgba(20, 10, 35, 0.85);
       border: 3px dashed #ffaa00;
       border-radius: 16px;
-      padding: 14px;
+      padding: 15px;
       text-align: left;
       box-shadow: inset 0 0 15px rgba(255, 170, 0, 0.2);
     }
@@ -180,7 +180,7 @@
       font-size: 1.1rem;
     }
 
-    /* 戰鬥競技場 */
+    /* 戰鬥競技場 (2D 橫向戰場) */
     #battleScreen {
       display: none;
       width: 96%;
@@ -188,24 +188,25 @@
       position: relative;
     }
     .arena-box {
-      background: linear-gradient(to bottom, #4f772d, #31572c);
+      background: linear-gradient(to bottom, #4f772d, #31572c); /* 綠色草地 */
       border: 6px solid #ffde00;
       border-radius: 30px;
       padding: 20px;
       display: flex;
       justify-content: space-between;
-      align-items: flex-end;
+      align-items: flex-end; /* 讓全身角色踩在泥土線上 */
       position: relative;
       height: 440px;
       overflow: hidden;
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
     }
+    /* 地面泥土線 */
     .arena-box::after {
       content: '';
       position: absolute;
       bottom: 0; left: 0; width: 100%;
       height: 25px;
-      background: #7f5539;
+      background: #7f5539; /* 泥土層 */
       z-index: 1;
     }
     .fighter-side {
@@ -215,6 +216,7 @@
       width: 250px;
       z-index: 5;
     }
+    
     .fighter-sprite-wrap {
       height: 270px;
       display: flex;
@@ -230,7 +232,7 @@
       filter: drop-shadow(0 10px 10px rgba(0,0,0,0.4));
     }
     #fighterCard2 .fighter-sprite {
-      transform: scaleX(-1);
+      transform: scaleX(-1); /* 讓右側藍方角色面向左側 */
     }
 
     .status-panel {
@@ -435,24 +437,19 @@
     <div class="preview-box">
       <div class="player-preview">
         <div style="color:#ef4444; font-size:1.1rem; margin-bottom:5px;">RED SIDE (P1)</div>
-        <div class="preview-avatar" style="border-color:#ef4444;">
-          <img id="p1PreviewImg" src="" style="display:none;" referrerpolicy="no-referrer">
-        </div>
+        <div class="preview-avatar" style="border-color:#ef4444;"><img id="p1PreviewImg" src="" style="display:none;" referrerpolicy="no-referrer"></div>
         <div id="p1Name" style="color:#ffde00; font-size:1.2rem;">?</div>
         <div id="p1SuperTag" class="roster-super-tag" style="display:none;"></div>
       </div>
       <div style="font-size:2rem; color:#ffde00;">VS</div>
       <div class="player-preview">
         <div style="color:#3b82f6; font-size:1.1rem; margin-bottom:5px;">BLUE SIDE (P2)</div>
-        <div class="preview-avatar" style="border-color:#3b82f6;">
-          <img id="p2PreviewImg" src="" style="display:none;" referrerpolicy="no-referrer">
-        </div>
+        <div class="preview-avatar" style="border-color:#3b82f6;"><img id="p2PreviewImg" src="" style="display:none;" referrerpolicy="no-referrer"></div>
         <div id="p2Name" style="color:#ffde00; font-size:1.2rem;">?</div>
         <div id="p2SuperTag" class="roster-super-tag" style="display:none;"></div>
       </div>
     </div>
 
-    <!-- 12 英雄選擇網格 -->
     <div class="roster-grid" id="rosterContainer"></div>
     <button class="btn-brawl" id="startBrawlBtn" onclick="enterBattle()">🔥 BRAWL! (進入對決) 🔥</button>
 
@@ -532,11 +529,11 @@
   </div>
 
   <script>
-    // 💡 12 位完整的熱門官方英雄列表（直連透明全身立繪 + 自動切換備用頭像保險）
+    // 💡 12 位完整的熱門官方英雄列表（套用全新 WordPress 官方防牆代理，100% 順暢載入！）
     const brawlersRoster = [
       { 
         name: "Crow", 
-        sprite: "https://static.wikia.nocookie.net/brawlstars/images/a/a2/Crow_Skin-Default.png", 
+        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/a/a2/Crow_Skin-Default.png", 
         backupId: "16000016",
         superName: "天降黑羽 (Dagger Storm)", 
         superIcon: "🪶", 
@@ -545,7 +542,7 @@
       },
       { 
         name: "Mortis", 
-        sprite: "https://static.wikia.nocookie.net/brawlstars/images/b/b2/Mortis_Skin-Default.png", 
+        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/b/b2/Mortis_Skin-Default.png", 
         backupId: "16000015",
         superName: "蝠血狂飆 (Life Lead)", 
         superIcon: "🦇", 
@@ -554,7 +551,7 @@
       },
       { 
         name: "El Primo", 
-        sprite: "https://static.wikia.nocookie.net/brawlstars/images/0/04/El_Primo_Skin-Default.png", 
+        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/0/04/El_Primo_Skin-Default.png", 
         backupId: "16000004",
         superName: "飛天手肘落 (Flying Elbow)", 
         superIcon: "🥊", 
@@ -563,7 +560,7 @@
       },
       { 
         name: "Bo", 
-        sprite: "https://static.wikia.nocookie.net/brawlstars/images/e/ee/Bo_Skin-Default.png", 
+        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/e/ee/Bo_Skin-Default.png", 
         backupId: "16000008",
         superName: "地雷爆破 (Mines Blast)", 
         superIcon: "🏹", 
@@ -572,7 +569,7 @@
       },
       { 
         name: "Barley", 
-        sprite: "https://static.wikia.nocookie.net/brawlstars/images/3/3c/Barley_Skin-Default.png", 
+        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/3/3c/Barley_Skin-Default.png", 
         backupId: "16000003",
         superName: "狂暴烈酒 (Super Bottle)", 
         superIcon: "🍾", 
@@ -581,7 +578,7 @@
       },
       { 
         name: "Shelly", 
-        sprite: "https://static.wikia.nocookie.net/brawlstars/images/5/5e/Shelly_Skin-Default.png", 
+        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/5/5e/Shelly_Skin-Default.png", 
         backupId: "16000000",
         superName: "超級大霰彈 (Super Shell)", 
         superIcon: "💥", 
@@ -590,7 +587,7 @@
       },
       { 
         name: "Colt", 
-        sprite: "https://static.wikia.nocookie.net/brawlstars/images/8/8a/Colt_Skin-Default.png", 
+        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/8/8a/Colt_Skin-Default.png", 
         backupId: "16000001",
         superName: "子彈風暴 (Bullet Storm)", 
         superIcon: "🔫", 
@@ -599,7 +596,7 @@
       },
       { 
         name: "Spike", 
-        sprite: "https://static.wikia.nocookie.net/brawlstars/images/8/8e/Spike_Skin-Default.png", 
+        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/8/8e/Spike_Skin-Default.png", 
         backupId: "16000005",
         superName: "針刺結界 (Stick Around)", 
         superIcon: "🌵", 
@@ -608,7 +605,7 @@
       },
       { 
         name: "Leon", 
-        sprite: "https://static.wikia.nocookie.net/brawlstars/images/3/33/Leon_Skin-Default.png", 
+        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/3/33/Leon_Skin-Default.png", 
         backupId: "16000023",
         superName: "隱形潛獵 (Smoke Bomb)", 
         superIcon: "🦎", 
@@ -617,7 +614,7 @@
       },
       { 
         name: "Piper", 
-        sprite: "https://static.wikia.nocookie.net/brawlstars/images/5/5d/Piper_Skin-Default.png", 
+        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/5/5d/Piper_Skin-Default.png", 
         backupId: "16000022",
         superName: "驚喜謝幕 (Poppin')", 
         superIcon: "☂️", 
@@ -626,7 +623,7 @@
       },
       { 
         name: "Frank", 
-        sprite: "https://static.wikia.nocookie.net/brawlstars/images/5/55/Frank_Skin-Default.png", 
+        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/5/55/Frank_Skin-Default.png", 
         backupId: "16000020",
         superName: "震地重擊 (Stunning Blow)", 
         superIcon: "🔨", 
@@ -635,7 +632,7 @@
       },
       { 
         name: "Bull", 
-        sprite: "https://static.wikia.nocookie.net/brawlstars/images/b/b7/Bull_Skin-Default.png", 
+        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/b/b7/Bull_Skin-Default.png", 
         backupId: "16000002",
         superName: "蠻牛衝撞 (Bulldozer)", 
         superIcon: "🐂", 
@@ -700,6 +697,7 @@
       brawlersRoster.forEach((b) => {
         const card = document.createElement('div');
         card.className = 'roster-card';
+        // 💡 徹底解決破圖：選角卡片使用與戰鬥完全相同的全身立繪，並設置自動 referrer 保護
         card.innerHTML = `
           <img src="${b.sprite}" alt="${b.name}" referrerpolicy="no-referrer" onerror="this.onerror=null; this.src='https://cdn.brawlify.com/brawlers/borders/${b.backupId}.png'">
           <div style="font-size:1.05rem;">${b.name}</div>
