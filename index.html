@@ -201,7 +201,14 @@
       font-size: 2.2rem;
       display: none;
       z-index: 10;
-      transition: all 0.35s linear;
+      transition: all 0.32s linear;
+    }
+    /* 暴擊時子彈放大 */
+    .projectile.crit-bullet {
+      width: 70px;
+      height: 70px;
+      font-size: 3.5rem;
+      text-shadow: 0 0 20px #ffde00;
     }
     .damage-text {
       position: absolute;
@@ -213,16 +220,22 @@
       pointer-events: none;
       z-index: 20;
     }
+    /* 暴擊傷害字體樣式 */
+    .damage-text.crit-damage {
+      font-size: 3.5rem;
+      color: #ffde00;
+      text-shadow: 3px 3px 0 #ff0055, 5px 5px 0 #000;
+    }
     @keyframes floatDamage {
       0% { opacity: 1; transform: translateY(0) scale(1.3); }
-      100% { opacity: 0; transform: translateY(-70px) scale(0.9); }
+      100% { opacity: 0; transform: translateY(-80px) scale(0.9); }
     }
     @keyframes shakeCard {
       0%, 100% { transform: translateX(0); filter: brightness(1); }
-      20% { transform: translateX(-15px); filter: brightness(2) drop-shadow(0 0 15px red); }
-      40% { transform: translateX(15px); }
-      60% { transform: translateX(-10px); }
-      80% { transform: translateX(10px); }
+      20% { transform: translateX(-18px); filter: brightness(2) drop-shadow(0 0 20px red); }
+      40% { transform: translateX(18px); }
+      60% { transform: translateX(-12px); }
+      80% { transform: translateX(12px); }
     }
 
     /* 競技場中央控制台 */
@@ -376,7 +389,6 @@
   </div>
 
   <script>
-    // 英雄名單與官方頭像
     const brawlersRoster = [
       { name: "Crow", img: "https://cdn.brawlify.com/brawlers/borders/16000016.png", icon: "🪶" },
       { name: "Mortis", img: "https://cdn.brawlify.com/brawlers/borders/16000015.png", icon: "🦇" },
@@ -386,7 +398,6 @@
       { name: "Shelly", img: "https://cdn.brawlify.com/brawlers/borders/16000000.png", icon: "💥" }
     ];
 
-    // 12 題精選小學英文題庫
     const questions = [
       { cat: "Phonics", q: "Which word has the 'short a' sound?", opts: ["Cake", "Cat", "Rain", "Train"], ans: 1 },
       { cat: "Grammar (Tenses)", q: "Yesterday, Kelly ________ to the library.", opts: ["go", "goes", "went", "going"], ans: 2 },
@@ -404,13 +415,12 @@
 
     let p1Brawler = null;
     let p2Brawler = null;
-    let selectingPlayer = 1; // 1 = P1, 2 = P2
-    let currentAttacker = 1; // 1 = P1, 2 = P2
+    let selectingPlayer = 1;
+    let currentAttacker = 1;
     let p1Hp = 3;
     let p2Hp = 3;
     let hasAnswered = false;
 
-    // 音效合成器 (安全保護)
     let audioCtx = null;
     function playBeep(freq, type, duration) {
       try {
@@ -428,7 +438,6 @@
       } catch (e) {}
     }
 
-    // 初始化選角畫面
     function initRoster() {
       const container = document.getElementById('rosterContainer');
       container.innerHTML = '';
@@ -441,21 +450,21 @@
       });
     }
 
-    function selectBrawler(brawler) {
+    function selectBrawler(b) {
       if (selectingPlayer === 1) {
-        p1Brawler = brawler;
-        document.getElementById('p1Name').innerText = brawler.name;
+        p1Brawler = b;
+        document.getElementById('p1Name').innerText = b.name;
         const img = document.getElementById('p1PreviewImg');
-        img.src = brawler.img;
+        img.src = b.img;
         img.style.display = 'block';
         selectingPlayer = 2;
         document.getElementById('selectInstruction').innerText = "Player 2 (Blue Side): Choose Your Brawler!";
         playBeep(440, 'sine', 0.15);
       } else if (selectingPlayer === 2) {
-        p2Brawler = brawler;
-        document.getElementById('p2Name').innerText = brawler.name;
+        p2Brawler = b;
+        document.getElementById('p2Name').innerText = b.name;
         const img = document.getElementById('p2PreviewImg');
-        img.src = brawler.img;
+        img.src = b.img;
         img.style.display = 'block';
         document.getElementById('selectInstruction').innerText = "Ready to Fight! Click Below!";
         document.getElementById('startBrawlBtn').style.display = 'block';
@@ -487,6 +496,8 @@
       document.getElementById('f2Img').src = p2Brawler.img;
       document.getElementById('f2Name').innerText = p2Brawler.name;
       currentAttacker = 1;
+      p1Hp = 3;
+      p2Hp = 3;
       updateBattleUI();
     }
 
@@ -525,14 +536,16 @@
             playBeep(523, 'sine', 0.2);
             setTimeout(() => {
               document.getElementById('quizModal').style.display = 'none';
-              executeAttackAnimation(true);
+              // 20% 機率觸發雙倍暴擊傷害
+              const isCrit = Math.random() < 0.20;
+              executeAttackAnimation(true, isCrit);
             }, 600);
           } else {
             btn.classList.add('wrong');
             playBeep(180, 'sawtooth', 0.3);
             setTimeout(() => {
               document.getElementById('quizModal').style.display = 'none';
-              executeAttackAnimation(false);
+              executeAttackAnimation(false, false);
             }, 700);
           }
         };
@@ -541,20 +554,24 @@
       document.getElementById('quizModal').style.display = 'flex';
     }
 
-    // 荒野亂鬥風格攻擊與被打擊動畫
-    function executeAttackAnimation(isSuccess) {
+    function executeAttackAnimation(isSuccess, isCrit) {
       const attackerCard = document.getElementById(currentAttacker === 1 ? 'fighterCard1' : 'fighterCard2');
       const defenderCard = document.getElementById(currentAttacker === 1 ? 'fighterCard2' : 'fighterCard1');
       const bullet = document.getElementById('bullet');
       const dmg = document.getElementById('damageIndicator');
       const attacker = currentAttacker === 1 ? p1Brawler : p2Brawler;
 
-      // 攻擊者微幅前衝蓄力
       attackerCard.style.transform = currentAttacker === 1 ? 'translateX(35px) scale(1.1)' : 'translateX(-35px) scale(1.1)';
       setTimeout(() => { attackerCard.style.transform = 'none'; }, 200);
 
       if (isSuccess) {
-        // 發射飛行能量子彈
+        // 設定暴擊子彈大小
+        if (isCrit) {
+          bullet.classList.add('crit-bullet');
+        } else {
+          bullet.classList.remove('crit-bullet');
+        }
+
         bullet.innerText = attacker.icon || '💥';
         bullet.style.display = 'block';
         bullet.style.top = '150px';
@@ -562,33 +579,49 @@
 
         setTimeout(() => {
           bullet.style.left = currentAttacker === 1 ? '750px' : '220px';
-          playBeep(700, 'triangle', 0.15);
+          if (isCrit) {
+            playBeep(880, 'sine', 0.1);
+            setTimeout(() => playBeep(1200, 'sine', 0.15), 80);
+          } else {
+            playBeep(700, 'triangle', 0.15);
+          }
         }, 30);
 
-        // 子彈命中對手
         setTimeout(() => {
           bullet.style.display = 'none';
-          playBeep(150, 'square', 0.3);
+          
+          if (isCrit) {
+            playBeep(120, 'square', 0.5); // 暴擊超重音音效
+          } else {
+            playBeep(150, 'square', 0.3);
+          }
 
-          // 對手震動與紅光反應
           defenderCard.style.animation = 'shakeCard 0.4s ease';
           setTimeout(() => { defenderCard.style.animation = 'none'; }, 400);
 
-          // 跳出 -1 HP 浮動數字
-          dmg.style.left = currentAttacker === 1 ? '770px' : '180px';
+          // 浮動傷害字樣 (暴擊 vs 普通)
+          if (isCrit) {
+            dmg.classList.add('crit-damage');
+            dmg.innerText = 'CRITICAL! -2 HP';
+          } else {
+            dmg.classList.remove('crit-damage');
+            dmg.innerText = '-1 HP!';
+          }
+
+          dmg.style.left = currentAttacker === 1 ? '770px' : '120px';
           dmg.style.top = '100px';
           dmg.style.animation = 'floatDamage 0.8s forwards';
           setTimeout(() => { dmg.style.animation = 'none'; }, 800);
 
-          // 扣除生命值
+          // 計算血量扣除
+          const dmgAmount = isCrit ? 2 : 1;
           if (currentAttacker === 1) {
-            p2Hp = Math.max(0, p2Hp - 1);
+            p2Hp = Math.max(0, p2Hp - dmgAmount);
           } else {
-            p1Hp = Math.max(0, p1Hp - 1);
+            p1Hp = Math.max(0, p1Hp - dmgAmount);
           }
           updateBattleUI();
 
-          // 判定 Knockout 勝利
           if (p1Hp <= 0 || p2Hp <= 0) {
             const winner = p1Hp > 0 ? p1Brawler.name : p2Brawler.name;
             setTimeout(() => {
@@ -599,13 +632,11 @@
             return;
           }
 
-          // 輪換攻守方
           currentAttacker = currentAttacker === 1 ? 2 : 1;
           updateBattleUI();
         }, 380);
 
       } else {
-        // 答錯攻擊落空 (Miss)
         alert(`❌ 攻擊落空 (Miss)！輪到對手反擊！`);
         currentAttacker = currentAttacker === 1 ? 2 : 1;
         updateBattleUI();
