@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- 💡 這裡已精確更新為您指定的標題 -->
   <title>BCKLAS English Challenge - Brawl Stars 1v1</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Arial Black', Impact, sans-serif; }
@@ -404,7 +403,8 @@
           </div>
           <div id="f1Name" style="font-size:1.4rem; color:#ffde00; margin-bottom:6px;">Crow</div>
           <div class="hp-bar-wrap"><div class="hp-fill" id="f1HpFill"></div></div>
-          <div class="hp-text" id="f1HpText">HP: 3 / 3</div>
+          <!-- 💡 初始血量顯示更新為 10 -->
+          <div class="hp-text" id="f1HpText">HP: 10 / 10</div>
         </div>
       </div>
 
@@ -422,7 +422,8 @@
           </div>
           <div id="f2Name" style="font-size:1.4rem; color:#ffde00; margin-bottom:6px;">Mortis</div>
           <div class="hp-bar-wrap"><div class="hp-fill" id="f2HpFill"></div></div>
-          <div class="hp-text" id="f2HpText">HP: 3 / 3</div>
+          <!-- 💡 初始血量顯示更新為 10 -->
+          <div class="hp-text" id="f2HpText">HP: 10 / 10</div>
         </div>
       </div>
 
@@ -471,8 +472,9 @@
     let p2Brawler = null;
     let selectingPlayer = 1;
     let currentAttacker = 1;
-    let p1Hp = 3;
-    let p2Hp = 3;
+    // 💡 內建 HP 最大上限同步調整為 10
+    let p1Hp = 10;
+    let p2Hp = 10;
     let hasAnswered = false;
 
     let audioCtx = null;
@@ -530,8 +532,8 @@
       p1Brawler = null;
       p2Brawler = null;
       selectingPlayer = 1;
-      p1Hp = 3;
-      p2Hp = 3;
+      p1Hp = 10;
+      p2Hp = 10;
       document.getElementById('p1Name').innerText = "?";
       document.getElementById('p2Name').innerText = "?";
       document.getElementById('p1PreviewImg').style.display = 'none';
@@ -550,16 +552,17 @@
       document.getElementById('f2Img').src = p2Brawler.img;
       document.getElementById('f2Name').innerText = p2Brawler.name;
       currentAttacker = 1;
-      p1Hp = 3;
-      p2Hp = 3;
+      p1Hp = 10;
+      p2Hp = 10;
       updateBattleUI();
     }
 
     function updateBattleUI() {
-      document.getElementById('f1HpFill').style.width = `${(p1Hp / 3) * 100}%`;
-      document.getElementById('f1HpText').innerText = `HP: ${p1Hp} / 3`;
-      document.getElementById('f2HpFill').style.width = `${(p2Hp / 3) * 100}%`;
-      document.getElementById('f2HpText').innerText = `HP: ${p2Hp} / 3`;
+      // 💡 以 10 HP 計算血條長度比例
+      document.getElementById('f1HpFill').style.width = `${(p1Hp / 10) * 100}%`;
+      document.getElementById('f1HpText').innerText = `HP: ${p1Hp} / 10`;
+      document.getElementById('f2HpFill').style.width = `${(p2Hp / 10) * 100}%`;
+      document.getElementById('f2HpText').innerText = `HP: ${p2Hp} / 10`;
 
       const attacker = currentAttacker === 1 ? p1Brawler : p2Brawler;
       const side = currentAttacker === 1 ? "Red" : "Blue";
@@ -590,8 +593,8 @@
             playBeep(523, 'sine', 0.2);
             setTimeout(() => {
               document.getElementById('quizModal').style.display = 'none';
-              // 20% 機率觸發雙倍暴擊傷害
-              const isCrit = Math.random() < 0.20;
+              // 💡 30% 機率觸發雙倍暴擊傷害（在 10 HP 對局中最完美）
+              const isCrit = Math.random() < 0.30;
               executeAttackAnimation(true, isCrit);
             }, 600);
           } else {
