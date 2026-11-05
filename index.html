@@ -333,19 +333,31 @@
   </div>
 
   <script>
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    // 建立音效播放器
+    let audioCtx = null;
     function playBeep(freq, type, duration) {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      osc.type = type;
-      osc.frequency.value = freq;
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
-      osc.stop(audioCtx.currentTime + duration);
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.value = freq;
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        console.log("Audio play blocked by browser settings.", e);
+      }
     }
 
+    // 12題精選英文題庫
     const questions = [
       { cat: "Phonics", q: "Which word has the 'short a' sound?", opts: ["Cake", "Cat", "Rain", "Train"], ans: 1 },
       { cat: "Grammar (Tenses)", q: "Yesterday, Kelly ________ to the library.", opts: ["go", "goes", "went", "going"], ans: 2 },
@@ -371,8 +383,9 @@
 
     let currentTurnIndex = 0; // 0代表第一個英雄 (Crow)
     const scores = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 };
-    let hasAnswered = false; // 防止重複點擊選項
+    let hasAnswered = false; // 防止重複計分
 
+    // 更新介面（亮起當前輪流的組別）
     function updateTurnUI() {
       const activeBrawler = brawlers[currentTurnIndex];
       document.getElementById('currentTurnText').innerText = `Current Turn: ${activeBrawler.name}`;
@@ -387,6 +400,7 @@
       }
     }
 
+    // 增減寶石分數
     function changeGem(teamId, val) {
       scores[teamId] = Math.max(0, scores[teamId] + val);
       document.getElementById(`gem-${teamId}`).innerText = `💎 ${scores[teamId]}`;
@@ -399,6 +413,7 @@
       }
     }
 
+    // 抽選題目
     function openQuestion() {
       hasAnswered = false;
       const activeBrawler = brawlers[currentTurnIndex];
@@ -408,6 +423,7 @@
       document.getElementById('qTurnTitle').innerText = `Target Brawler: ${activeBrawler.name}`;
       document.getElementById('qCategory').innerText = `【分類：${q.cat}】`;
       document.getElementById('qQuestion').innerText = q.q;
+      
       const optsBox = document.getElementById('qOptions');
       optsBox.innerHTML = '';
 
@@ -421,6 +437,8 @@
 
           if (idx === q.ans) {
             btn.classList.add('correct');
+            playBeep(523, 'sine', 0.2);
+            setTimeout(() => playBeep(659, 'sine', 0.3), 150);
             // 答對：自動給當前輪值英雄 +1 分
             changeGem(activeBrawler.id, 1);
           } else {
@@ -435,15 +453,17 @@
       document.getElementById('qModal').style.display = 'flex';
     }
 
+    // 關閉題目視窗
     function closeQuestion() {
       document.getElementById('qModal').style.display = 'none';
-      // 答完關閉視窗後，自動輪到下一個英雄
+      // 答完並關閉視窗後，自動輪到下一個英雄
       if (hasAnswered) {
         currentTurnIndex = (currentTurnIndex + 1) % brawlers.length;
         updateTurnUI();
       }
     }
 
+    // 重設遊戲
     function resetGame() {
       if(confirm("確定要將所有小組寶石重設為 0 並且重新從第一位英雄(Crow)開始輪流嗎？")) {
         for(let i=1; i<=5; i++) {
@@ -455,6 +475,7 @@
       }
     }
 
+    // 全螢幕投影
     function toggleFullScreen() {
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen();
@@ -462,6 +483,11 @@
         document.exitFullscreen();
       }
     }
+
+    // 網頁加載時初始化
+    window.onload = () => {
+      updateTurnUI();
+    };
   </script>
 </body>
 </html>
