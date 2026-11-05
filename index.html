@@ -54,7 +54,7 @@
       background: rgba(0, 0, 0, 0.6);
       border: 4px solid #ffde00;
       border-radius: 24px;
-      padding: 25px;
+      padding: 20px 25px;
       text-align: center;
       box-shadow: 0 0 30px rgba(255, 222, 0, 0.3);
       display: flex;
@@ -62,9 +62,9 @@
       align-items: center;
     }
     .select-status {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       color: #ffde00;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
       text-shadow: 2px 2px 0 #000;
     }
     .preview-box {
@@ -84,7 +84,7 @@
       height: 110px;
       border-radius: 20px;
       border: 4px solid #fff;
-      background: rgba(255,255,255,0.08);
+      background: rgba(255, 255, 255, 0.08);
       overflow: hidden;
       margin-bottom: 8px;
       display: flex;
@@ -98,15 +98,15 @@
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 12px;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
       width: 100%;
       max-width: 850px;
     }
     .roster-card {
       background: #2d164d;
       border: 3px solid #552586;
-      border-radius: 15px;
-      padding: 10px 5px;
+      border-radius: 18px;
+      padding: 12px 6px;
       cursor: pointer;
       display: flex;
       flex-direction: column;
@@ -126,7 +126,7 @@
       filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
     }
     .roster-super-tag {
-      font-size: 0.72rem;
+      font-size: 0.75rem;
       color: #ffde00;
       background: rgba(0,0,0,0.5);
       padding: 2px 6px;
@@ -166,7 +166,7 @@
       text-shadow: 1px 1px 0 #000;
     }
     .rules-list {
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       line-height: 1.5;
       color: #ddd;
     }
@@ -188,25 +188,24 @@
       position: relative;
     }
     .arena-box {
-      background: linear-gradient(to bottom, #4f772d, #31572c); /* 綠色草地 */
+      background: linear-gradient(to bottom, #4f772d, #31572c);
       border: 6px solid #ffde00;
       border-radius: 30px;
       padding: 20px;
       display: flex;
       justify-content: space-between;
-      align-items: flex-end; /* 讓全身角色踩在泥土線上 */
+      align-items: flex-end;
       position: relative;
       height: 440px;
       overflow: hidden;
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
     }
-    /* 地面泥土線 */
     .arena-box::after {
       content: '';
       position: absolute;
       bottom: 0; left: 0; width: 100%;
       height: 25px;
-      background: #7f5539; /* 泥土層 */
+      background: #7f5539;
       z-index: 1;
     }
     .fighter-side {
@@ -216,7 +215,6 @@
       width: 250px;
       z-index: 5;
     }
-    
     .fighter-sprite-wrap {
       height: 270px;
       display: flex;
@@ -232,7 +230,7 @@
       filter: drop-shadow(0 10px 10px rgba(0,0,0,0.4));
     }
     #fighterCard2 .fighter-sprite {
-      transform: scaleX(-1); /* 讓右側藍方角色面向左側 */
+      transform: scaleX(-1);
     }
 
     .status-panel {
@@ -425,31 +423,38 @@
       <h1>BCKLAS ENGLISH CHALLENGE</h1>
       <div class="sub-title">Brawl Stars 1v1 Arena • Normal vs Super Attack!</div>
     </div>
-    <div style="display:flex; gap:8px;">
+    <div style="display:flex; gap:8px; align-items:center;">
+      <!-- 🔊 背景音樂開關按鈕 -->
+      <button class="btn-top" id="btnMusic" onclick="toggleBGM()">🔊 音樂: 播</button>
       <button class="btn-top" onclick="restartSelection()">🔄 重新選角</button>
       <button class="btn-top" onclick="toggleFullScreen()">⛶ 全螢幕</button>
     </div>
   </header>
 
   <!-- 1. 角色選擇介面 -->
-  <div id="selectScreen">
+  <div id="selectScreen" onclick="tryStartMusic()">
     <div class="select-status" id="selectInstruction">Player 1 (Red Side): Choose Your Brawler!</div>
     <div class="preview-box">
       <div class="player-preview">
         <div style="color:#ef4444; font-size:1.1rem; margin-bottom:5px;">RED SIDE (P1)</div>
-        <div class="preview-avatar" style="border-color:#ef4444;"><img id="p1PreviewImg" src="" style="display:none;" referrerpolicy="no-referrer"></div>
+        <div class="preview-avatar" style="border-color:#ef4444;">
+          <img id="p1PreviewImg" src="" style="display:none;" referrerpolicy="no-referrer">
+        </div>
         <div id="p1Name" style="color:#ffde00; font-size:1.2rem;">?</div>
         <div id="p1SuperTag" class="roster-super-tag" style="display:none;"></div>
       </div>
       <div style="font-size:2rem; color:#ffde00;">VS</div>
       <div class="player-preview">
         <div style="color:#3b82f6; font-size:1.1rem; margin-bottom:5px;">BLUE SIDE (P2)</div>
-        <div class="preview-avatar" style="border-color:#3b82f6;"><img id="p2PreviewImg" src="" style="display:none;" referrerpolicy="no-referrer"></div>
+        <div class="preview-avatar" style="border-color:#3b82f6;">
+          <img id="p2PreviewImg" src="" style="display:none;" referrerpolicy="no-referrer">
+        </div>
         <div id="p2Name" style="color:#ffde00; font-size:1.2rem;">?</div>
         <div id="p2SuperTag" class="roster-super-tag" style="display:none;"></div>
       </div>
     </div>
 
+    <!-- 12 英雄選擇網格 -->
     <div class="roster-grid" id="rosterContainer"></div>
     <button class="btn-brawl" id="startBrawlBtn" onclick="enterBattle()">🔥 BRAWL! (進入對決) 🔥</button>
 
@@ -463,7 +468,7 @@
         </div>
         <div class="rules-item">
           <span class="rules-icon">⚡</span>
-          <span><strong>SUPER Attack (角色專屬絕招)</strong>：題目為<strong>【高難度挑戰題】</strong>！答對觸發該英雄毀滅絕招，造成 <strong>3 HP 傷害</strong>（Mortis 為 2 HP 傷害並為自己回血 +1 HP）！</span>
+          <span><strong>SUPER Attack (角色專屬絕招)</strong>：題目為<strong>【高難度挑戰題】</strong>！答對觸發該英雄毀滅絕招，造成 <strong>3 HP 傷害</strong>（Mortis/Poco 為 2 HP 傷害並為自己回血 +1 HP）！</span>
         </div>
         <div class="rules-item">
           <span class="rules-icon">🛡️</span>
@@ -529,7 +534,7 @@
   </div>
 
   <script>
-    // 💡 12 位完整的熱門官方英雄列表（套用全新 WordPress 官方防牆代理，100% 順暢載入！）
+    // 12 位完整的熱門官方英雄列表（去防盜鏈高畫質全身圖）
     const brawlersRoster = [
       { 
         name: "Crow", 
@@ -641,7 +646,7 @@
       }
     ];
 
-    // 1. 普通難度題庫 (Normal Quiz)
+    // 普通題目
     const normalQuestions = [
       { cat: "Phonics", q: "Which word has the 'short a' sound?", opts: ["Cake", "Cat", "Rain", "Train"], ans: 1 },
       { cat: "Grammar", q: "Yesterday, Kelly ________ to the library.", opts: ["go", "goes", "went", "going"], ans: 2 },
@@ -653,7 +658,7 @@
       { cat: "Vocabulary", q: "Where do you borrow English books?", opts: ["Canteen", "Library", "Art Room", "Hall"], ans: 1 }
     ];
 
-    // 2. 高難度絕招題庫 (Hard Challenge Quiz)
+    // 絕招題目
     const hardQuestions = [
       { cat: "Past Continuous", q: "While Tom ________ his homework, the telephone rang.", opts: ["was doing", "did", "does", "is doing"], ans: 0 },
       { cat: "Conditionals", q: "If it rains tomorrow, we ________ the school picnic.", opts: ["cancel", "will cancel", "canceled", "would cancel"], ans: 1 },
@@ -662,7 +667,7 @@
       { cat: "Irregular Verbs", q: "Choose the correct past participle: 'The vase was ________ by the cat.'", opts: ["broke", "broken", "breaked", "breaking"], ans: 1 },
       { cat: "Conjunctions", q: "Mary went to school ________ she was not feeling very well.", opts: ["because", "although", "so", "unless"], ans: 1 },
       { cat: "Sentence Structure", q: "Identify the error: 'Neither Peter nor his brothers (A)is (B)coming to (C)the party.'", opts: ["(A) is -> are", "(B) coming -> come", "(C) the -> a", "No error"], ans: 0 },
-      { cat: "Reading Inference", q: "'Jack was soaking wet and his umbrella was turned inside out.' What happened?", opts: ["It was sunny", "A strong windy storm occurred", "He fell in a pool", "He lost his bag"], ans: 1 }
+      { cat: "Reading Inference", q: "'Jack was soaking wet and his umbrella was turned inside out.' What happened?", opts: ["Jack fell down", "A strong windy storm occurred", "He washed his bag", "He bought a new hat"], ans: 1 }
     ];
 
     let p1Brawler = null;
@@ -674,6 +679,7 @@
     let hasAnswered = false;
     let isCurrentSuper = false;
 
+    // 音效
     let audioCtx = null;
     function playBeep(freq, type, duration) {
       try {
@@ -691,13 +697,72 @@
       } catch (e) {}
     }
 
+    // ==========================================
+    // 🔊 網頁內建背景音樂 (使用 Web Audio API 生成經典荒野戰鬥曲)
+    // ==========================================
+    let bgmInterval = null;
+    let isBGMPlaying = false;
+    let bgmGainNode = null;
+
+    function startBGM() {
+      if (isBGMPlaying) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        
+        bgmGainNode = audioCtx.createGain();
+        bgmGainNode.gain.value = 0.08; // 背景音量控制在 8% 避免太吵
+        bgmGainNode.connect(audioCtx.destination);
+        
+        isBGMPlaying = true;
+        document.getElementById('btnMusic').innerText = "🔊 音樂: 播";
+
+        let beat = 0;
+        // 循環演奏荒野對戰節奏
+        bgmInterval = setInterval(() => {
+          if (!isBGMPlaying) return;
+          const osc = audioCtx.createOscillator();
+          osc.connect(bgmGainNode);
+          
+          // 經典《荒野亂鬥》激昂重低音節奏
+          const notes = [110, 110, 130, 110, 146, 110, 165, 130];
+          osc.frequency.value = notes[beat % notes.length];
+          
+          osc.type = (beat % 4 === 0) ? 'triangle' : 'sine';
+          osc.start();
+          
+          const dur = (beat % 2 === 0) ? 0.22 : 0.12;
+          osc.stop(audioCtx.currentTime + dur);
+          beat++;
+        }, 220);
+      } catch(e) {}
+    }
+
+    function toggleBGM() {
+      const btn = document.getElementById('btnMusic');
+      if (isBGMPlaying) {
+        clearInterval(bgmInterval);
+        isBGMPlaying = false;
+        btn.innerText = "🔇 音樂: 靜";
+        playBeep(220, 'sine', 0.1);
+      } else {
+        startBGM();
+      }
+    }
+
+    function tryStartMusic() {
+      if (!isBGMPlaying) {
+        startBGM();
+      }
+    }
+
+    // 初始化選角
     function initRoster() {
       const container = document.getElementById('rosterContainer');
       container.innerHTML = '';
       brawlersRoster.forEach((b) => {
         const card = document.createElement('div');
         card.className = 'roster-card';
-        // 💡 徹底解決破圖：選角卡片使用與戰鬥完全相同的全身立繪，並設置自動 referrer 保護
         card.innerHTML = `
           <img src="${b.sprite}" alt="${b.name}" referrerpolicy="no-referrer" onerror="this.onerror=null; this.src='https://cdn.brawlify.com/brawlers/borders/${b.backupId}.png'">
           <div style="font-size:1.05rem;">${b.name}</div>
@@ -709,6 +774,7 @@
     }
 
     function selectBrawler(b) {
+      tryStartMusic(); // 學生上台點擊時自動解鎖背景音樂
       if (selectingPlayer === 1) {
         p1Brawler = b;
         document.getElementById('p1Name').innerText = b.name;
@@ -764,6 +830,7 @@
     function enterBattle() {
       document.getElementById('selectScreen').style.display = 'none';
       document.getElementById('battleScreen').style.display = 'block';
+      
       const f1 = document.getElementById('f1Img');
       f1.src = p1Brawler.sprite;
       f1.onerror = () => { f1.src = `https://cdn.brawlify.com/brawlers/borders/${p1Brawler.backupId}.png`; };
