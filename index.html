@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 💡 這裡已精確更新為您指定的標題 -->
   <title>BCKLAS English Challenge - Brawl Stars 1v1</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Arial Black', Impact, sans-serif; }
@@ -128,8 +129,42 @@
       cursor: pointer;
       box-shadow: 0 7px 0 #15803d;
       display: none;
+      margin-bottom: 20px;
     }
     .btn-brawl:active { transform: translateY(4px); box-shadow: 0 3px 0 #15803d; }
+
+    /* 戰鬥秘笈規則面板 */
+    .rules-box {
+      width: 100%;
+      max-width: 650px;
+      background: rgba(20, 10, 35, 0.85);
+      border: 3px dashed #ffaa00;
+      border-radius: 16px;
+      padding: 15px;
+      text-align: left;
+      box-shadow: inset 0 0 15px rgba(255, 170, 0, 0.2);
+    }
+    .rules-title {
+      font-size: 1.1rem;
+      color: #ffde00;
+      margin-bottom: 8px;
+      text-align: center;
+      text-shadow: 1px 1px 0 #000;
+    }
+    .rules-list {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #ddd;
+    }
+    .rules-item {
+      margin-bottom: 6px;
+      display: flex;
+      align-items: flex-start;
+    }
+    .rules-icon {
+      margin-right: 8px;
+      font-size: 1.1rem;
+    }
 
     /* 戰鬥競技場 */
     #battleScreen {
@@ -310,7 +345,7 @@
 
   <header>
     <div>
-      <h1>BCKLAS ENGLISH DUEL</h1>
+      <h1>BCKLAS ENGLISH CHALLENGE</h1>
       <div class="sub-title">Brawl Stars 1v1 Arena • Answer to Attack!</div>
     </div>
     <div style="display:flex; gap:8px;">
@@ -337,6 +372,25 @@
     </div>
     <div class="roster-grid" id="rosterContainer"></div>
     <button class="btn-brawl" id="startBrawlBtn" onclick="enterBattle()">🔥 BRAWL! (進入對決) 🔥</button>
+
+    <!-- 🎯 戰鬥秘笈規則面板 -->
+    <div class="rules-box">
+      <div class="rules-title">⚔️ BATTLE TIPS / 戰鬥秘笈 ⚔️</div>
+      <div class="rules-list">
+        <div class="rules-item">
+          <span class="rules-icon">🎯</span>
+          <span><strong>20% Critical Chance (20% 暴擊機率)</strong>：每次答對英文題目，有 20% 的幸運機率發動驚天動地的「暴擊」！</span>
+        </div>
+        <div class="rules-item">
+          <span class="rules-icon">💥</span>
+          <span><strong>Double Damage (雙倍傷害 -2 HP)</strong>：觸發暴擊時，音效會更震撼，發射的子彈會變大，對手頭頂會爆出黃金色的 <strong>CRITICAL! -2 HP</strong> 效果！</span>
+        </div>
+        <div class="rules-item">
+          <span class="rules-icon">🛡️</span>
+          <span><strong>Safety Guard (血量保護)</strong>：如果對手只剩 1 格血，暴擊會安全將 HP 扣減至 0 並宣告 K.O. 勝利，絕對不會出現負數。</span>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- 2. 戰鬥競技場介面 -->
@@ -565,7 +619,6 @@
       setTimeout(() => { attackerCard.style.transform = 'none'; }, 200);
 
       if (isSuccess) {
-        // 設定暴擊子彈大小
         if (isCrit) {
           bullet.classList.add('crit-bullet');
         } else {
@@ -591,7 +644,7 @@
           bullet.style.display = 'none';
           
           if (isCrit) {
-            playBeep(120, 'square', 0.5); // 暴擊超重音音效
+            playBeep(120, 'square', 0.5);
           } else {
             playBeep(150, 'square', 0.3);
           }
@@ -599,7 +652,6 @@
           defenderCard.style.animation = 'shakeCard 0.4s ease';
           setTimeout(() => { defenderCard.style.animation = 'none'; }, 400);
 
-          // 浮動傷害字樣 (暴擊 vs 普通)
           if (isCrit) {
             dmg.classList.add('crit-damage');
             dmg.innerText = 'CRITICAL! -2 HP';
@@ -613,7 +665,6 @@
           dmg.style.animation = 'floatDamage 0.8s forwards';
           setTimeout(() => { dmg.style.animation = 'none'; }, 800);
 
-          // 計算血量扣除
           const dmgAmount = isCrit ? 2 : 1;
           if (currentAttacker === 1) {
             p2Hp = Math.max(0, p2Hp - dmgAmount);
@@ -640,14 +691,6 @@
         alert(`❌ 攻擊落空 (Miss)！輪到對手反擊！`);
         currentAttacker = currentAttacker === 1 ? 2 : 1;
         updateBattleUI();
-      }
-    }
-
-    function toggleFullScreen() {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen();
-      } else {
-        document.exitFullscreen();
       }
     }
 
