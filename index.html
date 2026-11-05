@@ -173,25 +173,24 @@
       position: relative;
     }
     .arena-box {
-      background: linear-gradient(to bottom, #4f772d, #31572c); /* 綠色草地戰場背景 */
+      background: linear-gradient(to bottom, #4f772d, #31572c); /* 綠色草地 */
       border: 6px solid #ffde00;
       border-radius: 30px;
       padding: 20px;
       display: flex;
       justify-content: space-between;
-      align-items: flex-end; /* 讓全身角色站在地面上 */
+      align-items: flex-end;
       position: relative;
       height: 420px;
       overflow: hidden;
       box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
     }
-    /* 地面泥土線 */
     .arena-box::after {
       content: '';
       position: absolute;
       bottom: 0; left: 0; width: 100%;
       height: 25px;
-      background: #7f5539; /* 泥土層 */
+      background: #7f5539; /* 泥土底層 */
       z-index: 1;
     }
     .fighter-side {
@@ -201,15 +200,13 @@
       width: 250px;
       z-index: 5;
     }
-    
-    /* 全身立體角色容器與鏡像翻轉 */
     .fighter-sprite-wrap {
       height: 240px;
       display: flex;
       align-items: flex-end;
       justify-content: center;
       position: relative;
-      transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1); /* 平滑衝鋒 */
+      transition: transform 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
     .fighter-sprite {
       width: 150px;
@@ -217,12 +214,10 @@
       object-fit: contain;
       filter: drop-shadow(0 10px 10px rgba(0,0,0,0.4));
     }
-    /* 讓右側藍方角色面向左側（水平翻轉） */
     #fighterCard2 .fighter-sprite {
-      transform: scaleX(-1);
+      transform: scaleX(-1); /* 讓右側藍方角色面向左側 */
     }
 
-    /* 頂部血量與狀態條 */
     .status-panel {
       position: absolute;
       top: 15px;
@@ -251,7 +246,6 @@
     }
     .hp-text { font-size: 1.1rem; color: #fff; text-shadow: 2px 2px 0 #000; }
 
-    /* 浮動傷害字體 */
     .damage-text {
       position: absolute;
       font-size: 2.5rem;
@@ -272,7 +266,6 @@
       100% { opacity: 0; transform: translateY(-90px) scale(0.8); }
     }
 
-    /* 近身爆裂打擊特效（Slash Effect） */
     .hit-burst {
       position: absolute;
       font-size: 4.5rem;
@@ -287,7 +280,6 @@
       100% { transform: scale(1) rotate(90deg); opacity: 0; }
     }
 
-    /* 被打擊震動與擊退動畫 */
     @keyframes hitReceiveRed {
       0%, 100% { transform: translateX(0); filter: brightness(1); }
       20% { transform: translateX(35px); filter: brightness(2.5) sepia(1) saturate(5) hue-rotate(-50deg); }
@@ -303,7 +295,6 @@
       80% { transform: translateX(5px); }
     }
 
-    /* 勝利跳躍與落敗倒地 */
     @keyframes victoryJump {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-50px) scaleY(1.1); }
@@ -312,12 +303,11 @@
       100% { transform: rotate(90deg) translateY(50px); opacity: 0; }
     }
 
-    /* 競技場中央控制台 */
     .arena-center {
       display: flex;
       flex-direction: column;
       align-items: center;
-      align-self: center; /* 置中對齊 */
+      align-self: center;
       z-index: 5;
       margin-bottom: 40px;
     }
@@ -344,7 +334,6 @@
     }
     .btn-attack:active { transform: translateY(4px); box-shadow: 0 2px 0 #88002e; }
 
-    /* 答題視窗 */
     .modal {
       display: none;
       position: fixed;
@@ -414,7 +403,7 @@
     <div class="roster-grid" id="rosterContainer"></div>
     <button class="btn-brawl" id="startBrawlBtn" onclick="enterBattle()">🔥 BRAWL! (進入對決) 🔥</button>
 
-    <!-- 🎯 戰鬥秘笈規則面板 -->
+    <!-- 戰鬥秘笈規則面板 -->
     <div class="rules-box">
       <div class="rules-title">⚔️ BATTLE TIPS / 戰鬥秘笈 ⚔️</div>
       <div class="rules-list">
@@ -484,7 +473,7 @@
   </div>
 
   <script>
-    // 英雄全身官方 PNG 圖片庫 (Brawlify CDN 高畫質全身立繪)
+    // 英雄全身立繪圖片
     const brawlersRoster = [
       { name: "Crow", img: "https://cdn.brawlify.com/brawlers/borders/16000016.png", sprite: "https://cdn.brawlify.com/brawlers/borderless/16000016.png", icon: "🪶" },
       { name: "Mortis", img: "https://cdn.brawlify.com/brawlers/borders/16000015.png", sprite: "https://cdn.brawlify.com/brawlers/borderless/16000015.png", icon: "🦇" },
@@ -583,11 +572,13 @@
       document.getElementById('battleScreen').style.display = 'none';
       document.getElementById('selectScreen').style.display = 'flex';
       
-      // 重置戰鬥卡片樣式
+      // 重置動畫狀態
       document.getElementById('fighterCard1').style.animation = 'none';
       document.getElementById('fighterCard2').style.animation = 'none';
       document.getElementById('fighterCard1').style.transform = 'none';
       document.getElementById('fighterCard2').style.transform = 'none';
+      document.getElementById('fighterCard1').style.opacity = '1';
+      document.getElementById('fighterCard2').style.opacity = '1';
     }
 
     function enterBattle() {
@@ -655,7 +646,6 @@
       document.getElementById('quizModal').style.display = 'flex';
     }
 
-    // 全身近戰衝刺攻擊、砍擊爆發與擊退動畫
     function executeAttackAnimation(isSuccess, isCrit) {
       const attackerWrap = document.getElementById(currentAttacker === 1 ? 'fighterCard1' : 'fighterCard2');
       const defenderWrap = document.getElementById(currentAttacker === 1 ? 'fighterCard2' : 'fighterCard1');
@@ -664,29 +654,26 @@
       const attacker = currentAttacker === 1 ? p1Brawler : p2Brawler;
 
       if (isSuccess) {
-        // 1. 攻擊角色急速衝向對手 (Dash)
-        // 橫跨戰場需要移動約 500px 到 600px 左右
+        // 1. 衝鋒動畫
         attackerWrap.style.transform = currentAttacker === 1 ? 'translateX(550px) scale(1.15)' : 'translateX(-550px) scale(1.15)';
         
-        // 2. 當衝到對手面前時，引爆斬擊效果
+        // 2. 命中爆炸與受創
         setTimeout(() => {
-          // 爆發特效位置
           burst.innerText = isCrit ? '💥⚡' : '💥';
           burst.style.display = 'block';
           burst.style.left = currentAttacker === 1 ? '720px' : '230px';
           burst.style.bottom = '100px';
 
-          // 震撼打擊聲
           if (isCrit) {
             playBeep(120, 'square', 0.5);
           } else {
             playBeep(180, 'square', 0.3);
           }
 
-          // 3. 對手受創，觸發強烈震動與擊退 (Knockback)
+          // 對手受創與擊退
           defenderWrap.style.animation = currentAttacker === 1 ? 'hitReceiveBlue 0.45s ease' : 'hitReceiveRed 0.45s ease';
           
-          // 4. 浮動跳出 -1 / -2 傷害文字
+          // 4. 跳出傷害文字
           if (isCrit) {
             dmg.classList.add('crit-damage');
             dmg.innerText = 'CRITICAL! -2 HP';
@@ -698,7 +685,7 @@
           dmg.style.bottom = '220px';
           dmg.style.animation = 'floatDamage 0.85s forwards';
 
-          // 扣除生命值
+          // 計算血量扣除
           const dmgAmount = isCrit ? 2 : 1;
           if (currentAttacker === 1) {
             p2Hp = Math.max(0, p2Hp - dmgAmount);
@@ -706,31 +693,30 @@
             p1Hp = Math.max(0, p1Hp - dmgAmount);
           }
           updateBattleUI();
-
         }, 320);
 
-        // 5. 特效消失，進攻角色退回原位 (Retreat)
+        // 5. 撤退
         setTimeout(() => {
           burst.style.display = 'none';
           dmg.style.animation = 'none';
           defenderWrap.style.animation = 'none';
-          attackerWrap.style.transform = 'none'; // 退回原位
+          attackerWrap.style.transform = 'none';
         }, 800);
 
-        // 6. 判定 Knockout 終局勝負
+        // 6. 判定終局 K.O.
         setTimeout(() => {
           if (p1Hp <= 0 || p2Hp <= 0) {
-            const winner = p1Hp > 0 ? p1Brawler.name : p2Brawler.name;
-            const winnerWrap = p1Hp > 0 ? attackerWrap : defenderWrap;
-            const loserWrap = p1Hp > 0 ? defenderWrap : attackerWrap;
+            const winnerName = p1Hp > 0 ? p1Brawler.name : p2Brawler.name;
+            const winnerWrap = p1Hp > 0 ? document.getElementById('fighterCard1') : document.getElementById('fighterCard2');
+            const loserWrap = p1Hp > 0 ? document.getElementById('fighterCard2') : document.getElementById('fighterCard1');
 
-            // 勝利者原地歡樂跳躍，敗者躺下消散
+            // 贏家跳躍，輸家倒下
             winnerWrap.style.animation = 'victoryJump 0.4s ease infinite';
             loserWrap.style.animation = 'defeatFall 1s forwards';
 
             setTimeout(() => {
               playBeep(880, 'triangle', 0.6);
-              alert(`🏆 KNOCKOUT! 恭喜 ${winner} 贏得本次英語大挑戰總冠軍！`);
+              alert(`🏆 KNOCKOUT! 恭喜 ${winnerName} 贏得本次英語大挑戰總冠軍！`);
               winnerWrap.style.animation = 'none';
               loserWrap.style.animation = 'none';
               restartSelection();
@@ -738,13 +724,11 @@
             return;
           }
 
-          // 輪到下一位攻擊
           currentAttacker = currentAttacker === 1 ? 2 : 1;
           updateBattleUI();
         }, 900);
 
       } else {
-        // 答錯攻擊落空 (Miss)
         alert(`❌ 答錯了！攻擊落空 (Miss)！輪到對手反擊！`);
         currentAttacker = currentAttacker === 1 ? 2 : 1;
         updateBattleUI();
