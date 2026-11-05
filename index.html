@@ -84,7 +84,7 @@
       height: 110px;
       border-radius: 20px;
       border: 4px solid #fff;
-      background: rgba(255,255,255,0.08);
+      background: rgba(255, 255, 255, 0.08);
       overflow: hidden;
       margin-bottom: 8px;
       display: flex;
@@ -119,8 +119,8 @@
       box-shadow: 0 0 15px #ffde00;
     }
     .roster-card img {
-      width: 75px;
-      height: 90px;
+      width: 80px;
+      height: 95px;
       object-fit: contain;
       margin-bottom: 6px;
       filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
@@ -435,14 +435,18 @@
     <div class="preview-box">
       <div class="player-preview">
         <div style="color:#ef4444; font-size:1.1rem; margin-bottom:5px;">RED SIDE (P1)</div>
-        <div class="preview-avatar" style="border-color:#ef4444;"><img id="p1PreviewImg" src="" style="display:none;" referrerpolicy="no-referrer"></div>
+        <div class="preview-avatar" style="border-color:#ef4444;">
+          <img id="p1PreviewImg" src="" style="display:none;" referrerpolicy="no-referrer">
+        </div>
         <div id="p1Name" style="color:#ffde00; font-size:1.2rem;">?</div>
         <div id="p1SuperTag" class="roster-super-tag" style="display:none;"></div>
       </div>
       <div style="font-size:2rem; color:#ffde00;">VS</div>
       <div class="player-preview">
         <div style="color:#3b82f6; font-size:1.1rem; margin-bottom:5px;">BLUE SIDE (P2)</div>
-        <div class="preview-avatar" style="border-color:#3b82f6;"><img id="p2PreviewImg" src="" style="display:none;" referrerpolicy="no-referrer"></div>
+        <div class="preview-avatar" style="border-color:#3b82f6;">
+          <img id="p2PreviewImg" src="" style="display:none;" referrerpolicy="no-referrer">
+        </div>
         <div id="p2Name" style="color:#ffde00; font-size:1.2rem;">?</div>
         <div id="p2SuperTag" class="roster-super-tag" style="display:none;"></div>
       </div>
@@ -527,11 +531,12 @@
   </div>
 
   <script>
-    // 💡 徹底解決破圖：選角卡片與對戰統一使用經過驗證的官方全身透明去背立繪
+    // 💡 8位英雄：統一使用保證成功的官方透明去背全身圖，並配有 Brawlify 本地備份機制
     const brawlersRoster = [
       { 
         name: "Crow", 
         sprite: "https://static.wikia.nocookie.net/brawlstars/images/a/a2/Crow_Skin-Default.png", 
+        backupId: "16000016",
         superName: "天降黑羽 (Dagger Storm)", 
         superIcon: "🪶", 
         superDmg: 3, 
@@ -540,6 +545,7 @@
       { 
         name: "Mortis", 
         sprite: "https://static.wikia.nocookie.net/brawlstars/images/b/b2/Mortis_Skin-Default.png", 
+        backupId: "16000015",
         superName: "蝠血狂飆 (Life Lead)", 
         superIcon: "🦇", 
         superDmg: 2, 
@@ -548,6 +554,7 @@
       { 
         name: "El Primo", 
         sprite: "https://static.wikia.nocookie.net/brawlstars/images/0/04/El_Primo_Skin-Default.png", 
+        backupId: "16000004",
         superName: "飛天手肘落 (Flying Elbow)", 
         superIcon: "🥊", 
         superDmg: 3, 
@@ -556,6 +563,7 @@
       { 
         name: "Bo", 
         sprite: "https://static.wikia.nocookie.net/brawlstars/images/e/ee/Bo_Skin-Default.png", 
+        backupId: "16000008",
         superName: "地雷爆破 (Mines Blast)", 
         superIcon: "🏹", 
         superDmg: 3, 
@@ -564,6 +572,7 @@
       { 
         name: "Barley", 
         sprite: "https://static.wikia.nocookie.net/brawlstars/images/3/3c/Barley_Skin-Default.png", 
+        backupId: "16000003",
         superName: "狂暴烈酒 (Super Bottle)", 
         superIcon: "🍾", 
         superDmg: 3, 
@@ -572,6 +581,7 @@
       { 
         name: "Shelly", 
         sprite: "https://static.wikia.nocookie.net/brawlstars/images/5/5e/Shelly_Skin-Default.png", 
+        backupId: "16000000",
         superName: "超級大霰彈 (Super Shell)", 
         superIcon: "💥", 
         superDmg: 3, 
@@ -580,6 +590,7 @@
       { 
         name: "Colt", 
         sprite: "https://static.wikia.nocookie.net/brawlstars/images/8/8a/Colt_Skin-Default.png", 
+        backupId: "16000001",
         superName: "子彈風暴 (Bullet Storm)", 
         superIcon: "🔫", 
         superDmg: 3, 
@@ -588,6 +599,7 @@
       { 
         name: "Spike", 
         sprite: "https://static.wikia.nocookie.net/brawlstars/images/8/8e/Spike_Skin-Default.png", 
+        backupId: "16000005",
         superName: "針刺結界 (Stick Around)", 
         superIcon: "🌵", 
         superDmg: 3, 
@@ -651,9 +663,9 @@
       brawlersRoster.forEach((b) => {
         const card = document.createElement('div');
         card.className = 'roster-card';
-        // 💡 這裡直接載入百分之百可用的全身去背立繪
+        // 💡 核心：選角卡片使用與戰鬥完全相同的去背立繪，並設置自動備用圖
         card.innerHTML = `
-          <img src="${b.sprite}" alt="${b.name}" referrerpolicy="no-referrer">
+          <img src="${b.sprite}" alt="${b.name}" referrerpolicy="no-referrer" onerror="this.onerror=null; this.src='https://cdn.brawlify.com/brawlers/borders/${b.backupId}.png'">
           <div style="font-size:1.05rem;">${b.name}</div>
           <div class="roster-super-tag">⚡ ${b.superName.split(' ')[0]}</div>
         `;
@@ -670,6 +682,7 @@
         document.getElementById('p1SuperTag').style.display = 'block';
         const img = document.getElementById('p1PreviewImg');
         img.src = b.sprite;
+        img.onerror = () => { img.src = `https://cdn.brawlify.com/brawlers/borders/${b.backupId}.png`; };
         img.style.display = 'block';
         selectingPlayer = 2;
         document.getElementById('selectInstruction').innerText = "Player 2 (Blue Side): Choose Your Brawler!";
@@ -681,6 +694,7 @@
         document.getElementById('p2SuperTag').style.display = 'block';
         const img = document.getElementById('p2PreviewImg');
         img.src = b.sprite;
+        img.onerror = () => { img.src = `https://cdn.brawlify.com/brawlers/borders/${b.backupId}.png`; };
         img.style.display = 'block';
         document.getElementById('selectInstruction').innerText = "Ready to Fight! Click Below!";
         document.getElementById('startBrawlBtn').style.display = 'block';
@@ -716,12 +730,18 @@
     function enterBattle() {
       document.getElementById('selectScreen').style.display = 'none';
       document.getElementById('battleScreen').style.display = 'block';
-      document.getElementById('f1Img').src = p1Brawler.sprite;
+      const f1 = document.getElementById('f1Img');
+      f1.src = p1Brawler.sprite;
+      f1.onerror = () => { f1.src = `https://cdn.brawlify.com/brawlers/borders/${p1Brawler.backupId}.png`; };
       document.getElementById('f1Name').innerText = p1Brawler.name;
       document.getElementById('f1SuperDesc').innerText = `⚡ ${p1Brawler.superName}`;
-      document.getElementById('f2Img').src = p2Brawler.sprite;
+      
+      const f2 = document.getElementById('f2Img');
+      f2.src = p2Brawler.sprite;
+      f2.onerror = () => { f2.src = `https://cdn.brawlify.com/brawlers/borders/${p2Brawler.backupId}.png`; };
       document.getElementById('f2Name').innerText = p2Brawler.name;
       document.getElementById('f2SuperDesc').innerText = `⚡ ${p2Brawler.superName}`;
+      
       currentAttacker = 1;
       p1Hp = 10;
       p2Hp = 10;
