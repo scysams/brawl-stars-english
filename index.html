@@ -29,6 +29,7 @@
       font-size: 1.8rem;
       color: #ffde00;
       text-shadow: 3px 3px 0 #d9381e, 5px 5px 0 #000;
+      cursor: pointer;
     }
     .sub-title {
       font-size: 0.95rem;
@@ -54,7 +55,7 @@
     .btn-top:active { transform: translateY(3px); box-shadow: 0 1px 0 #000; }
     .btn-rank { background: #eab308; color: #000; font-weight: bold; }
     .btn-menu { background: #38bdf8; color: #000; }
-    .btn-manage { background: #a855f7; color: #fff; font-weight: bold; }
+    .btn-manage { background: #a855f7; color: #fff; font-weight: bold; display: none; }
 
     /* 主選單：4大模式選擇卡片 */
     #menuScreen {
@@ -357,6 +358,7 @@
       border: 3px solid #ffde00;
       margin-bottom: 12px;
       text-shadow: 2px 2px 0 #000;
+      transition: all 0.2s;
     }
     .action-btn-group {
       display: flex;
@@ -371,6 +373,7 @@
       border-radius: 16px;
       cursor: pointer;
       box-shadow: 0 5px 0 #88002e;
+      transition: all 0.1s;
     }
     .btn-attack-super {
       background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
@@ -381,6 +384,7 @@
       border-radius: 16px;
       cursor: pointer;
       box-shadow: 0 5px 0 #581c87, 0 0 15px rgba(236, 72, 153, 0.6);
+      transition: all 0.1s;
     }
     .btn-attack-normal:active, .btn-attack-super:active { transform: translateY(3px); box-shadow: 0 2px 0 #000; }
 
@@ -488,17 +492,18 @@
       margin-top: 10px;
       outline: none;
     }
+    #btnBgmClear { display: none; }
   </style>
 </head>
 <body>
 
   <header>
     <div>
-      <h1>BCKLAS ENGLISH CHALLENGE</h1>
+      <h1 id="adminLockTitle" ondblclick="unlockAdminMode()">BCKLAS ENGLISH CHALLENGE</h1>
       <div class="sub-title">Brawl Stars Arena • 4 Battle Modes & Secure Roster</div>
     </div>
     <div class="header-btns">
-      <button class="btn-top btn-manage" onclick="openImportModal()">⚙️ 導入名單</button>
+      <button class="btn-top btn-manage" id="btnAdminImport" onclick="openImportModal()">⚙️ 導入名單</button>
       <button class="btn-top btn-rank" onclick="openLeaderboard()">🏆 龍虎榜</button>
       <button class="btn-top btn-menu" onclick="returnToMenu()">🏠 主選單</button>
       <button class="btn-top" id="btnMusic" onclick="toggleBGM()">🔊 音樂</button>
@@ -510,29 +515,25 @@
   <div id="menuScreen" onclick="tryStartMusic()">
     <div class="menu-title">⚡ SELECT BATTLE MODE / 選擇挑戰模式 ⚡</div>
     <div class="modes-grid">
-      <!-- 模式 1: 個人賽對電腦 -->
       <div class="mode-card" onclick="startModeSelect(1)">
         <div class="mode-icon">🤖</div>
         <div class="mode-name">1. 個人挑戰賽 (Solo vs AI)</div>
         <div class="mode-desc">自選英雄對抗電腦隨機對手，答對出招，挑戰個人最高得分！</div>
       </div>
-      <!-- 模式 2: 雙人 1v1 對決 -->
       <div class="mode-card" onclick="startModeSelect(2)">
         <div class="mode-icon">⚔️</div>
         <div class="mode-name">2. 雙人對決 (1v1 PvP Duel)</div>
         <div class="mode-desc">紅藍雙方各派代表挑選英雄，輪流發動普通攻擊或 SUPER 絕招！</div>
       </div>
-      <!-- 模式 3: 團體對抗賽 -->
       <div class="mode-card" onclick="startModeSelect(3)">
         <div class="mode-icon">👥</div>
         <div class="mode-name">3. 團體聯賽 (Team Brawl)</div>
         <div class="mode-desc">紅隊 vs 藍隊 3v3 團隊接力！共享 15 HP，考驗組別默契！</div>
       </div>
-      <!-- 模式 4: 打 Boss -->
       <div class="mode-card" onclick="startModeSelect(4)">
         <div class="mode-icon">👾</div>
         <div class="mode-name">4. 首領狂暴戰 (Boss Fight)</div>
-        <div class="mode-desc">全班齊心合力對決 30 HP 超級機械首領，答對題目合力扣除 Boss 血量！</div>
+        <div class="mode-desc">全班齊心合力對決 30 HP 超級機械首領！Boss 將會自動狂暴反撲！</div>
       </div>
     </div>
   </div>
@@ -568,7 +569,7 @@
   <!-- 3. 戰鬥競技場介面 -->
   <div id="battleScreen">
     <div class="arena-box">
-      <!-- 選手 1 -->
+      <!-- 英雄陣營 -->
       <div class="fighter-side" id="panelWrap1">
         <div class="status-panel" id="panel1">
           <div id="f1Name" style="font-size:1.4rem; color:#ffde00; margin-bottom:3px; text-shadow:2px 2px 0 #000;">Hero 1</div>
@@ -584,13 +585,13 @@
       <!-- 中央控制台：普攻 & 絕招 -->
       <div class="arena-center">
         <div class="turn-badge" id="currentTurnBadge">Attacker: Hero 1</div>
-        <div class="action-btn-group">
+        <div class="action-btn-group" id="actionBtnGroup">
           <button class="btn-attack-normal" onclick="openQuiz(false)">🥊 普通攻擊 (Normal)</button>
           <button class="btn-attack-super" id="btnSuper" onclick="openQuiz(true)">⚡ 發動絕招 (SUPER)</button>
         </div>
       </div>
 
-      <!-- 選手 2 / 對手 / Boss -->
+      <!-- Boss / 對手陣營 -->
       <div class="fighter-side" id="panelWrap2">
         <div class="status-panel" id="panel2">
           <div id="f2Name" style="font-size:1.4rem; color:#ffde00; margin-bottom:3px; text-shadow:2px 2px 0 #000;">Hero 2</div>
@@ -625,12 +626,10 @@
       <h2 style="font-size:1.8rem; color:#ffde00; margin-bottom:10px;">🏆 恭喜獲勝！登錄龍虎榜 🏆</h2>
       <div style="font-size:1.1rem; color:#38bdf8; margin-bottom:15px;" id="recordSummary">得分: 100 分</div>
       
-      <!-- 選擇班別（會自動聯動姓名） -->
       <select id="stuClassSelect" class="record-select" onchange="updateNameDropdown()">
         <option value="">-- 選擇班別 --</option>
       </select>
       
-      <!-- 安全選取姓名（免手動打字，防洩露） -->
       <select id="stuNameSelect" class="record-select">
         <option value="">-- 選擇學生姓名 --</option>
       </select>
@@ -663,29 +662,32 @@
         </table>
       </div>
       <div style="margin-top:15px; display:flex; justify-content:center; gap:10px;">
-        <button class="btn-top" onclick="clearLeaderboard()" style="background:#ef4444; color:#fff;">🗑️ 清空榜單</button>
+        <button class="btn-top" id="btnBgmClear" onclick="clearLeaderboard()" style="background:#ef4444; color:#fff;">🗑️ 清空榜單</button>
         <button class="btn-top" onclick="closeLeaderboard()">關閉</button>
       </div>
     </div>
   </div>
 
-  <!-- 7. 學生名單管理/導入視窗 (100%本地安全) -->
+  <!-- 7. 學生名單管理/導入視窗 -->
   <div class="modal" id="importModal">
     <div class="record-modal-content" style="max-width:700px;">
       <h2 style="font-size:1.7rem; color:#a855f7; margin-bottom:10px;">📋 導入學校 Google Sheet 學生名單</h2>
       <p style="font-size:0.85rem; color:#94a3b8; line-height:1.4; text-align:left;">
-        <strong>🔒 隱私安全保證</strong>：本名單直接儲存於這台電腦中，絕不上傳至任何伺服器，安全無憂。<br>
-        <strong>💡 導入指南</strong>：請從您的 Google Sheet 複製 <strong>班別</strong> 和 <strong>姓名</strong> 兩欄貼上在下方（每行一格，系統會自動解析）：
+        <strong>🔒 隱私安全保證</strong>：本名單直接儲存於本地瀏覽器，絕不上傳雲端。<br>
+        <strong>💡 導入指南</strong>：請從 Google Sheet 複製 <strong>班別</strong> 和 <strong>姓名</strong> 兩欄貼上（每行一筆，Tab 或空格隔開）：
       </p>
       <textarea id="importArea" class="import-textarea" placeholder="例：&#13;3B&#9;Kelly Chan&#13;3B&#9;Tom Wong&#13;3C&#9;Alex Lee"></textarea>
       <div style="margin-top:15px; display:flex; justify-content:center; gap:10px;">
-        <button class="btn-top btn-manage" onclick="processImport()">⚡ 開始導入</button>
+        <button class="btn-top btn-manage" style="display:inline-block;" onclick="processImport()">⚡ 開始導入</button>
         <button class="btn-top" onclick="closeImportModal()">取消關閉</button>
       </div>
     </div>
   </div>
 
   <script>
+    let isAdminUnlocked = false;
+    const ADMIN_PASSWORD = "bcklas3b";
+
     // 12 位官方英雄配置
     const brawlersRoster = [
       { name: "Crow", sprite: "https://static.wikia.nocookie.net/brawlstars/images/a/a2/Crow_Skin-Default.png", backupId: "16000016", superName: "天降黑羽 (Dagger Storm)", superIcon: "🪶", superDmg: 3, heal: 0 },
@@ -702,9 +704,16 @@
       { name: "Bull", sprite: "https://static.wikia.nocookie.net/brawlstars/images/b/b7/Bull_Skin-Default.png", backupId: "16000002", superName: "蠻牛衝撞 (Bulldozer)", superIcon: "🐂", superDmg: 3, heal: 0 }
     ];
 
-    const bossEntity = { name: "Robo Boss 首領", sprite: "https://static.wikia.nocookie.net/brawlstars/images/5/55/Frank_Skin-Default.png", superName: "毀滅鐳射 (Laser Surge)", superIcon: "⚡", superDmg: 3, heal: 0 };
+    // Robo Boss 實體
+    const bossEntity = { 
+      name: "Robo Boss 首領", 
+      sprite: "https://static.wikia.nocookie.net/brawlstars/images/5/55/Frank_Skin-Default.png", 
+      superName: "毀滅鐳射 (Laser Surge)", 
+      superIcon: "⚡", 
+      superDmg: 3, 
+      heal: 0 
+    };
 
-    // 預設 3B 學生演示名單 (若老師尚未導入)
     const defaultRoster = [
       { stuClass: "3B", name: "Kelly Chan" },
       { stuClass: "3B", name: "Tom Wong" },
@@ -714,7 +723,6 @@
       { stuClass: "3B", name: "Cherry Lam" }
     ];
 
-    // 題庫配置
     const normalQuestions = [
       { cat: "Phonics", q: "Which word has the 'short a' sound?", opts: ["Cake", "Cat", "Rain", "Train"], ans: 1 },
       { cat: "Grammar", q: "Yesterday, Kelly ________ to the library.", opts: ["go", "goes", "went", "going"], ans: 2 },
@@ -749,7 +757,6 @@
     let isCurrentSuper = false;
     let scoreAccumulated = 0;
 
-    // Web Audio 音效與音樂系統
     let audioCtx = null;
     let bgmInterval = null;
     let isBGMPlaying = false;
@@ -809,7 +816,20 @@
       if (!isBGMPlaying) startBGM();
     }
 
-    // 啟動對抗與選角
+    function unlockAdminMode() {
+      const pw = prompt("🔒 請輸入管理員解鎖密碼：\n(預設為 bcklas3b)");
+      if (pw === ADMIN_PASSWORD) {
+        isAdminUnlocked = true;
+        alert("🔓 管理權限已解鎖！「⚙️ 導入名單」與「清空龍虎榜」按鈕已顯現。");
+        document.getElementById('btnAdminImport').style.display = 'inline-block';
+        document.getElementById('btnBgmClear').style.display = 'inline-block';
+        playBeep(880, 'sine', 0.25);
+      } else if (pw !== null) {
+        alert("❌ 密碼錯誤！無法解鎖管理權限。");
+        playBeep(150, 'sawtooth', 0.3);
+      }
+    }
+
     function startModeSelect(mode) {
       tryStartMusic();
       currentGameMode = mode;
@@ -949,7 +969,7 @@
       scoreAccumulated = 0;
 
       if (currentGameMode === 3) maxHp = 15;
-      else if (currentGameMode === 4) maxHp = 30;
+      else if (currentGameMode === 4) maxHp = 30; // Boss 擁 30 HP
       else maxHp = 10;
 
       p1Hp = currentGameMode === 4 ? 12 : maxHp;
@@ -965,10 +985,32 @@
       document.getElementById('f2HpFill').style.width = `${(p2Hp / maxHp) * 100}%`;
       document.getElementById('f2HpText').innerText = `HP: ${p2Hp} / ${maxHp}`;
 
-      const attacker = currentAttacker === 1 ? p1Brawler : p2Brawler;
-      const side = currentAttacker === 1 ? "Red" : "Blue";
-      document.getElementById('currentTurnBadge').innerText = `Attacker: ${attacker.name} (${side})`;
-      document.getElementById('btnSuper').innerText = `⚡ 發動絕招: ${attacker.name}`;
+      const btnGroup = document.getElementById('actionBtnGroup');
+      const badge = document.getElementById('currentTurnBadge');
+
+      // 👾 Boss 回合專屬控制：自動鎖定按鈕與警示
+      if (currentGameMode === 4 && currentAttacker === 2) {
+        btnGroup.style.pointerEvents = 'none';
+        btnGroup.style.opacity = '0.3';
+        badge.innerText = `⚠️ BOSS 狂暴反擊中...`;
+        badge.style.borderColor = '#ef4444';
+        badge.style.color = '#ef4444';
+      } else if (currentGameMode === 1 && currentAttacker === 2) {
+        btnGroup.style.pointerEvents = 'none';
+        btnGroup.style.opacity = '0.3';
+        badge.innerText = `🤖 CPU 電腦出招中...`;
+        badge.style.borderColor = '#38bdf8';
+        badge.style.color = '#38bdf8';
+      } else {
+        btnGroup.style.pointerEvents = 'auto';
+        btnGroup.style.opacity = '1';
+        badge.style.borderColor = '#ffde00';
+        badge.style.color = '#ffde00';
+        const attacker = currentAttacker === 1 ? p1Brawler : p2Brawler;
+        const side = currentAttacker === 1 ? "Red" : "Blue";
+        badge.innerText = `Attacker: ${attacker.name} (${side})`;
+        document.getElementById('btnSuper').innerText = `⚡ 發動絕招: ${attacker.name}`;
+      }
     }
 
     function openQuiz(isSuper) {
@@ -1091,10 +1133,12 @@
         }, 800);
 
         setTimeout(() => {
+          // 判定勝負
           if (p1Hp <= 0 || p2Hp <= 0) {
-            const winnerName = p1Hp > 0 ? p1Brawler.name : p2Brawler.name;
-            const winnerWrap = p1Hp > 0 ? document.getElementById('fighterCard1') : document.getElementById('fighterCard2');
-            const loserWrap = p1Hp > 0 ? document.getElementById('fighterCard2') : document.getElementById('fighterCard1');
+            const isHeroWon = p1Hp > 0;
+            const winnerName = isHeroWon ? p1Brawler.name : p2Brawler.name;
+            const winnerWrap = isHeroWon ? document.getElementById('fighterCard1') : document.getElementById('fighterCard2');
+            const loserWrap = isHeroWon ? document.getElementById('fighterCard2') : document.getElementById('fighterCard1');
 
             winnerWrap.style.animation = 'victoryJump 0.4s ease infinite';
             loserWrap.style.animation = 'defeatFall 1s forwards';
@@ -1103,16 +1147,29 @@
               playBeep(880, 'triangle', 0.6);
               winnerWrap.style.animation = 'none';
               loserWrap.style.animation = 'none';
-              promptRecordRegistration(winnerName);
+              if (currentGameMode === 4 && !isHeroWon) {
+                alert(`💥 DEFEAT! 首領太狂暴了，全班英雄被擊倒！整頓陣型後再來挑戰吧！`);
+                returnToMenu();
+              } else {
+                promptRecordRegistration(winnerName);
+              }
             }, 1200);
             return;
           }
 
+          // 回合切換與自動反擊分流
           if (currentGameMode === 1 && currentAttacker === 1) {
+            // Solo Mode: 電腦反擊
             currentAttacker = 2;
             updateBattleUI();
             setTimeout(() => { triggerAITurn(); }, 1000);
+          } else if (currentGameMode === 4 && currentAttacker === 1) {
+            // 👾 Boss Mode: 英雄打完，Boss 自動狂暴反擊！
+            currentAttacker = 2;
+            updateBattleUI();
+            setTimeout(() => { triggerBossAutoAttack(); }, 1200);
           } else {
+            // 雙人 1v1 或 Boss/AI 攻擊完交還英雄
             currentAttacker = currentAttacker === 1 ? 2 : 1;
             updateBattleUI();
           }
@@ -1124,6 +1181,10 @@
           currentAttacker = 2;
           updateBattleUI();
           setTimeout(() => { triggerAITurn(); }, 1000);
+        } else if (currentGameMode === 4 && currentAttacker === 1) {
+          currentAttacker = 2;
+          updateBattleUI();
+          setTimeout(() => { triggerBossAutoAttack(); }, 1200);
         } else {
           currentAttacker = currentAttacker === 1 ? 2 : 1;
           updateBattleUI();
@@ -1131,12 +1192,21 @@
       }
     }
 
+    // 👾 Boss 自動反擊核心邏輯
+    function triggerBossAutoAttack() {
+      if (p2Hp <= 0 || p1Hp <= 0) return;
+      // 25% 機率觸發 Boss 超級絕招
+      const isBossSuper = Math.random() < 0.25;
+      executeAttackAnimation(true, false, isBossSuper);
+    }
+
+    // Solo Mode 電腦反擊
     function triggerAITurn() {
       const aiHits = Math.random() < 0.65;
       if (aiHits) {
         executeAttackAnimation(true, false, false);
       } else {
-        alert(`🤖 電腦 (${p2Brawler.name}) 答錯，攻擊落空！換你出擊！`);
+        alert(`🤖 電腦 (${p2Brawler.name}) 攻擊落空！換你出擊！`);
         currentAttacker = 1;
         updateBattleUI();
       }
@@ -1181,7 +1251,6 @@
             name: parts[1].trim()
           });
         } else {
-          // 支援半角空格分隔備用
           const spaceParts = l.trim().split(/\s+/);
           if (spaceParts.length >= 2) {
             newRoster.push({
@@ -1194,7 +1263,7 @@
 
       if (newRoster.length > 0) {
         localStorage.setItem('bcklas_secure_roster', JSON.stringify(newRoster));
-        alert(`🎉 成功導入 ${newRoster.length} 位學生名單！已安全鎖定存儲在您的本地網頁瀏覽器中。`);
+        alert(`🎉 成功導入 ${newRoster.length} 位學生名單！已安全鎖定存儲在本地瀏覽器中。`);
         closeImportModal();
       } else {
         alert("解析失敗，請確認格式（班別 名字，中間可用Tab或空格隔開）。");
@@ -1207,7 +1276,6 @@
     function promptRecordRegistration(winner) {
       document.getElementById('recordSummary').innerText = `獲勝英雄: ${winner} • 本局得分: ${scoreAccumulated} 分`;
       
-      // 動態加載已導入的班級到下拉選單
       const roster = getStoredRoster();
       const classes = [...new Set(roster.map(r => r.stuClass))];
       
@@ -1217,7 +1285,7 @@
         const opt = document.createElement('option');
         opt.value = c;
         opt.innerText = c;
-        if(c === "3B") opt.selected = true; // 3B默認
+        if(c === "3B") opt.selected = true;
         classSelect.appendChild(opt);
       });
 
@@ -1252,7 +1320,7 @@
       const stuName = document.getElementById('stuNameSelect').value;
 
       if (!stuClass || !stuName) {
-        alert("請在選單中選取您的班別與大名！");
+        alert("請在選單中選取班別與姓名！");
         return;
       }
       
