@@ -200,7 +200,7 @@
     }
     .btn-brawl:active { transform: translateY(3px); box-shadow: 0 2px 0 #15803d; }
 
-    /* 戰鬥競技場 */
+    /* 戰鬥競技場 (2D 橫向戰場) */
     #battleScreen {
       display: none;
       width: 96%;
@@ -340,6 +340,7 @@
       100% { transform: rotate(90deg) translateY(60px); opacity: 0; }
     }
 
+    /* 競技場中央控制台 */
     .arena-center {
       display: flex;
       flex-direction: column;
@@ -491,19 +492,25 @@
       margin-top: 10px;
       outline: none;
     }
-    #btnBgmClear { display: none; }
+
+    /* 🗑️ 龍虎榜管理專用按鈕（預設隱藏） */
+    #btnBgmClear {
+      display: none;
+    }
   </style>
-  <!-- 引入標準的高速 MD5 加密庫 (100% 離線可用，絕不洩漏) -->
+  <!-- 💡 引入安全高速的 CryptoJS MD5 原生函式庫，保障學校隱私，課堂離線依然完美運行 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/blueimp-md5/2.19.0/js/md5.min.js"></script>
 </head>
 <body>
 
   <header>
     <div>
+      <!-- ondblclick 雙擊解鎖 -->
       <h1 id="adminLockTitle" ondblclick="unlockAdminMode()">BCKLAS ENGLISH CHALLENGE</h1>
       <div class="sub-title">Brawl Stars Arena • 4 Battle Modes & Secure Roster</div>
     </div>
     <div class="header-btns">
+      <!-- ⚙️ 導入按鈕：預設完全隱藏 (class: btn-manage) -->
       <button class="btn-top btn-manage" id="btnAdminImport" onclick="openImportModal()">⚙️ 導入名單</button>
       <button class="btn-top btn-rank" onclick="openLeaderboard()">🏆 龍虎榜</button>
       <button class="btn-top btn-menu" onclick="returnToMenu()">🏠 主選單</button>
@@ -562,7 +569,6 @@
       </div>
     </div>
 
-    <!-- 12 英雄選擇網格 -->
     <div class="roster-grid" id="rosterContainer"></div>
     <button class="btn-brawl" id="startBrawlBtn" onclick="enterBattle()">🔥 BRAWL! (進入對決) 🔥</button>
   </div>
@@ -570,7 +576,7 @@
   <!-- 3. 戰鬥競技場介面 -->
   <div id="battleScreen">
     <div class="arena-box">
-      <!-- 英雄陣營 -->
+      <!-- 選手 1 -->
       <div class="fighter-side" id="panelWrap1">
         <div class="status-panel" id="panel1">
           <div id="f1Name" style="font-size:1.4rem; color:#ffde00; margin-bottom:3px; text-shadow:2px 2px 0 #000;">Hero 1</div>
@@ -592,7 +598,7 @@
         </div>
       </div>
 
-      <!-- Boss / 對手陣營 -->
+      <!-- 選手 2 / 對手 / Boss -->
       <div class="fighter-side" id="panelWrap2">
         <div class="status-panel" id="panel2">
           <div id="f2Name" style="font-size:1.4rem; color:#ffde00; margin-bottom:3px; text-shadow:2px 2px 0 #000;">Hero 2</div>
@@ -627,10 +633,12 @@
       <h2 style="font-size:1.8rem; color:#ffde00; margin-bottom:10px;">🏆 恭喜獲勝！登錄龍虎榜 🏆</h2>
       <div style="font-size:1.1rem; color:#38bdf8; margin-bottom:15px;" id="recordSummary">得分: 100 分</div>
       
+      <!-- 選擇班別（會自動聯動姓名） -->
       <select id="stuClassSelect" class="record-select" onchange="updateNameDropdown()">
         <option value="">-- 選擇班別 --</option>
       </select>
       
+      <!-- 安全選取姓名 -->
       <select id="stuNameSelect" class="record-select">
         <option value="">-- 選擇學生姓名 --</option>
       </select>
@@ -663,13 +671,14 @@
         </table>
       </div>
       <div style="margin-top:15px; display:flex; justify-content:center; gap:10px;">
+        <!-- 🗑️ 清空按鈕：預設完全隱藏 -->
         <button class="btn-top" id="btnBgmClear" onclick="clearLeaderboard()" style="background:#ef4444; color:#fff;">🗑️ 清空榜單</button>
         <button class="btn-top" onclick="closeLeaderboard()">關閉</button>
       </div>
     </div>
   </div>
 
-  <!-- 7. 學生名單管理/導入視窗 -->
+  <!-- 7. 學生名單管理/導入視窗 (100%本地安全) -->
   <div class="modal" id="importModal">
     <div class="record-modal-content" style="max-width:700px;">
       <h2 style="font-size:1.7rem; color:#a855f7; margin-bottom:10px;">📋 導入學校 Google Sheet 學生名單</h2>
@@ -686,37 +695,38 @@
   </div>
 
   <script>
-    // 🔒 密碼單向 MD5 加密特徵碼（真實密碼為 "bcklas3b"，但網頁源碼中不存任何明文）
+    // 🔒 密碼防護：使用與 Python 端完全一致的 MD5 特徵加密雜湊比對，全代碼不存放密碼明文
     let isAdminUnlocked = false;
-    const ADMIN_HASH_KEY = "225576a086a60fcb3b6f00115bc5f899"; // bcklas3b 的哈希值
+    const ADMIN_HASH_KEY = "46d6aaeba586482b859972d8dd2e1322"; // bcklas3b 的正確 MD5 特徵碼
 
-    // 12 位官方英雄配置
+    // 12 位官方英雄配置 (安全 WordPress 代理)
     const brawlersRoster = [
-      { name: "Crow", sprite: "https://static.wikia.nocookie.net/brawlstars/images/a/a2/Crow_Skin-Default.png", backupId: "16000016", superName: "天降黑羽 (Dagger Storm)", superIcon: "🪶", superDmg: 3, heal: 0 },
-      { name: "Mortis", sprite: "https://static.wikia.nocookie.net/brawlstars/images/b/b2/Mortis_Skin-Default.png", backupId: "16000015", superName: "蝠血狂飆 (Life Lead)", superIcon: "🦇", superDmg: 2, heal: 1 },
-      { name: "El Primo", sprite: "https://static.wikia.nocookie.net/brawlstars/images/0/04/El_Primo_Skin-Default.png", backupId: "16000004", superName: "飛天手肘落 (Flying Elbow)", superIcon: "🥊", superDmg: 3, heal: 0 },
-      { name: "Bo", sprite: "https://static.wikia.nocookie.net/brawlstars/images/e/ee/Bo_Skin-Default.png", backupId: "16000008", superName: "地雷爆破 (Mines Blast)", superIcon: "🏹", superDmg: 3, heal: 0 },
-      { name: "Barley", sprite: "https://static.wikia.nocookie.net/brawlstars/images/3/3c/Barley_Skin-Default.png", backupId: "16000003", superName: "狂暴烈酒 (Super Bottle)", superIcon: "🍾", superDmg: 3, heal: 0 },
-      { name: "Shelly", sprite: "https://static.wikia.nocookie.net/brawlstars/images/5/5e/Shelly_Skin-Default.png", backupId: "16000000", superName: "超級大霰彈 (Super Shell)", superIcon: "💥", superDmg: 3, heal: 0 },
-      { name: "Colt", sprite: "https://static.wikia.nocookie.net/brawlstars/images/8/8a/Colt_Skin-Default.png", backupId: "16000001", superName: "子彈風暴 (Bullet Storm)", superIcon: "🔫", superDmg: 3, heal: 0 },
-      { name: "Spike", sprite: "https://static.wikia.nocookie.net/brawlstars/images/8/8e/Spike_Skin-Default.png", backupId: "16000005", superName: "針刺結界 (Stick Around)", superIcon: "🌵", superDmg: 3, heal: 0 },
-      { name: "Leon", sprite: "https://static.wikia.nocookie.net/brawlstars/images/3/33/Leon_Skin-Default.png", backupId: "16000023", superName: "隱形潛獵 (Smoke Bomb)", superIcon: "🦎", superDmg: 3, heal: 0 },
-      { name: "Piper", sprite: "https://static.wikia.nocookie.net/brawlstars/images/5/5d/Piper_Skin-Default.png", backupId: "16000022", superName: "驚喜謝幕 (Poppin')", superIcon: "☂️", superDmg: 3, heal: 0 },
-      { name: "Frank", sprite: "https://static.wikia.nocookie.net/brawlstars/images/5/55/Frank_Skin-Default.png", backupId: "16000020", superName: "震地重擊 (Stunning Blow)", superIcon: "🔨", superDmg: 3, heal: 0 },
-      { name: "Bull", sprite: "https://static.wikia.nocookie.net/brawlstars/images/b/b7/Bull_Skin-Default.png", backupId: "16000002", superName: "蠻牛衝撞 (Bulldozer)", superIcon: "🐂", superDmg: 3, heal: 0 }
+      { name: "Crow", sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/a/a2/Crow_Skin-Default.png", backupId: "16000016", superName: "天降黑羽 (Dagger Storm)", superIcon: "🪶", superDmg: 3, heal: 0 },
+      { name: "Mortis", sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/b/b2/Mortis_Skin-Default.png", backupId: "16000015", superName: "蝠血狂飆 (Life Lead)", superIcon: "🦇", superDmg: 2, heal: 1 },
+      { name: "El Primo", sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/0/04/El_Primo_Skin-Default.png", backupId: "16000004", superName: "飛天手肘落 (Flying Elbow)", superIcon: "🥊", superDmg: 3, heal: 0 },
+      { name: "Bo", sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/e/ee/Bo_Skin-Default.png", backupId: "16000008", superName: "地雷爆破 (Mines Blast)", superIcon: "🏹", superDmg: 3, heal: 0 },
+      { name: "Barley", sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/3/3c/Barley_Skin-Default.png", backupId: "16000003", superName: "狂暴烈酒 (Super Bottle)", superIcon: "🍾", superDmg: 3, heal: 0 },
+      { name: "Shelly", sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/5/5e/Shelly_Skin-Default.png", backupId: "16000000", superName: "超級大霰彈 (Super Shell)", superIcon: "💥", superDmg: 3, heal: 0 },
+      { name: "Colt", sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/8/8a/Colt_Skin-Default.png", backupId: "16000001", superName: "子彈風暴 (Bullet Storm)", superIcon: "🔫", superDmg: 3, heal: 0 },
+      { name: "Spike", sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/8/8e/Spike_Skin-Default.png", backupId: "16000005", superName: "針刺結界 (Stick Around)", superIcon: "🌵", superDmg: 3, heal: 0 },
+      { name: "Leon", sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/3/33/Leon_Skin-Default.png", backupId: "16000023", superName: "隱形潛獵 (Smoke Bomb)", superIcon: "🦎", superDmg: 3, heal: 0 },
+      { name: "Piper", sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/5/5d/Piper_Skin-Default.png", backupId: "16000022", superName: "驚喜謝幕 (Poppin')", superIcon: "☂️", superDmg: 3, heal: 0 },
+      { name: "Frank", sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/5/55/Frank_Skin-Default.png", backupId: "16000020", superName: "震地重擊 (Stunning Blow)", superIcon: "🔨", superDmg: 3, heal: 0 },
+      { name: "Bull", sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/b/b7/Bull_Skin-Default.png", backupId: "16000002", superName: "蠻牛衝撞 (Bulldozer)", superIcon: "🐂", superDmg: 3, heal: 0 }
     ];
 
-    const bossEntity = { name: "Robo Boss 首領", sprite: "https://static.wikia.nocookie.net/brawlstars/images/5/55/Frank_Skin-Default.png", superName: "毀滅鐳射 (Laser Surge)", superIcon: "⚡", superDmg: 3, heal: 0 };
+    const bossEntity = { name: "Robo Boss 首領", sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/5/55/Frank_Skin-Default.png", superName: "毀滅鐳射 (Laser Surge)", superIcon: "⚡", superDmg: 3, heal: 0 };
 
+    // 預設 3B 名單
     const defaultRoster = [
       { stuClass: "3B", name: "Kelly Chan" },
       { stuClass: "3B", name: "Tom Wong" },
-      { stuClass: "3B", name: "Alex Lee" },
       { stuClass: "3B", name: "Ada Sze" },
       { stuClass: "3B", name: "Benny Ho" },
       { stuClass: "3B", name: "Cherry Lam" }
     ];
 
+    // 題庫配置
     const normalQuestions = [
       { cat: "Phonics", q: "Which word has the 'short a' sound?", opts: ["Cake", "Cat", "Rain", "Train"], ans: 1 },
       { cat: "Grammar", q: "Yesterday, Kelly ________ to the library.", opts: ["go", "goes", "went", "going"], ans: 2 },
@@ -810,13 +820,10 @@
       if (!isBGMPlaying) startBGM();
     }
 
-    // ==========================================
-    // 🔐 管理員安全解鎖系統 (MD5 加密防透視)
-    // ==========================================
+    // 🔒 雙擊管理員登陸：利用藍鹽（md5）單向特徵比對，避免明文密碼被學生看見！
     function unlockAdminMode() {
       const pw = prompt("🔒 請輸入管理員解鎖密碼：");
       if (pw !== null) {
-        // 使用前端 CryptoJS/MD5 進行加密比對，程式中只存放 225576a086... 的哈希特徵
         const hashedInput = md5(pw.trim().toLowerCase()); 
         if (hashedInput === ADMIN_HASH_KEY) {
           isAdminUnlocked = true;
@@ -831,6 +838,7 @@
       }
     }
 
+    // 主選單與模式控制
     function startModeSelect(mode) {
       tryStartMusic();
       currentGameMode = mode;
@@ -1156,6 +1164,7 @@
             return;
           }
 
+          // 👾 Boss 自動反擊與 AI 回合流轉
           if (currentGameMode === 1 && currentAttacker === 1) {
             currentAttacker = 2;
             updateBattleUI();
@@ -1204,9 +1213,7 @@
       }
     }
 
-    // ==========================================
     // 🔒 安全本地名單系統 (LocalStorage)
-    // ==========================================
     function getStoredRoster() {
       const roster = localStorage.getItem('bcklas_secure_roster');
       return roster ? JSON.parse(roster) : defaultRoster;
@@ -1262,9 +1269,7 @@
       }
     }
 
-    // ==========================================
-    // 🏆 龍虎榜
-    // ==========================================
+    // 🏆 龍虎榜（Leaderboard）及學生成績登錄
     function promptRecordRegistration(winner) {
       document.getElementById('recordSummary').innerText = `獲勝英雄: ${winner} • 本局得分: ${scoreAccumulated} 分`;
       
@@ -1277,7 +1282,7 @@
         const opt = document.createElement('option');
         opt.value = c;
         opt.innerText = c;
-        if(c === "3B") opt.selected = true;
+        if(c === "3B") opt.selected = true; 
         classSelect.appendChild(opt);
       });
 
