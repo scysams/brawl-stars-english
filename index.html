@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BCKLAS English Challenge - Brawl Stars 1v1</title>
+  <title>BCKLAS English Challenge - Brawl Stars Arena</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Arial Black', Impact, sans-serif; }
     body {
@@ -23,17 +23,22 @@
       align-items: center;
       width: 96%;
       max-width: 1100px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
     h1 {
-      font-size: 2rem;
+      font-size: 1.8rem;
       color: #ffde00;
       text-shadow: 3px 3px 0 #d9381e, 5px 5px 0 #000;
     }
     .sub-title {
-      font-size: 1rem;
+      font-size: 0.95rem;
       color: #00f0ff;
       text-shadow: 1px 1px 0 #000;
+    }
+    .header-btns {
+      display: flex;
+      gap: 8px;
+      align-items: center;
     }
     .btn-top {
       background: #ffaa00;
@@ -41,144 +46,158 @@
       border: 3px solid #000;
       border-radius: 12px;
       padding: 6px 14px;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       cursor: pointer;
       box-shadow: 0 4px 0 #000;
+      transition: all 0.1s;
     }
     .btn-top:active { transform: translateY(3px); box-shadow: 0 1px 0 #000; }
+    .btn-rank { background: #eab308; color: #000; font-weight: bold; }
+    .btn-menu { background: #38bdf8; color: #000; }
+    .btn-manage { background: #a855f7; color: #fff; font-weight: bold; }
+
+    /* 主選單：4大模式選擇卡片 */
+    #menuScreen {
+      width: 96%;
+      max-width: 1000px;
+      background: rgba(0, 0, 0, 0.65);
+      border: 4px solid #ffde00;
+      border-radius: 25px;
+      padding: 25px;
+      text-align: center;
+      box-shadow: 0 0 35px rgba(255, 222, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .menu-title {
+      font-size: 1.7rem;
+      color: #ffde00;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 0 #000;
+    }
+    .modes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+    .mode-card {
+      background: linear-gradient(135deg, #2e1065 0%, #3b0764 100%);
+      border: 3px solid #7c3aed;
+      border-radius: 20px;
+      padding: 20px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 6px 0 #000;
+      transition: all 0.2s;
+    }
+    .mode-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      border-color: #ffde00;
+      box-shadow: 0 0 20px #ffde00;
+    }
+    .mode-icon { font-size: 3rem; margin-bottom: 8px; }
+    .mode-name { font-size: 1.3rem; color: #ffde00; margin-bottom: 6px; }
+    .mode-desc { font-size: 0.9rem; color: #cbd5e1; line-height: 1.4; }
 
     /* 角色挑選介面 */
     #selectScreen {
+      display: none;
       width: 96%;
       max-width: 950px;
       background: rgba(0, 0, 0, 0.6);
       border: 4px solid #ffde00;
       border-radius: 24px;
-      padding: 20px 25px;
+      padding: 20px;
       text-align: center;
-      box-shadow: 0 0 30px rgba(255, 222, 0, 0.3);
-      display: flex;
       flex-direction: column;
       align-items: center;
     }
     .select-status {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
       color: #ffde00;
-      margin-bottom: 16px;
+      margin-bottom: 15px;
       text-shadow: 2px 2px 0 #000;
     }
     .preview-box {
       display: flex;
-      gap: 50px;
+      gap: 40px;
       align-items: center;
-      margin-bottom: 25px;
+      margin-bottom: 18px;
     }
     .player-preview {
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 150px;
+      width: 140px;
     }
     .preview-avatar {
-      width: 110px;
-      height: 110px;
-      border-radius: 20px;
+      width: 100px;
+      height: 100px;
+      border-radius: 18px;
       border: 4px solid #fff;
       background: rgba(255, 255, 255, 0.08);
       overflow: hidden;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
     .preview-avatar img { width: 90%; height: 90%; object-fit: contain; }
-    
-    /* 12 英雄選擇網格 (雙排 4x3 佈局) */
     .roster-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
+      gap: 10px;
+      margin-bottom: 18px;
       width: 100%;
       max-width: 850px;
     }
     .roster-card {
       background: #2d164d;
       border: 3px solid #552586;
-      border-radius: 18px;
-      padding: 12px 6px;
+      border-radius: 15px;
+      padding: 8px 4px;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       align-items: center;
-      transition: all 0.2s;
+      transition: all 0.15s;
     }
     .roster-card:hover {
-      transform: translateY(-5px) scale(1.05);
+      transform: translateY(-4px) scale(1.04);
       border-color: #ffde00;
       box-shadow: 0 0 15px #ffde00;
     }
     .roster-card img {
-      width: 75px;
-      height: 90px;
+      width: 70px;
+      height: 85px;
       object-fit: contain;
       margin-bottom: 4px;
       filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
     }
     .roster-super-tag {
-      font-size: 0.75rem;
+      font-size: 0.7rem;
       color: #ffde00;
       background: rgba(0,0,0,0.5);
-      padding: 2px 6px;
-      border-radius: 6px;
-      margin-top: 4px;
+      padding: 2px 5px;
+      border-radius: 5px;
     }
     .btn-brawl {
       background: #22c55e;
       color: #fff;
-      font-size: 1.5rem;
-      padding: 12px 40px;
+      font-size: 1.4rem;
+      padding: 10px 36px;
       border: 4px solid #000;
-      border-radius: 20px;
+      border-radius: 18px;
       cursor: pointer;
-      box-shadow: 0 7px 0 #15803d;
+      box-shadow: 0 6px 0 #15803d;
       display: none;
-      margin-bottom: 20px;
     }
-    .btn-brawl:active { transform: translateY(4px); box-shadow: 0 3px 0 #15803d; }
-
-    /* 戰鬥秘笈規則面板 */
-    .rules-box {
-      width: 100%;
-      max-width: 750px;
-      background: rgba(20, 10, 35, 0.85);
-      border: 3px dashed #ffaa00;
-      border-radius: 16px;
-      padding: 15px;
-      text-align: left;
-      box-shadow: inset 0 0 15px rgba(255, 170, 0, 0.2);
-    }
-    .rules-title {
-      font-size: 1.1rem;
-      color: #ffde00;
-      margin-bottom: 8px;
-      text-align: center;
-      text-shadow: 1px 1px 0 #000;
-    }
-    .rules-list {
-      font-size: 0.9rem;
-      line-height: 1.5;
-      color: #ddd;
-    }
-    .rules-item {
-      margin-bottom: 6px;
-      display: flex;
-      align-items: flex-start;
-    }
-    .rules-icon {
-      margin-right: 8px;
-      font-size: 1.1rem;
-    }
+    .btn-brawl:active { transform: translateY(3px); box-shadow: 0 2px 0 #15803d; }
 
     /* 戰鬥競技場 (2D 橫向戰場) */
     #battleScreen {
@@ -190,7 +209,7 @@
     .arena-box {
       background: linear-gradient(to bottom, #4f772d, #31572c);
       border: 6px solid #ffde00;
-      border-radius: 30px;
+      border-radius: 28px;
       padding: 20px;
       display: flex;
       justify-content: space-between;
@@ -216,7 +235,7 @@
       z-index: 5;
     }
     .fighter-sprite-wrap {
-      height: 270px;
+      height: 260px;
       display: flex;
       align-items: flex-end;
       justify-content: center;
@@ -225,13 +244,11 @@
     }
     .fighter-sprite {
       width: 180px;
-      height: 240px;
+      height: 230px;
       object-fit: contain;
       filter: drop-shadow(0 10px 10px rgba(0,0,0,0.4));
     }
-    #fighterCard2 .fighter-sprite {
-      transform: scaleX(-1);
-    }
+    #fighterCard2 .fighter-sprite { transform: scaleX(-1); }
 
     .status-panel {
       position: absolute;
@@ -259,7 +276,7 @@
       background: linear-gradient(90deg, #ef4444, #22c55e);
       transition: width 0.3s ease;
     }
-    .hp-text { font-size: 1.1rem; color: #fff; text-shadow: 2px 2px 0 #000; }
+    .hp-text { font-size: 1.05rem; color: #fff; text-shadow: 2px 2px 0 #000; }
 
     .damage-text {
       position: absolute;
@@ -277,7 +294,7 @@
       text-shadow: 3px 3px 0 #ff0055, 5px 5px 0 #000;
     }
     .damage-text.super-damage {
-      font-size: 4rem;
+      font-size: 3.8rem;
       color: #a855f7;
       text-shadow: 3px 3px 0 #ffde00, 5px 5px 0 #000;
     }
@@ -314,7 +331,6 @@
       60% { transform: translateX(-15px); }
       80% { transform: translateX(5px); }
     }
-
     @keyframes victoryJump {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-50px) scaleY(1.1); }
@@ -323,6 +339,7 @@
       100% { transform: rotate(90deg) translateY(60px); opacity: 0; }
     }
 
+    /* 競技場中央控制台 */
     .arena-center {
       display: flex;
       flex-direction: column;
@@ -332,7 +349,7 @@
       margin-bottom: 30px;
     }
     .turn-badge {
-      font-size: 1.3rem;
+      font-size: 1.25rem;
       color: #ffde00;
       background: rgba(0,0,0,0.7);
       padding: 6px 18px;
@@ -348,27 +365,26 @@
     .btn-attack-normal {
       background: #ff0055;
       color: #fff;
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       padding: 10px 18px;
       border: 4px solid #000;
       border-radius: 16px;
       cursor: pointer;
       box-shadow: 0 5px 0 #88002e;
-      transition: all 0.1s;
     }
     .btn-attack-super {
       background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
       color: #ffde00;
-      font-size: 1.25rem;
-      padding: 10px 22px;
+      font-size: 1.15rem;
+      padding: 10px 20px;
       border: 4px solid #ffde00;
       border-radius: 16px;
       cursor: pointer;
       box-shadow: 0 5px 0 #581c87, 0 0 15px rgba(236, 72, 153, 0.6);
-      transition: all 0.1s;
     }
     .btn-attack-normal:active, .btn-attack-super:active { transform: translateY(3px); box-shadow: 0 2px 0 #000; }
 
+    /* 答題彈出視窗 */
     .modal {
       display: none;
       position: fixed;
@@ -398,9 +414,9 @@
     }
     .diff-normal { background: #3b82f6; color: #fff; }
     .diff-hard { background: #ec4899; color: #fff; border: 2px solid #ffde00; box-shadow: 0 0 12px #ec4899; }
-    .q-turn { font-size: 1.4rem; color: #ffde00; margin-bottom: 6px; }
+    .q-turn { font-size: 1.35rem; color: #ffde00; margin-bottom: 6px; }
     .q-cat { color: #38bdf8; font-size: 1.05rem; margin-bottom: 12px; }
-    .q-text { font-size: 1.55rem; color: #fff; margin-bottom: 22px; line-height: 1.35; }
+    .q-text { font-size: 1.5rem; color: #fff; margin-bottom: 22px; line-height: 1.35; }
     .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .opt-btn {
       background: #4338ca;
@@ -414,6 +430,64 @@
     }
     .opt-btn.correct { background: #10b981 !important; border-color: #fff; }
     .opt-btn.wrong { background: #ef4444 !important; opacity: 0.5; }
+
+    /* 龍虎榜登記 & 瀏覽面板 */
+    .record-modal-content {
+      background: #1e1035;
+      border: 4px solid #eab308;
+      border-radius: 20px;
+      padding: 25px;
+      width: 90%;
+      max-width: 650px;
+      text-align: center;
+      box-shadow: 0 0 35px #eab308;
+    }
+    .record-input, .record-select {
+      width: 80%;
+      padding: 10px 15px;
+      font-size: 1.2rem;
+      border: 3px solid #ffde00;
+      border-radius: 12px;
+      background: #0f051d;
+      color: #fff;
+      margin: 8px 0;
+      text-align: center;
+      outline: none;
+    }
+    .record-select option { background: #1e1035; color: #fff; }
+    .leaderboard-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+      font-size: 0.95rem;
+    }
+    .leaderboard-table th {
+      background: #4c1d95;
+      color: #ffde00;
+      padding: 8px;
+      border: 2px solid #000;
+    }
+    .leaderboard-table td {
+      background: rgba(255,255,255,0.06);
+      padding: 8px;
+      border: 1px solid #475569;
+      color: #f8fafc;
+    }
+
+    /* 學生名單管理視窗 */
+    .import-textarea {
+      width: 90%;
+      height: 180px;
+      background: #0f051d;
+      color: #4ade80;
+      border: 2px solid #a855f7;
+      border-radius: 12px;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 0.95rem;
+      margin-top: 10px;
+      outline: none;
+    }
   </style>
 </head>
 <body>
@@ -421,22 +495,54 @@
   <header>
     <div>
       <h1>BCKLAS ENGLISH CHALLENGE</h1>
-      <div class="sub-title">Brawl Stars 1v1 Arena • Normal vs Super Attack!</div>
+      <div class="sub-title">Brawl Stars Arena • 4 Battle Modes & Secure Roster</div>
     </div>
-    <div style="display:flex; gap:8px; align-items:center;">
-      <!-- 🔊 背景音樂開關按鈕 -->
-      <button class="btn-top" id="btnMusic" onclick="toggleBGM()">🔊 音樂: 播</button>
-      <button class="btn-top" onclick="restartSelection()">🔄 重新選角</button>
+    <div class="header-btns">
+      <button class="btn-top btn-manage" onclick="openImportModal()">⚙️ 導入名單</button>
+      <button class="btn-top btn-rank" onclick="openLeaderboard()">🏆 龍虎榜</button>
+      <button class="btn-top btn-menu" onclick="returnToMenu()">🏠 主選單</button>
+      <button class="btn-top" id="btnMusic" onclick="toggleBGM()">🔊 音樂</button>
       <button class="btn-top" onclick="toggleFullScreen()">⛶ 全螢幕</button>
     </div>
   </header>
 
-  <!-- 1. 角色選擇介面 -->
+  <!-- 1. 主選單：4 大模式 -->
+  <div id="menuScreen" onclick="tryStartMusic()">
+    <div class="menu-title">⚡ SELECT BATTLE MODE / 選擇挑戰模式 ⚡</div>
+    <div class="modes-grid">
+      <!-- 模式 1: 個人賽對電腦 -->
+      <div class="mode-card" onclick="startModeSelect(1)">
+        <div class="mode-icon">🤖</div>
+        <div class="mode-name">1. 個人挑戰賽 (Solo vs AI)</div>
+        <div class="mode-desc">自選英雄對抗電腦隨機對手，答對出招，挑戰個人最高得分！</div>
+      </div>
+      <!-- 模式 2: 雙人 1v1 對決 -->
+      <div class="mode-card" onclick="startModeSelect(2)">
+        <div class="mode-icon">⚔️</div>
+        <div class="mode-name">2. 雙人對決 (1v1 PvP Duel)</div>
+        <div class="mode-desc">紅藍雙方各派代表挑選英雄，輪流發動普通攻擊或 SUPER 絕招！</div>
+      </div>
+      <!-- 模式 3: 團體對抗賽 -->
+      <div class="mode-card" onclick="startModeSelect(3)">
+        <div class="mode-icon">👥</div>
+        <div class="mode-name">3. 團體聯賽 (Team Brawl)</div>
+        <div class="mode-desc">紅隊 vs 藍隊 3v3 團隊接力！共享 15 HP，考驗組別默契！</div>
+      </div>
+      <!-- 模式 4: 打 Boss -->
+      <div class="mode-card" onclick="startModeSelect(4)">
+        <div class="mode-icon">👾</div>
+        <div class="mode-name">4. 首領狂暴戰 (Boss Fight)</div>
+        <div class="mode-desc">全班齊心合力對決 30 HP 超級機械首領，答對題目合力扣除 Boss 血量！</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. 角色選擇介面 -->
   <div id="selectScreen" onclick="tryStartMusic()">
-    <div class="select-status" id="selectInstruction">Player 1 (Red Side): Choose Your Brawler!</div>
+    <div class="select-status" id="selectInstruction">Choose Your Brawler!</div>
     <div class="preview-box">
       <div class="player-preview">
-        <div style="color:#ef4444; font-size:1.1rem; margin-bottom:5px;">RED SIDE (P1)</div>
+        <div id="p1SideLabel" style="color:#ef4444; font-size:1.1rem; margin-bottom:5px;">PLAYER 1</div>
         <div class="preview-avatar" style="border-color:#ef4444;">
           <img id="p1PreviewImg" src="" style="display:none;" referrerpolicy="no-referrer">
         </div>
@@ -445,7 +551,7 @@
       </div>
       <div style="font-size:2rem; color:#ffde00;">VS</div>
       <div class="player-preview">
-        <div style="color:#3b82f6; font-size:1.1rem; margin-bottom:5px;">BLUE SIDE (P2)</div>
+        <div id="p2SideLabel" style="color:#3b82f6; font-size:1.1rem; margin-bottom:5px;">PLAYER 2</div>
         <div class="preview-avatar" style="border-color:#3b82f6;">
           <img id="p2PreviewImg" src="" style="display:none;" referrerpolicy="no-referrer">
         </div>
@@ -457,35 +563,16 @@
     <!-- 12 英雄選擇網格 -->
     <div class="roster-grid" id="rosterContainer"></div>
     <button class="btn-brawl" id="startBrawlBtn" onclick="enterBattle()">🔥 BRAWL! (進入對決) 🔥</button>
-
-    <!-- 戰鬥秘笈規則面板 -->
-    <div class="rules-box">
-      <div class="rules-title">⚔️ BATTLE & SUPER TIPS / 戰鬥與絕招秘笈 ⚔️</div>
-      <div class="rules-list">
-        <div class="rules-item">
-          <span class="rules-icon">🥊</span>
-          <span><strong>Normal Attack (普通攻擊)</strong>：題目難度標準。答對造成 1 HP 傷害（30% 幸運爆擊 2 HP）。</span>
-        </div>
-        <div class="rules-item">
-          <span class="rules-icon">⚡</span>
-          <span><strong>SUPER Attack (角色專屬絕招)</strong>：題目為<strong>【高難度挑戰題】</strong>！答對觸發該英雄毀滅絕招，造成 <strong>3 HP 傷害</strong>（Mortis/Poco 為 2 HP 傷害並為自己回血 +1 HP）！</span>
-        </div>
-        <div class="rules-item">
-          <span class="rules-icon">🛡️</span>
-          <span><strong>Safety Guard (血量保護)</strong>：若對手只剩 1-2 格血，高額傷害安全歸零並判定 K.O. 勝利，無負數。</span>
-        </div>
-      </div>
-    </div>
   </div>
 
-  <!-- 2. 戰鬥競技場介面 -->
+  <!-- 3. 戰鬥競技場介面 -->
   <div id="battleScreen">
     <div class="arena-box">
-      <!-- 玩家 1 (紅方全身立繪) -->
+      <!-- 選手 1 -->
       <div class="fighter-side" id="panelWrap1">
         <div class="status-panel" id="panel1">
-          <div id="f1Name" style="font-size:1.4rem; color:#ffde00; margin-bottom:3px; text-shadow:2px 2px 0 #000;">Crow</div>
-          <div id="f1SuperDesc" style="font-size:0.85rem; color:#00f0ff; margin-bottom:5px;">Super: Dagger Storm</div>
+          <div id="f1Name" style="font-size:1.4rem; color:#ffde00; margin-bottom:3px; text-shadow:2px 2px 0 #000;">Hero 1</div>
+          <div id="f1SuperDesc" style="font-size:0.85rem; color:#00f0ff; margin-bottom:5px;">Super: Active</div>
           <div class="hp-bar-wrap"><div class="hp-fill" id="f1HpFill"></div></div>
           <div class="hp-text" id="f1HpText">HP: 10 / 10</div>
         </div>
@@ -496,18 +583,18 @@
 
       <!-- 中央控制台：普攻 & 絕招 -->
       <div class="arena-center">
-        <div class="turn-badge" id="currentTurnBadge">Attacker: Crow</div>
+        <div class="turn-badge" id="currentTurnBadge">Attacker: Hero 1</div>
         <div class="action-btn-group">
           <button class="btn-attack-normal" onclick="openQuiz(false)">🥊 普通攻擊 (Normal)</button>
-          <button class="btn-attack-super" id="btnSuper" onclick="openQuiz(true)">⚡ 發動絕招: Crow</button>
+          <button class="btn-attack-super" id="btnSuper" onclick="openQuiz(true)">⚡ 發動絕招 (SUPER)</button>
         </div>
       </div>
 
-      <!-- 玩家 2 (藍方全身立繪) -->
+      <!-- 選手 2 / 對手 / Boss -->
       <div class="fighter-side" id="panelWrap2">
         <div class="status-panel" id="panel2">
-          <div id="f2Name" style="font-size:1.4rem; color:#ffde00; margin-bottom:3px; text-shadow:2px 2px 0 #000;">Mortis</div>
-          <div id="f2SuperDesc" style="font-size:0.85rem; color:#00f0ff; margin-bottom:5px;">Super: Life Lead</div>
+          <div id="f2Name" style="font-size:1.4rem; color:#ffde00; margin-bottom:3px; text-shadow:2px 2px 0 #000;">Hero 2</div>
+          <div id="f2SuperDesc" style="font-size:0.85rem; color:#00f0ff; margin-bottom:5px;">Super: Ready</div>
           <div class="hp-bar-wrap"><div class="hp-fill" id="f2HpFill"></div></div>
           <div class="hp-text" id="f2HpText">HP: 10 / 10</div>
         </div>
@@ -516,137 +603,118 @@
         </div>
       </div>
 
-      <!-- 打擊爆破特效與傷害文字 -->
       <div class="hit-burst" id="burstEffect">💥</div>
       <div class="damage-text" id="damageIndicator">-1 HP!</div>
     </div>
   </div>
 
-  <!-- 3. 英文題目彈出框 -->
+  <!-- 4. 英文題目彈出框 -->
   <div class="modal" id="quizModal">
     <div class="modal-content">
       <div id="modalDiffBadge" class="q-diff-badge diff-normal">Normal Question</div>
-      <div class="q-turn" id="modalTurnTitle">Crow is Attacking!</div>
+      <div class="q-turn" id="modalTurnTitle">Attacking!</div>
       <div class="q-cat" id="modalCat">Category: Grammar</div>
       <div class="q-text" id="modalQ">Question here?</div>
       <div class="options-grid" id="modalOpts"></div>
     </div>
   </div>
 
+  <!-- 5. 隱私安全龍虎榜登記視窗 -->
+  <div class="modal" id="recordModal">
+    <div class="record-modal-content">
+      <h2 style="font-size:1.8rem; color:#ffde00; margin-bottom:10px;">🏆 恭喜獲勝！登錄龍虎榜 🏆</h2>
+      <div style="font-size:1.1rem; color:#38bdf8; margin-bottom:15px;" id="recordSummary">得分: 100 分</div>
+      
+      <!-- 選擇班別（會自動聯動姓名） -->
+      <select id="stuClassSelect" class="record-select" onchange="updateNameDropdown()">
+        <option value="">-- 選擇班別 --</option>
+      </select>
+      
+      <!-- 安全選取姓名（免手動打字，防洩露） -->
+      <select id="stuNameSelect" class="record-select">
+        <option value="">-- 選擇學生姓名 --</option>
+      </select>
+      
+      <div style="margin-top:15px; display:flex; justify-content:center; gap:10px;">
+        <button class="btn-top btn-rank" onclick="saveRecord()">💾 儲存並查看龍虎榜</button>
+        <button class="btn-top" onclick="closeRecordModal()">關閉返回</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. 龍虎榜總覽視窗 -->
+  <div class="modal" id="leaderboardModal">
+    <div class="record-modal-content" style="max-width:850px;">
+      <h2 style="font-size:1.8rem; color:#ffde00; margin-bottom:10px;">🏅 BCKLAS 英語挑戰賽 • 龍虎榜 🏅</h2>
+      <div style="max-height:360px; overflow-y:auto;">
+        <table class="leaderboard-table">
+          <thead>
+            <tr>
+              <th>排名</th>
+              <th>日期時間</th>
+              <th>班別</th>
+              <th>學生姓名</th>
+              <th>使用英雄</th>
+              <th>模式</th>
+              <th>得分</th>
+            </tr>
+          </thead>
+          <tbody id="leaderboardBody"></tbody>
+        </table>
+      </div>
+      <div style="margin-top:15px; display:flex; justify-content:center; gap:10px;">
+        <button class="btn-top" onclick="clearLeaderboard()" style="background:#ef4444; color:#fff;">🗑️ 清空榜單</button>
+        <button class="btn-top" onclick="closeLeaderboard()">關閉</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. 學生名單管理/導入視窗 (100%本地安全) -->
+  <div class="modal" id="importModal">
+    <div class="record-modal-content" style="max-width:700px;">
+      <h2 style="font-size:1.7rem; color:#a855f7; margin-bottom:10px;">📋 導入學校 Google Sheet 學生名單</h2>
+      <p style="font-size:0.85rem; color:#94a3b8; line-height:1.4; text-align:left;">
+        <strong>🔒 隱私安全保證</strong>：本名單直接儲存於這台電腦中，絕不上傳至任何伺服器，安全無憂。<br>
+        <strong>💡 導入指南</strong>：請從您的 Google Sheet 複製 <strong>班別</strong> 和 <strong>姓名</strong> 兩欄貼上在下方（每行一格，系統會自動解析）：
+      </p>
+      <textarea id="importArea" class="import-textarea" placeholder="例：&#13;3B&#9;Kelly Chan&#13;3B&#9;Tom Wong&#13;3C&#9;Alex Lee"></textarea>
+      <div style="margin-top:15px; display:flex; justify-content:center; gap:10px;">
+        <button class="btn-top btn-manage" onclick="processImport()">⚡ 開始導入</button>
+        <button class="btn-top" onclick="closeImportModal()">取消關閉</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // 12 位完整的熱門官方英雄列表（去防盜鏈高畫質全身圖）
+    // 12 位官方英雄配置
     const brawlersRoster = [
-      { 
-        name: "Crow", 
-        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/a/a2/Crow_Skin-Default.png", 
-        backupId: "16000016",
-        superName: "天降黑羽 (Dagger Storm)", 
-        superIcon: "🪶", 
-        superDmg: 3, 
-        heal: 0 
-      },
-      { 
-        name: "Mortis", 
-        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/b/b2/Mortis_Skin-Default.png", 
-        backupId: "16000015",
-        superName: "蝠血狂飆 (Life Lead)", 
-        superIcon: "🦇", 
-        superDmg: 2, 
-        heal: 1 
-      },
-      { 
-        name: "El Primo", 
-        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/0/04/El_Primo_Skin-Default.png", 
-        backupId: "16000004",
-        superName: "飛天手肘落 (Flying Elbow)", 
-        superIcon: "🥊", 
-        superDmg: 3, 
-        heal: 0 
-      },
-      { 
-        name: "Bo", 
-        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/e/ee/Bo_Skin-Default.png", 
-        backupId: "16000008",
-        superName: "地雷爆破 (Mines Blast)", 
-        superIcon: "🏹", 
-        superDmg: 3, 
-        heal: 0 
-      },
-      { 
-        name: "Barley", 
-        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/3/3c/Barley_Skin-Default.png", 
-        backupId: "16000003",
-        superName: "狂暴烈酒 (Super Bottle)", 
-        superIcon: "🍾", 
-        superDmg: 3, 
-        heal: 0 
-      },
-      { 
-        name: "Shelly", 
-        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/5/5e/Shelly_Skin-Default.png", 
-        backupId: "16000000",
-        superName: "超級大霰彈 (Super Shell)", 
-        superIcon: "💥", 
-        superDmg: 3, 
-        heal: 0 
-      },
-      { 
-        name: "Colt", 
-        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/8/8a/Colt_Skin-Default.png", 
-        backupId: "16000001",
-        superName: "子彈風暴 (Bullet Storm)", 
-        superIcon: "🔫", 
-        superDmg: 3, 
-        heal: 0 
-      },
-      { 
-        name: "Spike", 
-        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/8/8e/Spike_Skin-Default.png", 
-        backupId: "16000005",
-        superName: "針刺結界 (Stick Around)", 
-        superIcon: "🌵", 
-        superDmg: 3, 
-        heal: 0 
-      },
-      { 
-        name: "Leon", 
-        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/3/33/Leon_Skin-Default.png", 
-        backupId: "16000023",
-        superName: "隱形潛獵 (Smoke Bomb)", 
-        superIcon: "🦎", 
-        superDmg: 3, 
-        heal: 0 
-      },
-      { 
-        name: "Piper", 
-        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/5/5d/Piper_Skin-Default.png", 
-        backupId: "16000022",
-        superName: "驚喜謝幕 (Poppin')", 
-        superIcon: "☂️", 
-        superDmg: 3, 
-        heal: 0 
-      },
-      { 
-        name: "Frank", 
-        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/5/55/Frank_Skin-Default.png", 
-        backupId: "16000020",
-        superName: "震地重擊 (Stunning Blow)", 
-        superIcon: "🔨", 
-        superDmg: 3, 
-        heal: 0 
-      },
-      { 
-        name: "Bull", 
-        sprite: "https://i0.wp.com/static.wikia.nocookie.net/brawlstars/images/b/b7/Bull_Skin-Default.png", 
-        backupId: "16000002",
-        superName: "蠻牛衝撞 (Bulldozer)", 
-        superIcon: "🐂", 
-        superDmg: 3, 
-        heal: 0 
-      }
+      { name: "Crow", sprite: "https://static.wikia.nocookie.net/brawlstars/images/a/a2/Crow_Skin-Default.png", backupId: "16000016", superName: "天降黑羽 (Dagger Storm)", superIcon: "🪶", superDmg: 3, heal: 0 },
+      { name: "Mortis", sprite: "https://static.wikia.nocookie.net/brawlstars/images/b/b2/Mortis_Skin-Default.png", backupId: "16000015", superName: "蝠血狂飆 (Life Lead)", superIcon: "🦇", superDmg: 2, heal: 1 },
+      { name: "El Primo", sprite: "https://static.wikia.nocookie.net/brawlstars/images/0/04/El_Primo_Skin-Default.png", backupId: "16000004", superName: "飛天手肘落 (Flying Elbow)", superIcon: "🥊", superDmg: 3, heal: 0 },
+      { name: "Bo", sprite: "https://static.wikia.nocookie.net/brawlstars/images/e/ee/Bo_Skin-Default.png", backupId: "16000008", superName: "地雷爆破 (Mines Blast)", superIcon: "🏹", superDmg: 3, heal: 0 },
+      { name: "Barley", sprite: "https://static.wikia.nocookie.net/brawlstars/images/3/3c/Barley_Skin-Default.png", backupId: "16000003", superName: "狂暴烈酒 (Super Bottle)", superIcon: "🍾", superDmg: 3, heal: 0 },
+      { name: "Shelly", sprite: "https://static.wikia.nocookie.net/brawlstars/images/5/5e/Shelly_Skin-Default.png", backupId: "16000000", superName: "超級大霰彈 (Super Shell)", superIcon: "💥", superDmg: 3, heal: 0 },
+      { name: "Colt", sprite: "https://static.wikia.nocookie.net/brawlstars/images/8/8a/Colt_Skin-Default.png", backupId: "16000001", superName: "子彈風暴 (Bullet Storm)", superIcon: "🔫", superDmg: 3, heal: 0 },
+      { name: "Spike", sprite: "https://static.wikia.nocookie.net/brawlstars/images/8/8e/Spike_Skin-Default.png", backupId: "16000005", superName: "針刺結界 (Stick Around)", superIcon: "🌵", superDmg: 3, heal: 0 },
+      { name: "Leon", sprite: "https://static.wikia.nocookie.net/brawlstars/images/3/33/Leon_Skin-Default.png", backupId: "16000023", superName: "隱形潛獵 (Smoke Bomb)", superIcon: "🦎", superDmg: 3, heal: 0 },
+      { name: "Piper", sprite: "https://static.wikia.nocookie.net/brawlstars/images/5/5d/Piper_Skin-Default.png", backupId: "16000022", superName: "驚喜謝幕 (Poppin')", superIcon: "☂️", superDmg: 3, heal: 0 },
+      { name: "Frank", sprite: "https://static.wikia.nocookie.net/brawlstars/images/5/55/Frank_Skin-Default.png", backupId: "16000020", superName: "震地重擊 (Stunning Blow)", superIcon: "🔨", superDmg: 3, heal: 0 },
+      { name: "Bull", sprite: "https://static.wikia.nocookie.net/brawlstars/images/b/b7/Bull_Skin-Default.png", backupId: "16000002", superName: "蠻牛衝撞 (Bulldozer)", superIcon: "🐂", superDmg: 3, heal: 0 }
     ];
 
-    // 普通題目
+    const bossEntity = { name: "Robo Boss 首領", sprite: "https://static.wikia.nocookie.net/brawlstars/images/5/55/Frank_Skin-Default.png", superName: "毀滅鐳射 (Laser Surge)", superIcon: "⚡", superDmg: 3, heal: 0 };
+
+    // 預設 3B 學生演示名單 (若老師尚未導入)
+    const defaultRoster = [
+      { stuClass: "3B", name: "Kelly Chan" },
+      { stuClass: "3B", name: "Tom Wong" },
+      { stuClass: "3B", name: "Alex Lee" },
+      { stuClass: "3B", name: "Ada Sze" },
+      { stuClass: "3B", name: "Benny Ho" },
+      { stuClass: "3B", name: "Cherry Lam" }
+    ];
+
+    // 題庫配置
     const normalQuestions = [
       { cat: "Phonics", q: "Which word has the 'short a' sound?", opts: ["Cake", "Cat", "Rain", "Train"], ans: 1 },
       { cat: "Grammar", q: "Yesterday, Kelly ________ to the library.", opts: ["go", "goes", "went", "going"], ans: 2 },
@@ -658,7 +726,6 @@
       { cat: "Vocabulary", q: "Where do you borrow English books?", opts: ["Canteen", "Library", "Art Room", "Hall"], ans: 1 }
     ];
 
-    // 絕招題目
     const hardQuestions = [
       { cat: "Past Continuous", q: "While Tom ________ his homework, the telephone rang.", opts: ["was doing", "did", "does", "is doing"], ans: 0 },
       { cat: "Conditionals", q: "If it rains tomorrow, we ________ the school picnic.", opts: ["cancel", "will cancel", "canceled", "would cancel"], ans: 1 },
@@ -667,20 +734,26 @@
       { cat: "Irregular Verbs", q: "Choose the correct past participle: 'The vase was ________ by the cat.'", opts: ["broke", "broken", "breaked", "breaking"], ans: 1 },
       { cat: "Conjunctions", q: "Mary went to school ________ she was not feeling very well.", opts: ["because", "although", "so", "unless"], ans: 1 },
       { cat: "Sentence Structure", q: "Identify the error: 'Neither Peter nor his brothers (A)is (B)coming to (C)the party.'", opts: ["(A) is -> are", "(B) coming -> come", "(C) the -> a", "No error"], ans: 0 },
-      { cat: "Reading Inference", q: "'Jack was soaking wet and his umbrella was turned inside out.' What happened?", opts: ["Jack fell down", "A strong windy storm occurred", "He washed his bag", "He bought a new hat"], ans: 1 }
+      { cat: "Reading Inference", q: "'Jack was soaking wet and his umbrella was turned inside out.' What happened?", opts: ["It was sunny", "A strong windy storm occurred", "He fell in a pool", "He lost his bag"], ans: 1 }
     ];
 
+    let currentGameMode = 2; 
     let p1Brawler = null;
     let p2Brawler = null;
     let selectingPlayer = 1;
     let currentAttacker = 1;
     let p1Hp = 10;
     let p2Hp = 10;
+    let maxHp = 10;
     let hasAnswered = false;
     let isCurrentSuper = false;
+    let scoreAccumulated = 0;
 
-    // 音效
+    // Web Audio 音效與音樂系統
     let audioCtx = null;
+    let bgmInterval = null;
+    let isBGMPlaying = false;
+
     function playBeep(freq, type, duration) {
       try {
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -697,66 +770,88 @@
       } catch (e) {}
     }
 
-    // ==========================================
-    // 🔊 網頁內建背景音樂 (使用 Web Audio API 生成經典荒野戰鬥曲)
-    // ==========================================
-    let bgmInterval = null;
-    let isBGMPlaying = false;
-    let bgmGainNode = null;
-
     function startBGM() {
       if (isBGMPlaying) return;
       try {
         if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         if (audioCtx.state === 'suspended') audioCtx.resume();
-        
-        bgmGainNode = audioCtx.createGain();
-        bgmGainNode.gain.value = 0.08; // 背景音量控制在 8% 避免太吵
-        bgmGainNode.connect(audioCtx.destination);
-        
+        const bgmGain = audioCtx.createGain();
+        bgmGain.gain.value = 0.07;
+        bgmGain.connect(audioCtx.destination);
         isBGMPlaying = true;
         document.getElementById('btnMusic').innerText = "🔊 音樂: 播";
-
         let beat = 0;
-        // 循環演奏荒野對戰節奏
         bgmInterval = setInterval(() => {
           if (!isBGMPlaying) return;
           const osc = audioCtx.createOscillator();
-          osc.connect(bgmGainNode);
-          
-          // 經典《荒野亂鬥》激昂重低音節奏
+          osc.connect(bgmGain);
           const notes = [110, 110, 130, 110, 146, 110, 165, 130];
           osc.frequency.value = notes[beat % notes.length];
-          
           osc.type = (beat % 4 === 0) ? 'triangle' : 'sine';
           osc.start();
-          
-          const dur = (beat % 2 === 0) ? 0.22 : 0.12;
-          osc.stop(audioCtx.currentTime + dur);
+          osc.stop(audioCtx.currentTime + ((beat % 2 === 0) ? 0.2 : 0.12));
           beat++;
         }, 220);
       } catch(e) {}
     }
 
     function toggleBGM() {
-      const btn = document.getElementById('btnMusic');
       if (isBGMPlaying) {
         clearInterval(bgmInterval);
         isBGMPlaying = false;
-        btn.innerText = "🔇 音樂: 靜";
-        playBeep(220, 'sine', 0.1);
+        document.getElementById('btnMusic').innerText = "🔇 音樂: 靜";
       } else {
         startBGM();
       }
     }
 
     function tryStartMusic() {
-      if (!isBGMPlaying) {
-        startBGM();
-      }
+      if (!isBGMPlaying) startBGM();
     }
 
-    // 初始化選角
+    // 啟動對抗與選角
+    function startModeSelect(mode) {
+      tryStartMusic();
+      currentGameMode = mode;
+      document.getElementById('menuScreen').style.display = 'none';
+      document.getElementById('selectScreen').style.display = 'flex';
+      selectingPlayer = 1;
+      p1Brawler = null;
+      p2Brawler = null;
+      document.getElementById('p1Name').innerText = "?";
+      document.getElementById('p2Name').innerText = "?";
+      document.getElementById('p1PreviewImg').style.display = 'none';
+      document.getElementById('p2PreviewImg').style.display = 'none';
+      document.getElementById('p1SuperTag').style.display = 'none';
+      document.getElementById('p2SuperTag').style.display = 'none';
+      document.getElementById('startBrawlBtn').style.display = 'none';
+
+      if (mode === 1) {
+        document.getElementById('selectInstruction').innerText = "Solo vs AI: Choose Your Brawler!";
+        document.getElementById('p1SideLabel').innerText = "YOU (玩家)";
+        document.getElementById('p2SideLabel').innerText = "CPU (電腦)";
+      } else if (mode === 2) {
+        document.getElementById('selectInstruction').innerText = "1v1 Duel: Player 1 Choose!";
+        document.getElementById('p1SideLabel').innerText = "RED (P1)";
+        document.getElementById('p2SideLabel').innerText = "BLUE (P2)";
+      } else if (mode === 3) {
+        document.getElementById('selectInstruction').innerText = "Team Brawl: Red Team Captain Choose!";
+        document.getElementById('p1SideLabel').innerText = "TEAM RED";
+        document.getElementById('p2SideLabel').innerText = "TEAM BLUE";
+      } else if (mode === 4) {
+        document.getElementById('selectInstruction').innerText = "Boss Fight: Choose Class Hero Champion!";
+        document.getElementById('p1SideLabel').innerText = "CLASS HERO";
+        document.getElementById('p2SideLabel').innerText = "ROBO BOSS";
+        p2Brawler = bossEntity;
+        document.getElementById('p2Name').innerText = bossEntity.name;
+        document.getElementById('p2PreviewImg').src = bossEntity.sprite;
+        document.getElementById('p2PreviewImg').style.display = 'block';
+        document.getElementById('p2SuperTag').innerText = `⚡ ${bossEntity.superName}`;
+        document.getElementById('p2SuperTag').style.display = 'block';
+      }
+      initRoster();
+    }
+
     function initRoster() {
       const container = document.getElementById('rosterContainer');
       container.innerHTML = '';
@@ -765,7 +860,7 @@
         card.className = 'roster-card';
         card.innerHTML = `
           <img src="${b.sprite}" alt="${b.name}" referrerpolicy="no-referrer" onerror="this.onerror=null; this.src='https://cdn.brawlify.com/brawlers/borders/${b.backupId}.png'">
-          <div style="font-size:1.05rem;">${b.name}</div>
+          <div style="font-size:1rem;">${b.name}</div>
           <div class="roster-super-tag">⚡ ${b.superName.split(' ')[0]}</div>
         `;
         card.onclick = () => selectBrawler(b);
@@ -774,86 +869,101 @@
     }
 
     function selectBrawler(b) {
-      tryStartMusic(); // 學生上台點擊時自動解鎖背景音樂
-      if (selectingPlayer === 1) {
+      tryStartMusic();
+      if (currentGameMode === 1) {
         p1Brawler = b;
         document.getElementById('p1Name').innerText = b.name;
         document.getElementById('p1SuperTag').innerText = `⚡ ${b.superName}`;
         document.getElementById('p1SuperTag').style.display = 'block';
-        const img = document.getElementById('p1PreviewImg');
-        img.src = b.sprite;
-        img.onerror = () => { img.src = `https://cdn.brawlify.com/brawlers/borders/${b.backupId}.png`; };
-        img.style.display = 'block';
-        selectingPlayer = 2;
-        document.getElementById('selectInstruction').innerText = "Player 2 (Blue Side): Choose Your Brawler!";
-        playBeep(440, 'sine', 0.15);
-      } else if (selectingPlayer === 2) {
-        p2Brawler = b;
-        document.getElementById('p2Name').innerText = b.name;
-        document.getElementById('p2SuperTag').innerText = `⚡ ${b.superName}`;
+        const img1 = document.getElementById('p1PreviewImg');
+        img1.src = b.sprite;
+        img1.style.display = 'block';
+
+        const remaining = brawlersRoster.filter(item => item.name !== b.name);
+        p2Brawler = remaining[Math.floor(Math.random() * remaining.length)];
+        document.getElementById('p2Name').innerText = `CPU (${p2Brawler.name})`;
+        document.getElementById('p2SuperTag').innerText = `⚡ ${p2Brawler.superName}`;
         document.getElementById('p2SuperTag').style.display = 'block';
-        const img = document.getElementById('p2PreviewImg');
-        img.src = b.sprite;
-        img.onerror = () => { img.src = `https://cdn.brawlify.com/brawlers/borders/${b.backupId}.png`; };
-        img.style.display = 'block';
-        document.getElementById('selectInstruction').innerText = "Ready to Fight! Click Below!";
+        const img2 = document.getElementById('p2PreviewImg');
+        img2.src = p2Brawler.sprite;
+        img2.style.display = 'block';
+
+        document.getElementById('selectInstruction').innerText = "Ready! Click Below to Fight CPU!";
         document.getElementById('startBrawlBtn').style.display = 'block';
         playBeep(587, 'sine', 0.2);
-      }
-    }
+      } else if (currentGameMode === 4) {
+        p1Brawler = b;
+        document.getElementById('p1Name').innerText = b.name;
+        document.getElementById('p1SuperTag').innerText = `⚡ ${b.superName}`;
+        document.getElementById('p1SuperTag').style.display = 'block';
+        const img1 = document.getElementById('p1PreviewImg');
+        img1.src = b.sprite;
+        img1.style.display = 'block';
 
-    function restartSelection() {
-      p1Brawler = null;
-      p2Brawler = null;
-      selectingPlayer = 1;
-      p1Hp = 10;
-      p2Hp = 10;
-      document.getElementById('p1Name').innerText = "?";
-      document.getElementById('p2Name').innerText = "?";
-      document.getElementById('p1SuperTag').style.display = 'none';
-      document.getElementById('p2SuperTag').style.display = 'none';
-      document.getElementById('p1PreviewImg').style.display = 'none';
-      document.getElementById('p2PreviewImg').style.display = 'none';
-      document.getElementById('startBrawlBtn').style.display = 'none';
-      document.getElementById('selectInstruction').innerText = "Player 1 (Red Side): Choose Your Brawler!";
-      document.getElementById('battleScreen').style.display = 'none';
-      document.getElementById('selectScreen').style.display = 'flex';
-      
-      document.getElementById('fighterCard1').style.animation = 'none';
-      document.getElementById('fighterCard2').style.animation = 'none';
-      document.getElementById('fighterCard1').style.transform = 'none';
-      document.getElementById('fighterCard2').style.transform = 'none';
-      document.getElementById('fighterCard1').style.opacity = '1';
-      document.getElementById('fighterCard2').style.opacity = '1';
+        document.getElementById('selectInstruction').innerText = "Hero Chosen! Ready to Challenge the Boss!";
+        document.getElementById('startBrawlBtn').style.display = 'block';
+        playBeep(587, 'sine', 0.2);
+      } else {
+        if (selectingPlayer === 1) {
+          p1Brawler = b;
+          document.getElementById('p1Name').innerText = b.name;
+          document.getElementById('p1SuperTag').innerText = `⚡ ${b.superName}`;
+          document.getElementById('p1SuperTag').style.display = 'block';
+          const img = document.getElementById('p1PreviewImg');
+          img.src = b.sprite;
+          img.style.display = 'block';
+          selectingPlayer = 2;
+          document.getElementById('selectInstruction').innerText = "Player 2 (Blue Side): Choose Your Brawler!";
+          playBeep(440, 'sine', 0.15);
+        } else if (selectingPlayer === 2) {
+          p2Brawler = b;
+          document.getElementById('p2Name').innerText = b.name;
+          document.getElementById('p2SuperTag').innerText = `⚡ ${b.superName}`;
+          document.getElementById('p2SuperTag').style.display = 'block';
+          const img = document.getElementById('p2PreviewImg');
+          img.src = b.sprite;
+          img.style.display = 'block';
+          document.getElementById('selectInstruction').innerText = "Ready to Fight! Click Below!";
+          document.getElementById('startBrawlBtn').style.display = 'block';
+          playBeep(587, 'sine', 0.2);
+        }
+      }
     }
 
     function enterBattle() {
       document.getElementById('selectScreen').style.display = 'none';
       document.getElementById('battleScreen').style.display = 'block';
-      
       const f1 = document.getElementById('f1Img');
       f1.src = p1Brawler.sprite;
       f1.onerror = () => { f1.src = `https://cdn.brawlify.com/brawlers/borders/${p1Brawler.backupId}.png`; };
       document.getElementById('f1Name').innerText = p1Brawler.name;
       document.getElementById('f1SuperDesc').innerText = `⚡ ${p1Brawler.superName}`;
-      
+
       const f2 = document.getElementById('f2Img');
       f2.src = p2Brawler.sprite;
       f2.onerror = () => { f2.src = `https://cdn.brawlify.com/brawlers/borders/${p2Brawler.backupId}.png`; };
       document.getElementById('f2Name').innerText = p2Brawler.name;
       document.getElementById('f2SuperDesc').innerText = `⚡ ${p2Brawler.superName}`;
-      
+
       currentAttacker = 1;
-      p1Hp = 10;
-      p2Hp = 10;
+      scoreAccumulated = 0;
+
+      if (currentGameMode === 3) maxHp = 15;
+      else if (currentGameMode === 4) maxHp = 30;
+      else maxHp = 10;
+
+      p1Hp = currentGameMode === 4 ? 12 : maxHp;
+      p2Hp = maxHp;
       updateBattleUI();
     }
 
     function updateBattleUI() {
-      document.getElementById('f1HpFill').style.width = `${(p1Hp / 10) * 100}%`;
-      document.getElementById('f1HpText').innerText = `HP: ${p1Hp} / 10`;
-      document.getElementById('f2HpFill').style.width = `${(p2Hp / 10) * 100}%`;
-      document.getElementById('f2HpText').innerText = `HP: ${p2Hp} / 10`;
+      const p1Max = currentGameMode === 4 ? 12 : maxHp;
+      document.getElementById('f1HpFill').style.width = `${(p1Hp / p1Max) * 100}%`;
+      document.getElementById('f1HpText').innerText = `HP: ${p1Hp} / ${p1Max}`;
+
+      document.getElementById('f2HpFill').style.width = `${(p2Hp / maxHp) * 100}%`;
+      document.getElementById('f2HpText').innerText = `HP: ${p2Hp} / ${maxHp}`;
 
       const attacker = currentAttacker === 1 ? p1Brawler : p2Brawler;
       const side = currentAttacker === 1 ? "Red" : "Blue";
@@ -896,6 +1006,7 @@
           if (idx === randQ.ans) {
             btn.classList.add('correct');
             playBeep(523, 'sine', 0.2);
+            scoreAccumulated += isSuper ? 25 : 10;
             setTimeout(() => {
               document.getElementById('quizModal').style.display = 'none';
               const isCrit = !isSuper && Math.random() < 0.30;
@@ -990,31 +1101,237 @@
 
             setTimeout(() => {
               playBeep(880, 'triangle', 0.6);
-              alert(`🏆 KNOCKOUT! 恭喜 ${winnerName} 贏得本次英語大挑戰總冠軍！`);
               winnerWrap.style.animation = 'none';
               loserWrap.style.animation = 'none';
-              restartSelection();
+              promptRecordRegistration(winnerName);
             }, 1200);
             return;
           }
 
-          currentAttacker = currentAttacker === 1 ? 2 : 1;
-          updateBattleUI();
+          if (currentGameMode === 1 && currentAttacker === 1) {
+            currentAttacker = 2;
+            updateBattleUI();
+            setTimeout(() => { triggerAITurn(); }, 1000);
+          } else {
+            currentAttacker = currentAttacker === 1 ? 2 : 1;
+            updateBattleUI();
+          }
         }, 900);
 
       } else {
-        alert(isSuper ? `❌ 絕招發動失敗！題目太難了，攻擊完全落空！輪到對手！` : `❌ 答錯了！攻擊落空 (Miss)！輪到對手反擊！`);
-        currentAttacker = currentAttacker === 1 ? 2 : 1;
+        alert(isSuper ? `❌ 絕招發動失敗！攻擊完全落空！` : `❌ 答錯了！攻擊落空 (Miss)！`);
+        if (currentGameMode === 1 && currentAttacker === 1) {
+          currentAttacker = 2;
+          updateBattleUI();
+          setTimeout(() => { triggerAITurn(); }, 1000);
+        } else {
+          currentAttacker = currentAttacker === 1 ? 2 : 1;
+          updateBattleUI();
+        }
+      }
+    }
+
+    function triggerAITurn() {
+      const aiHits = Math.random() < 0.65;
+      if (aiHits) {
+        executeAttackAnimation(true, false, false);
+      } else {
+        alert(`🤖 電腦 (${p2Brawler.name}) 答錯，攻擊落空！換你出擊！`);
+        currentAttacker = 1;
         updateBattleUI();
       }
     }
 
-    function toggleFullScreen() {
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen();
-      } else {
-        document.exitFullscreen();
+    // ==========================================
+    // 🔒 安全本地名單系統 (從 LocalStorage 讀寫)
+    // ==========================================
+    function getStoredRoster() {
+      const roster = localStorage.getItem('bcklas_secure_roster');
+      return roster ? JSON.parse(roster) : defaultRoster;
+    }
+
+    function openImportModal() {
+      const roster = getStoredRoster();
+      let defaultTxt = "";
+      roster.forEach(r => {
+        defaultTxt += `${r.stuClass}\t${r.name}\n`;
+      });
+      document.getElementById('importArea').value = defaultTxt;
+      document.getElementById('importModal').style.display = 'flex';
+    }
+
+    function closeImportModal() {
+      document.getElementById('importModal').style.display = 'none';
+    }
+
+    function processImport() {
+      const txt = document.getElementById('importArea').value.trim();
+      if (!txt) {
+        alert("請輸入名單數據！");
+        return;
       }
+      
+      const lines = txt.split('\n');
+      const newRoster = [];
+      lines.forEach(l => {
+        const parts = l.split('\t');
+        if (parts.length >= 2 && parts[0].trim() && parts[1].trim()) {
+          newRoster.push({
+            stuClass: parts[0].trim(),
+            name: parts[1].trim()
+          });
+        } else {
+          // 支援半角空格分隔備用
+          const spaceParts = l.trim().split(/\s+/);
+          if (spaceParts.length >= 2) {
+            newRoster.push({
+              stuClass: spaceParts[0],
+              name: spaceParts.slice(1).join(' ')
+            });
+          }
+        }
+      });
+
+      if (newRoster.length > 0) {
+        localStorage.setItem('bcklas_secure_roster', JSON.stringify(newRoster));
+        alert(`🎉 成功導入 ${newRoster.length} 位學生名單！已安全鎖定存儲在您的本地網頁瀏覽器中。`);
+        closeImportModal();
+      } else {
+        alert("解析失敗，請確認格式（班別 名字，中間可用Tab或空格隔開）。");
+      }
+    }
+
+    // ==========================================
+    // 🏆 龍虎榜（Leaderboard）
+    // ==========================================
+    function promptRecordRegistration(winner) {
+      document.getElementById('recordSummary').innerText = `獲勝英雄: ${winner} • 本局得分: ${scoreAccumulated} 分`;
+      
+      // 動態加載已導入的班級到下拉選單
+      const roster = getStoredRoster();
+      const classes = [...new Set(roster.map(r => r.stuClass))];
+      
+      const classSelect = document.getElementById('stuClassSelect');
+      classSelect.innerHTML = '<option value="">-- 選擇班別 --</option>';
+      classes.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c;
+        opt.innerText = c;
+        if(c === "3B") opt.selected = true; // 3B默認
+        classSelect.appendChild(opt);
+      });
+
+      updateNameDropdown();
+      document.getElementById('recordModal').style.display = 'flex';
+    }
+
+    function updateNameDropdown() {
+      const selectedClass = document.getElementById('stuClassSelect').value;
+      const nameSelect = document.getElementById('stuNameSelect');
+      nameSelect.innerHTML = '<option value="">-- 選擇學生姓名 --</option>';
+
+      if (!selectedClass) return;
+
+      const roster = getStoredRoster();
+      const filtered = roster.filter(r => r.stuClass === selectedClass);
+      filtered.forEach(r => {
+        const opt = document.createElement('option');
+        opt.value = r.name;
+        opt.innerText = r.name;
+        nameSelect.appendChild(opt);
+      });
+    }
+
+    function closeRecordModal() {
+      document.getElementById('recordModal').style.display = 'none';
+      returnToMenu();
+    }
+
+    function saveRecord() {
+      const stuClass = document.getElementById('stuClassSelect').value;
+      const stuName = document.getElementById('stuNameSelect').value;
+
+      if (!stuClass || !stuName) {
+        alert("請在選單中選取您的班別與大名！");
+        return;
+      }
+      
+      const now = new Date();
+      const dateStr = `${now.getMonth()+1}/${now.getDate()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+      const modeNames = ["", "個人賽 vs AI", "雙人 1v1", "團體聯賽", "首領 Boss戰"];
+
+      const recordItem = {
+        date: dateStr,
+        stuClass: stuClass,
+        name: stuName,
+        hero: p1Brawler ? p1Brawler.name : "Champion",
+        mode: modeNames[currentGameMode],
+        score: scoreAccumulated
+      };
+
+      let history = JSON.parse(localStorage.getItem('bcklas_leaderboard') || '[]');
+      history.push(recordItem);
+      history.sort((a, b) => b.score - a.score);
+      localStorage.setItem('bcklas_leaderboard', JSON.stringify(history));
+
+      document.getElementById('recordModal').style.display = 'none';
+      openLeaderboard();
+    }
+
+    function openLeaderboard() {
+      const history = JSON.parse(localStorage.getItem('bcklas_leaderboard') || '[]');
+      const tbody = document.getElementById('leaderboardBody');
+      tbody.innerHTML = '';
+
+      if (history.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7">尚無紀錄，快挑選模式挑戰第一名吧！</td></tr>`;
+      } else {
+        history.slice(0, 15).forEach((rec, idx) => {
+          let rankMedal = idx + 1;
+          if (idx === 0) rankMedal = '🥇 1';
+          else if (idx === 1) rankMedal = '🥈 2';
+          else if (idx === 2) rankMedal = '🥉 3';
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td style="font-weight:bold; color:#ffde00;">${rankMedal}</td>
+            <td>${rec.date}</td>
+            <td style="color:#38bdf8;">${rec.stuClass}</td>
+            <td style="font-weight:bold;">${rec.name}</td>
+            <td>${rec.hero}</td>
+            <td>${rec.mode}</td>
+            <td style="font-weight:bold; color:#4ade80;">${rec.score}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+      document.getElementById('leaderboardModal').style.display = 'flex';
+    }
+
+    function closeLeaderboard() {
+      document.getElementById('leaderboardModal').style.display = 'none';
+    }
+
+    function clearLeaderboard() {
+      if (confirm("確定要清空所有學生排行榜紀錄嗎？")) {
+        localStorage.removeItem('bcklas_leaderboard');
+        openLeaderboard();
+      }
+    }
+
+    function returnToMenu() {
+      document.getElementById('selectScreen').style.display = 'none';
+      document.getElementById('battleScreen').style.display = 'none';
+      document.getElementById('menuScreen').style.display = 'flex';
+    }
+
+    function restartSelection() {
+      startModeSelect(currentGameMode);
+    }
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+      else document.exitFullscreen();
     }
 
     window.onload = () => { initRoster(); };
